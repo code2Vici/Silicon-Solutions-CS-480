@@ -21,6 +21,14 @@ public class GameGrid {
 		p2Symbol = p2;
 	}
 
+	/**
+	 * Returns total grid size
+	 * @return int total grid sie
+	 */
+	public int getGridSize() {
+		return ( X_WIDTH * Y_WIDTH );
+	}
+
 	
 	/**
 	 * Changes state for given position in table to value.

@@ -10,11 +10,14 @@ public class TicTacToe {
 
 		GameGrid grid = new GameGrid( PLAYER1_SYMBOL, PLAYER2_SYMBOL );
 		Scanner input = new Scanner( System.in );
+
+		// Setup
 		int x = -1;
 		int y = -1;
-		boolean valid;
-		boolean playing = true;
-		char playAgain;
+		boolean valid; // Used for checking if user inputted position is valid
+		boolean playing = true; // Is game running boolean
+		char playAgain; // Used for y/n input to play again
+		int totalMoveCounter = grid.getGridSize(); // Tracks total moves in case of tie game
 
 		while ( playing ) {
 			grid.render();
@@ -29,8 +32,12 @@ public class TicTacToe {
 				}
 			}
 			grid.setState( x, y, 0 );
+			totalMoveCounter--;
 			if ( grid.checkWin() ) {
 				System.out.println( "Congrats Player 1 you win" );
+				playing = false;
+			} else if ( totalMoveCounter == 0 ) {
+				System.out.println( "Tie game" );
 				playing = false;
 			}
 			grid.render();
@@ -46,8 +53,12 @@ public class TicTacToe {
 					}
 				}
 				grid.setState( x, y, 1 );
+				totalMoveCounter--;
 				if ( grid.checkWin() ) {
 					System.out.println( "Congrats Player 2 you win" );
+					playing = false;
+				} else if ( totalMoveCounter == 0 ) {
+					System.out.println( "Tie game" );
 					playing = false;
 				}
 			} else {
