@@ -14,6 +14,7 @@ import java.util.LinkedList;
 
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
@@ -295,8 +296,13 @@ public class Course implements Serializable{
 			return d;
 		}
 		public Course openCourse() throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException{
-			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-			JFrame frame = new JFrame();
+		try{	
+                    UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+                    
+		} catch (Exception e){
+                    
+                }	
+                    JFrame frame = new JFrame();
 			frame.setLayout(new BorderLayout());
 			JFileChooser openFile = new JFileChooser();
 	        openFile.showOpenDialog(null);
@@ -316,17 +322,23 @@ public class Course implements Serializable{
 		         c.printStackTrace();
 		      }
 			return returnVal;
+                
 		}
 		
 		public void saveCourse() throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException{
-			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+                    try{	
+                        UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+                     
+                    } catch (Exception e){
+                    
+                    }
 			JFrame frame = new JFrame();
 			frame.setLayout(new BorderLayout());
 		    JFileChooser saveFile = new JFileChooser();
 	        saveFile.showSaveDialog(null);
 	        File myFile = saveFile.getSelectedFile();
 			try {
-		         FileOutputStream fileOut = new FileOutputStream(myFile+".txt");
+		         FileOutputStream fileOut = new FileOutputStream(myFile+".course");
 		         ObjectOutputStream out = new ObjectOutputStream(fileOut);
 		         out.writeObject(this);
 		         out.close();
@@ -337,7 +349,11 @@ public class Course implements Serializable{
 		      }
 		}
 		public void exportToCSV() throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException{
-			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+			try{	
+                            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+                        } catch (Exception e){
+                    
+                        }
 			JFrame frame = new JFrame();
 			frame.setLayout(new BorderLayout());
 		    JFileChooser saveFile = new JFileChooser();
