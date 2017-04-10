@@ -1,7 +1,0 @@
-BroncoID,LastName,FirstName,MiddleName,test1,test2
-1,Kries,Michael,Taylor,10.0,10.0
-2,2Kries,2Michael,2Taylor,20.0,0
-3,3Kries,3Michael,3Taylor,30.0,0
-4,4Kries,4Michael,4Taylor,0,0
-
-
