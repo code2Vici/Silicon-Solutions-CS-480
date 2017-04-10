@@ -346,10 +346,9 @@ public class GradeBookApp extends javax.swing.JFrame {
         fileMenu.setMnemonic(KeyEvent.VK_F);
         menuBar.add(fileMenu);
         
-        
          saveAction = new javax.swing.JMenuItem("Save", KeyEvent.VK_S);
          openAction = new javax.swing.JMenuItem("Open", KeyEvent.VK_O);
-        
+        exportCSV = new javax.swing.JMenuItem("Export CSV", KeyEvent.VK_C);
          exitAction = new javax.swing.JMenuItem("Exit", KeyEvent.VK_E);
         
         exitAction.addActionListener(new java.awt.event.ActionListener() {
@@ -360,7 +359,9 @@ public class GradeBookApp extends javax.swing.JFrame {
         saveAction.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 try{
+                    
                 myCourse.saveCourse();
+                swing();
                 } catch (Exception e){
                 }
             }
@@ -375,13 +376,23 @@ public class GradeBookApp extends javax.swing.JFrame {
                 }
             }
         });
-        
+        exportCSV.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                try{
+                    myCourse.exportToCSV();
+                    swing();
+                } catch (Exception e){
+                   
+                }
+            }
+        });
         fileMenu.add(saveAction);
         fileMenu.add(openAction);
         fileMenu.addSeparator();
+        fileMenu.add(exportCSV);
+        fileMenu.addSeparator();
         fileMenu.add(exitAction);
         
-      
        Object[] columns = {"ID", "First Name", "Middle Name", "Last Name", "Final Grade"};
         model.setColumnIdentifiers(columns);
         
@@ -435,8 +446,12 @@ public class GradeBookApp extends javax.swing.JFrame {
 
     }
     
+    private void swing(){
+        SwingUtilities.updateComponentTreeUI(this);
+    }
+    
     private void load(){
-        
+      SwingUtilities.updateComponentTreeUI(this);
         termLabel.setText(myCourse.getTerm());
         courseLabel.setText(myCourse.getCourseName());
         
@@ -497,7 +512,7 @@ public class GradeBookApp extends javax.swing.JFrame {
                                 categoryModel.addRow(new Object[]{c.getCategoryName()});
 			}
            
-           
+            
   /*      for(Student s : currentStudents){
 			
             double grade = myCourse.roundDouble(myCourse.calculateGrade(s));
@@ -957,6 +972,7 @@ public class GradeBookApp extends javax.swing.JFrame {
                 frame.setVisible(true);
                 frame.setLocationRelativeTo(null);
                 frame.setTitle("GradeBook");
+                SwingUtilities.updateComponentTreeUI(frame);
             }
         });
     }
@@ -997,6 +1013,7 @@ public class GradeBookApp extends javax.swing.JFrame {
     private javax.swing.JMenuItem exitAction;         
     private javax.swing.JMenuItem openAction;         
     private javax.swing.JMenuItem saveAction;
+    private javax.swing.JMenuItem exportCSV;  
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JMenu fileMenu;
     private javax.swing.JTable table;
