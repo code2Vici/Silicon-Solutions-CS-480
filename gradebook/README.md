@@ -1,5 +1,4 @@
 # Silicon-Solutions-CS-480
-Software Engineering Projects
 
 Project ID #: 05
 Estimated Development Time: 7 days
