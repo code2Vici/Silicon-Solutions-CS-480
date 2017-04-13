@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.LinearLayoutCompat
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="siliconsolutions.cpptourapp.HomeScreen">
+
+    <android.support.v7.widget.LinearLayoutCompat
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="#000000">
+
+
+        <ImageView
+            android:padding="4dp"
+            android:layout_weight="4"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:src="@drawable/calpoly3"
+            android:scaleType="centerCrop"
+
+            />
+
+        <TextView
+            android:background="#FF669955"
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:text="CAMPUS TOUR!"
+            android:textSize="30dp"
+            android:gravity="center"
+            android:textColor="#FFD700"
+            android:textStyle="italic"
+            />
+
+        <Button
+            android:textSize="25dp"
+            android:text="LET'S NAVIGATE"
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="0dp" />
+
+    </android.support.v7.widget.LinearLayoutCompat>
+
+</android.support.v7.widget.LinearLayoutCompat>
