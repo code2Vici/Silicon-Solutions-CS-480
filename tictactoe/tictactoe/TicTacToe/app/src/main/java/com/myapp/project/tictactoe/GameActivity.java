@@ -282,51 +282,37 @@ public class GameActivity extends AppCompatActivity {
 
 
     private boolean checkWinner(){
-        boolean win;
 
-        // Checks all horizontal win conditions
-        for ( int j = 0; j < ROW_COL_SIZE; j++ ) {
-            win = true;
-            for ( int i = 1; i < ROW_COL_SIZE; i++ ) {
-                if ( win ) {
-                    if ( array[ i ][ j ] == array[ i - 1 ][ j ] && array[ i ][ j ] != 0 ) {
-                        win = true;
-                    } else { win = false; }
-
-                }
-            }
-            if ( win ) { return win; }
-        }
-
-        // Checks all vertical win conditions
-        win = true; // Needed for default check
-        for ( int j = 0; j < ROW_COL_SIZE; j++ ) {
-            win = true;
-            for ( int i = 1; i < ROW_COL_SIZE; i++ ) {
-                if ( win ) {
-                    if ( array[ j ][ i ] == array[ j ][ i - 1 ] && array[ i ][ j ] != 0 ) {
-                        win = true;
-                    } else { win = false; }
-
-                }
-            }
-            if ( win ) { return win; }
-        }
-
-        // Upper left to bottom right diagonal check
-        if ( ROW_COL_SIZE == ROW_COL_SIZE ) {
-            // For generality, if table isn't square diagonal not valid.
-            win = true;
-            for ( int i = 1; i < ROW_COL_SIZE; i++ ) {
-                if ( win ) {
-                    if ( array[ i ][ i ] == array[ i- 1 ][ i - 1 ] && array[ i ][ i ] != 0 ) {
-                        win = true;
-                    } else { win = false; }
-
-                }
+        //check rows
+        for(int i = 0; i < ROW_COL_SIZE; i++){
+            if(valueCheck(array[i][0],array[i][1],array[i][2])){
+                return true;
             }
         }
-        return win;
+
+        //check cols
+        for(int i = 0; i < ROW_COL_SIZE; i++){
+            if(valueCheck(array[0][i],array[1][i],array[2][i])){
+                return true;
+            }
+        }
+
+        //check dialog
+        if(valueCheck(array[0][0],array[1][1],array[2][2]))
+            return true;
+
+        //check reverse dialog
+        if(valueCheck(array[0][2],array[1][1],array[2][0]))
+            return true;
+
+        return false;
+    }
+
+    private boolean valueCheck(int a, int b , int c){
+        if((a == b) && (a == c) && a != 0){
+            return true;
+        }
+        return false;
     }
 
     private void loadGame(String s){
