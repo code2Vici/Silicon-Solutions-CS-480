@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">CPP Tour</string>
+    <string name="search_tip">Browse</string>
 </resources>
