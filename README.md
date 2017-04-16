@@ -55,9 +55,9 @@ Checkpoint 5 (Day 7):
 Checkpoint 6 (Day 8): 
   o Project Due
 
+#######################################################################################
 
-
-Project ID #: 9 (Tic-Tac-Toe)
+Project ID #: 9 (Tic-Tac-Toe) Estimated Development Time: 3 Days
 
 Project Description:
 
