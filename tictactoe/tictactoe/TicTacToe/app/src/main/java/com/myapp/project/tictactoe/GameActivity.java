@@ -44,30 +44,37 @@ public class GameActivity extends AppCompatActivity {
     private int moveCounter = 0;
     private Intent intent;
 
+    /**
+     * Game activity with Tic-tac-toe grid
+     *
+     * @param savedInstanceState Instance of the activity to load.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
+
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().setNavigationBarColor(getResources().getColor(R.color.colorPrimary));
         }
 
-
+        //Error display dialogue when tapping a taken grid spot
         AlertDialog.Builder errorBuilder = new AlertDialog.Builder(GameActivity.this);
         errorBuilder.setTitle("Error").setMessage("Pick something else!");
         errorBuilder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-
+                System.out.println("Test click");
             }
         });
         intent = getIntent();
         gameLoaded = intent.hasExtra("data");
         errorDialog =  errorBuilder.create();
 
-
         winningBuilder = new AlertDialog.Builder(GameActivity.this);
 
+        //Save dialogue
         AlertDialog.Builder saveBuilder = new AlertDialog.Builder(GameActivity.this);
         View view = LayoutInflater.from(this).inflate(R.layout.save_dialog,null);
         final EditText input = (EditText) view.findViewById(R.id.edit_dialog);
@@ -75,6 +82,7 @@ public class GameActivity extends AppCompatActivity {
         saveBuilder.setPositiveButton(R.string.saveConfirm, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
+
                 fileName = input.getText().toString();
                 try {
                         String s = "";
@@ -85,7 +93,7 @@ public class GameActivity extends AppCompatActivity {
                         }
                         s += String.valueOf(curPlayer);
                         outputStream =  openFileOutput(fileName, Context.MODE_PRIVATE);
-                        outputStream.write(s.getBytes());//input[j
+                        outputStream.write(s.getBytes());
                         outputStream.close();
 
                 } catch (Exception e) {
@@ -102,7 +110,6 @@ public class GameActivity extends AppCompatActivity {
         saveBuilder.setNegativeButton(R.string.doNotSave, null);
         final AlertDialog saveDialog = saveBuilder.create();
 
-
         AlertDialog.Builder tieBuilder = new AlertDialog.Builder(GameActivity.this);
         tieBuilder.setTitle("GAME OVER");
         tieBuilder.setMessage("This is a tie game!").setCancelable(false)
@@ -114,9 +121,6 @@ public class GameActivity extends AppCompatActivity {
                 });
         tieDialog = tieBuilder.create();
 
-
-        //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        //setSupportActionBar(toolbar);
         tile1 = (ImageButton) findViewById(R.id.imageButton1);
         tile2 = (ImageButton) findViewById(R.id.imageButton2);
         tile3 = (ImageButton) findViewById(R.id.imageButton3);
@@ -280,7 +284,10 @@ public class GameActivity extends AppCompatActivity {
         moveCounter++;
     }
 
-
+    /**
+     * Checks for winning player
+     * @return winner
+     */
     private boolean checkWinner(){
 
         //check rows

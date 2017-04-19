@@ -10,6 +10,9 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 
+/**
+ * Home screen activity with play and load button
+ */
 public class HomeActivity extends Activity {
     public Button playButton;
     public Button loadButton;
@@ -21,8 +24,10 @@ public class HomeActivity extends Activity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_home);
+
         playButton = (Button) findViewById(R.id.playButton);
         loadButton = (Button) findViewById(R.id.loadButton);
+
         Animation rotateAnimation = (Animation) AnimationUtils.loadAnimation(getApplicationContext(),R.anim.rotate);
         playButton.setAnimation(rotateAnimation);
         playButton.setOnClickListener(new View.OnClickListener() {

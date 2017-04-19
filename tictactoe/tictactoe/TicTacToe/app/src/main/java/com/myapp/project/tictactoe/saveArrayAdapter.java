@@ -13,7 +13,9 @@ import android.widget.TextView;
 import java.io.File;
 import java.util.ArrayList;
 
-
+/**
+ * Adapter class to list saved games
+ */
 public class saveArrayAdapter extends ArrayAdapter<File>{
     public ArrayList<File> files;
     private Context context;

@@ -21,9 +21,14 @@ import java.util.Arrays;
 public class LoadScreen extends Activity {
     private ArrayList<File> fileArrayList;
 
+    /**
+     * Load screen activity when saving a game
+     * @param savedInstanceState Instance of activity to load
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -44,10 +49,15 @@ public class LoadScreen extends Activity {
         });
     }
 
-    private String readFile(File f){
+    /**
+     * File reader method
+     * @param file File to read
+     * @return Content of file read
+     */
+    private String readFile(File file){
         String content = null;
         try {
-            FileInputStream inputStream = openFileInput(f.getName());
+            FileInputStream inputStream = openFileInput(file.getName());
 
             byte[] readByte = new byte[inputStream.available()];
 

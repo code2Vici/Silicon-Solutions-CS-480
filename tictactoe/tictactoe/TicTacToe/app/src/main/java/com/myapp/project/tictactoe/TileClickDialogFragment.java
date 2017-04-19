@@ -7,9 +7,9 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 
 /**
+ * Dialogue display to confirm tile selection
  * Created by user on 4/10/17.
  */
-
 public class TileClickDialogFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
