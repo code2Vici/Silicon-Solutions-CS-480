@@ -13,13 +13,8 @@ Link contains an overview of what the Google Maps Api can do as well as links to
 https://developers.google.com/maps/documentation/android-api/intro
 
 Some feature links:
-
-	* [Creating map]( https://developers.google.com/maps/documentation/android-api/map)
-	
-    	* [Location data]( https://developers.google.com/maps/documentation/android-api/location )
-	
-	* [Shapes ( polylines/polygons )]( https://developers.google.com/maps/documentation/android-api/shapes )
-	
-	* [Points of interest]( https://developers.google.com/maps/documentation/android-api/poi )
-	
-	* [( Tutorial ) Using polylines/polygons]( https://developers.google.com/maps/documentation/android-api/polygon-tutorial )
+- [Creating map]( https://developers.google.com/maps/documentation/android-api/map)
+- [Location data]( https://developers.google.com/maps/documentation/android-api/location )
+- [Shapes ( polylines/polygons )]( https://developers.google.com/maps/documentation/android-api/shapes )
+- [Points of interest]( https://developers.google.com/maps/documentation/android-api/poi )	
+- [( Tutorial ) Using polylines/polygons]( https://developers.google.com/maps/documentation/android-api/polygon-tutorial )
