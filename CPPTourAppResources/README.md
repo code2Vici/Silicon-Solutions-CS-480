@@ -15,6 +15,9 @@ http://www.cpp.edu/~virtual-tour/360-panoramas/
 Link contains an overview of what the Google Maps Api can do as well as links to guides on how to set up map and features.
 https://developers.google.com/maps/documentation/android-api/intro
 
+#### Android Icon Generator:
+http://romannurik.github.io/AndroidAssetStudio/icons-generic.html#source.type=clipart&source.clipart=ac_unit&source.space.trim=1&source.space.pad=0&size=32&padding=8&color=rgba(0%2C%200%2C%200%2C%200.54)&name=ic_ac_unit
+
 Some feature links:
 - [Creating map]( https://developers.google.com/maps/documentation/android-api/map)
 - [Location data]( https://developers.google.com/maps/documentation/android-api/location )
