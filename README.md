@@ -76,3 +76,34 @@ Checkpoint 3 (Day 3):
 
 •	Complete documentation and report.
 
+######################################################################################
+
+Project ID #: 2 (Imp Compiler) Estimated Development Time: 7 Days
+
+Project Description:
+
+This program will be developed using the java programming language as a command line program. It will read in a .imp file and compile it to a .imc file. This compilation will be done according to the specifications in the project description. The program will take in files through command line arguments when executed. It will have the ability to compile multiple files by going through given files sequentially. The program will not need any user interaction after the execution, outputted files will be same name as input file but with .imc extension. In terms of development, were going to focus on creating the statement parser first, then proceed to develop the statement handler which will perform the translation into imp code and output it to the imc file.
+ 
+Preliminary Development Plan:
+
+Checkpoint 1 ( Day 1 ):
+·       Setup project
+·       Begin work on statement parser
+o   Parser will read through file and determine whether the statement is valid and which command it corresponds to
+o   Will print out error if invalid, give line number, then quit
+·       Begin work on statement handler
+Checkpoint 2 ( Day 3 ):
+·       Setup project
+·       Have statement parser done
+o   Complete testing on parser
+·       Continue work on statement handler
+o   Statement handler will process parsed statements and convert to imp code
+Checkpoint 3 ( Day 5 ):
+·       Finish statement handler
+·       Finish up all output and file writing
+o   Writing to file happens at end, file is not created if there is error.
+·       Perform extensive full program testing
+Checkpoint 4 ( Day 7 ):
+·       Complete testing
+·       Complete documentation and report
+
