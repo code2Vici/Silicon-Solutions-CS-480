@@ -13,9 +13,9 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:supportsRtl="true"
-        android:theme="@style/AppTheme">
-        <activity android:name=".HomeScreen">
+        android:supportsRtl="true">
+        <activity android:name=".HomeScreen"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -36,7 +36,8 @@
 
         <activity
             android:name=".BaseMap"
-            android:label="@string/title_activity_base_map">
+            android:label="@string/title_activity_base_map"
+            android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="siliconsolutions.cpptourapp.BaseMap" />
