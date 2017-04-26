@@ -20,22 +20,8 @@
             android:layout_height="?android:attr/actionBarSize"
             app:popupTheme="@style/AppTheme.PopupOverlay"
             android:background="@color/colorPrimary"
-            android:fitsSystemWindows="true">
+            android:fitsSystemWindows="true"/>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="right">
-
-                <ImageButton
-                    android:id="@+id/toolbar_building_menu_button"
-                    android:layout_width="wrap_content"
-                    android:src="@drawable/ic_buildings"
-                    android:background="@null"
-                    android:paddingRight="20dp"
-                    android:layout_height="wrap_content" />
-            </LinearLayout>
-        </android.support.v7.widget.Toolbar>
 
     </android.support.design.widget.AppBarLayout>
 
