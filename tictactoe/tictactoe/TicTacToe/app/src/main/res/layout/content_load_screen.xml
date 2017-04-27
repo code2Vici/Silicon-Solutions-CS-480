@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingTop="20dp"
+    android:paddingBottom="20dp"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.myapp.project.tictactoe.LoadScreen"
+    tools:showIn="@layout/activity_load_screen"
+    android:gravity="center_horizontal"
+    android:background="@color/colorPrimary"
+    android:orientation="vertical">
+
+    <ImageView
+        android:layout_width="288dp"
+        android:layout_height="62dp"
+        android:textColor="@color/colorAccent"
+        android:layout_marginBottom="20dp"
+        android:gravity="center_horizontal"
+        android:src="@drawable/loadgame" />
+
+    <ListView
+        android:id="@+id/saveList"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+</LinearLayout>

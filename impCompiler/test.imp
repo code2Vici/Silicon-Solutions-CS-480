@@ -1,0 +1,9 @@
+begin test
+Y := 3;X := 3;thenZ := 23
+Z := X + Y; X := 4
+if X then Y := 4 else Y := 2 endif
+X := 4
+Y := 2
+while X do X := X - 1 endwhile
+Z := X + Y
+end

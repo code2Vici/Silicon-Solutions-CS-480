@@ -1,0 +1,6 @@
+begin test
+X := 5
+Y := 3
+Z := X * Y; X := 4
+Y := Z * X
+end

@@ -1,0 +1,5 @@
+begin x
+X := 5 - 3
+Y := 5 - X
+Z := Y - X
+end

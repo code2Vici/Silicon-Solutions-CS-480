@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">TicTacToe</string>
+    <string name="ok">Ok</string>
+    <string name="yes">Yes</string>
+    <string name="endGame">End Game</string>
+    <string name="cancel">I change my mind</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY CONTENT</string>
+    <string name="title_activity_game">Tic-Tac-Toe</string>
+    <string name="saveConfirm">Save and Exit Game</string>
+    <string name="doNotSave">Cancel</string>
+    <string name="title_activity_load_screen">Load Game</string>
+</resources>
