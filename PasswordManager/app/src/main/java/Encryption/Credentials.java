@@ -29,16 +29,13 @@ public class Credentials implements Serializable{
 
     public boolean addCredential(String username, String password, String website) throws Exception{
         boolean added = true;
-        for(Credential c : credentials){
-            if(Encryptor.decrypt(c.getPassword(), hash).equals(password)){
-                added = false;
-            }
-        }
+
         if(added){
             credentials.add(new Credential(username,Encryptor.encrypt(password, hash),website));
         }
         return added;
     }
+    
     public LinkedList<Credential> getCredentials(){
         return credentials;
     }

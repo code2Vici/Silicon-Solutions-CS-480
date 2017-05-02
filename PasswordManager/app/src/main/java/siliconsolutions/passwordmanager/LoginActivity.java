@@ -122,7 +122,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         }
         catch(Exception e){
             Log.d("TAG",e.getLocalizedMessage());
-            Log.d("TAG","testhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhd");
+            Log.d("TAG","save credentials failed");
             e.printStackTrace();
         }
     }
@@ -390,18 +390,14 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         protected void onPostExecute(final Boolean success) {
             mAuthTask = null;
             showProgress(false);
-            Credentials myCreds =null;
             if (success) {
-                for(Credentials c : credentials){
-                    if(c.getUsername().equals(mEmail)){
-                        myCreds = c;
-                    }
-                }
                 finish();
                 Intent myIntent = new Intent(LoginActivity.this,MainActivity.class);
                 Bundle bundle = new Bundle();
-                bundle.putSerializable("credentialList", myCreds);
+                bundle.putSerializable("credentialList", credentials);
                 myIntent.putExtras(bundle);
+                myIntent.putExtra("username",mEmail);
+                myIntent.putExtra("password",mPassword);
                 startActivity(myIntent);
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
