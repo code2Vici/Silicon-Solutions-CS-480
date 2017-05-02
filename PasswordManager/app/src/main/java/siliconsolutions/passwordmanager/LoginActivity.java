@@ -20,6 +20,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -31,6 +32,13 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -41,6 +49,8 @@ import static android.Manifest.permission.READ_CONTACTS;
 public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
 
     private static final int REQUEST_READ_CONTACTS = 0;
+
+    private static final String CREDENTIAL_FILE_NAME = "Creds.ser";
 
     private static final String[] DUMMY_CREDENTIALS = new String[]{
             "foo@example.com:hello", "bar@example.com:world"
@@ -62,6 +72,13 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
         populateAutoComplete();
+
+        try {
+            loadCredentials(CREDENTIAL_FILE_NAME);
+        }catch(Exception e){
+
+        }
+
 
         mPasswordView = (EditText) findViewById(R.id.password);
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -94,6 +111,43 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
     }
+
+    private void saveCredentials(String fileName){
+        try {
+            FileOutputStream fos = this.openFileOutput(fileName, this.MODE_PRIVATE);
+            ObjectOutputStream os = new ObjectOutputStream(fos);
+            os.writeObject(credentials);
+            os.close();
+            fos.close();
+        }
+        catch(Exception e){
+            Log.d("TAG",e.getLocalizedMessage());
+            Log.d("TAG","testhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhd");
+            e.printStackTrace();
+        }
+    }
+
+    private void loadCredentials(String fileName){
+        FileInputStream fis = null;
+        try {
+            fis = this.openFileInput(fileName);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        ObjectInputStream is = null;
+
+        try {
+            is = new ObjectInputStream(fis);
+            credentials = (LinkedList<Credentials>) is.readObject();
+            is.close();
+            fis.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
     private void attemptRegister(){
         String email = mEmailView.getText().toString();
         String password = mPasswordView.getText().toString();
@@ -105,6 +159,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             }
         }
         credentials.add(new Credentials(email,Encryptor.hash(password)));
+        saveCredentials(CREDENTIAL_FILE_NAME);
         displayToast("User has been Added!");
     }
     private void populateAutoComplete() {
@@ -335,10 +390,18 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         protected void onPostExecute(final Boolean success) {
             mAuthTask = null;
             showProgress(false);
-
+            Credentials myCreds =null;
             if (success) {
+                for(Credentials c : credentials){
+                    if(c.getUsername().equals(mEmail)){
+                        myCreds = c;
+                    }
+                }
                 finish();
                 Intent myIntent = new Intent(LoginActivity.this,MainActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("credentialList", myCreds);
+                myIntent.putExtras(bundle);
                 startActivity(myIntent);
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));

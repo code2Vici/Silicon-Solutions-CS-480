@@ -1,5 +1,7 @@
 package siliconsolutions.passwordmanager;
 
+import Encryption.*;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -24,6 +26,11 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+
+        Intent myIntent = this.getIntent();
+        Bundle bundle = myIntent.getExtras();
+        Credentials myCreds = (Credentials) bundle.getSerializable("credentialList");
+
     }
 
 }
