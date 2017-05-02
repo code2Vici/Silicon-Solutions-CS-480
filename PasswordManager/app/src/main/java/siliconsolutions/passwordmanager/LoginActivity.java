@@ -29,9 +29,12 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import Encryption.*;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
@@ -42,6 +45,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private static final String[] DUMMY_CREDENTIALS = new String[]{
             "foo@example.com:hello", "bar@example.com:world"
     };
+    private LinkedList<Credentials> credentials = new LinkedList<Credentials>();
 
     private UserLoginTask mAuthTask = null;
 
@@ -79,10 +83,30 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             }
         });
 
+        Button mEmailRegisterButton = (Button) findViewById(R.id.email_register_button);
+        mEmailRegisterButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                attemptRegister();
+            }
+        });
+
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
     }
+    private void attemptRegister(){
+        String email = mEmailView.getText().toString();
+        String password = mPasswordView.getText().toString();
 
+        for(Credentials c: credentials){
+            if(c.getUsername().equals(email)){
+                displayToast("This username already has an account. \n Please try another");
+                return;
+            }
+        }
+        credentials.add(new Credentials(email,Encryptor.hash(password)));
+        displayToast("User has been Added!");
+    }
     private void populateAutoComplete() {
         if (!mayRequestContacts()) {
             return;
@@ -178,12 +202,12 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     private boolean isEmailValid(String email) {
         //TODO: Replace this with your own logic
-        return email.contains("@");
+        return true;
     }
 
     private boolean isPasswordValid(String password) {
         //TODO: Replace this with your own logic
-        return password.length() > 4;
+        return true;
     }
 
     /**
@@ -264,7 +288,10 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         mEmailView.setAdapter(adapter);
     }
-
+    public void displayToast(String s){
+        Toast.makeText(this, s,
+        Toast.LENGTH_LONG).show();
+    }
 
     private interface ProfileQuery {
         String[] PROJECTION = {
@@ -294,23 +321,14 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         protected Boolean doInBackground(Void... params) {
             // TODO: attempt authentication against a network service.
 
-            try {
-                // Simulate network access.
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                return false;
-            }
-
-            for (String credential : DUMMY_CREDENTIALS) {
-                String[] pieces = credential.split(":");
-                if (pieces[0].equals(mEmail)) {
-                    // Account exists, return true if the password matches.
-                    return pieces[1].equals(mPassword);
+            for (Credentials c : credentials) {
+                if(c.getUsername().equals(mEmail)){
+                    return Encryptor.checkPassword(mPassword,c.getHash());
                 }
+
             }
 
-            // TODO: register the new account here.
-            return true;
+            return false;
         }
 
         @Override

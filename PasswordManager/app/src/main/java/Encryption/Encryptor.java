@@ -14,7 +14,7 @@ import org.bouncycastle.util.encoders.Base64;
 //import java.util.Base64;s
 
 public class Encryptor {
-    private static int workload = 12;
+    private static int workload = 5;
 
     public Encryptor(){
 
