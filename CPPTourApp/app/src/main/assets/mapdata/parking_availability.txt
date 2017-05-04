@@ -1,0 +1,28 @@
+Faculty and Staff, Student, Visitor, Disabled
+Faculty and Staff, Disabled
+Designated accessible parking for Kellogg Gym, Faculty and Staff, Student, Visitor, Resident
+Faculty and Staff, Student, Visitor, Disabled
+Faculty and Staff, Student, Visitor, Disabled
+Faculty and Staff, Student, Visitor, No Disabled
+Faculty and Staff, Visitor, Disabled
+Faculty and Staff, Student, Visitor, No Disabled
+Faculty and Staff, Visitor, Disabled, $1/hour Parking
+Faculty and Staff, Student, Visitor, No Disabled
+Faculty and Staff, Student, Visitor, No Disabled, Presidential, VIP and Visitor, $1/hour Parking
+Faculty and Staff, Student, Visitor, No Disabled
+Faculty and Staff, Student, Visitor, No Disabled
+Faculty and Staff, Resident, Visitor, $1/hour Parking
+Faculty and Staff, Student, Visitor, Disabled
+Faculty and Staff, Student, Visitor, Disabled
+Faculty and Staff (J1-J2: 7.00am - 5.30pm; J3-J8), Student (J1-J2: After 5.30pm; J3-J8), Visitor (J1-J2: After 5.30pm; J3-J8), No Disabled
+Kellogg West permit Only, Disabled
+Faculty and Staff, Student, Visitor, Disabled
+Faculty and Staff, Student, No Disabled
+CTTI permit only, Disabled
+Faculty and Staff, Student
+Faculty and Staff, Resident, No Disabled
+Student, Visitor, Faculty and Staff, Disabled
+Faculty and Staff, Resident, Disabled
+Faculty and Staff, Student, Visitor, Disabled
+Faculty and Staff, Student, Visitor, $1/hour Parking, Disabled
+Student
