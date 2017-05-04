@@ -3,11 +3,7 @@ package siliconsolutions.cpptourapp.Activity;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
-import android.location.Address;
-import android.location.Geocoder;
 import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.os.Bundle;
@@ -17,9 +13,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.SpannableString;
-import android.text.style.ForegroundColorSpan;
-import android.util.TypedValue;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -27,18 +21,25 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PolylineOptions;
 
-
-import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import siliconsolutions.cpptourapp.Directions.DirectionsService;
+import siliconsolutions.cpptourapp.Directions.GeoCodeResponse;
+import siliconsolutions.cpptourapp.Directions.Leg;
+import siliconsolutions.cpptourapp.Directions.Polyline;
+import siliconsolutions.cpptourapp.Directions.Route;
 import siliconsolutions.cpptourapp.GPS.GPSTracker;
 import siliconsolutions.cpptourapp.GPS.GPSTrackerListener;
 import siliconsolutions.cpptourapp.Model.GlobalVars;
@@ -52,11 +53,10 @@ public class BaseMap extends AppCompatActivity implements
 
     private GoogleMap mMap;
     private DrawerLayout drawer;
-
     private ImageView btnMyLocation;
     private ImageView btnOpenFavoriteDrawer;
-
     private GPSTracker gpsTracker;
+    private com.google.android.gms.maps.model.Polyline line;
 
 
     @Override
@@ -76,6 +76,32 @@ public class BaseMap extends AppCompatActivity implements
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
+
+        DirectionsService service = DirectionsService.retrofit.create(DirectionsService.class);
+        String origin = "34.058664,-117.824796";
+        String dest = "34.057115,-117.82743";
+        String mode = "walking";
+
+        service.getJson(origin, dest, mode).enqueue(new Callback<GeoCodeResponse>() {
+            @Override
+            public void onResponse(Call<GeoCodeResponse> call, Response<GeoCodeResponse> response) {
+                List<Route> routes = response.body().routes;
+                List<Leg> legs = routes.get(0).getLegs();
+                String polyLine = routes.get(0).getOverviewPolyline().getPoints();
+                List<LatLng> latLngs = decodePoly(polyLine);
+                for(int i = 0; i < latLngs.size() - 1;i++){
+                    LatLng src = latLngs.get(i);
+                    LatLng dest = latLngs.get(i + 1);
+                    line = mMap.addPolyline(new PolylineOptions().add(new LatLng(src.latitude,src.longitude),new LatLng(dest.latitude,dest.longitude))
+                    .width(5).color(Color.BLUE).geodesic(true));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<GeoCodeResponse> call, Throwable t) {
+                Log.i("FAILURE","did not receive call");
+            }
+        });
 
         NavigationView leftNavigationView = (NavigationView) findViewById(R.id.nav_view_left);
         leftNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
@@ -168,13 +194,16 @@ public class BaseMap extends AppCompatActivity implements
 
         // Add a marker in Sydney and move the camera
         LatLng cpp = new LatLng(34.056502, -117.821465);
-        mMap.addMarker(new MarkerOptions().position(cpp).title("Cal Poly Pomona"));
+        setMarkers();
+        //mMap.addMarker(new MarkerOptions().position(cpp).title("Cal Poly Pomona"));
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(cpp, 16));
     }
 
     public void setMarkers() {
         LatLng building8 = new LatLng(34.058664, -117.824796);
-        //mMap.addMarker(new MarkerOptions().position(building8).title("Building 8"));
+        LatLng building7 = new LatLng(34.057115,-117.82743);
+        mMap.addMarker(new MarkerOptions().position(building8).title("Building 8"));
+        mMap.addMarker(new MarkerOptions().position(building7).title("Building 7"));
     }
 
     @Override
@@ -259,5 +288,42 @@ public class BaseMap extends AppCompatActivity implements
     @Override
     public void onGPSTrackerStatusChanged(String provider, int status, Bundle extra) {
 
+    }
+
+    private ArrayList<LatLng> decodePoly(String encoded) {
+
+        Log.i("Location", "String received: "+encoded);
+        ArrayList<LatLng> poly = new ArrayList<LatLng>();
+        int index = 0, len = encoded.length();
+        int lat = 0, lng = 0;
+
+        while (index < len) {
+            int b, shift = 0, result = 0;
+            do {
+                b = encoded.charAt(index++) - 63;
+                result |= (b & 0x1f) << shift;
+                shift += 5;
+            } while (b >= 0x20);
+            int dlat = ((result & 1) != 0 ? ~(result >> 1) : (result >> 1));
+            lat += dlat;
+
+            shift = 0;
+            result = 0;
+            do {
+                b = encoded.charAt(index++) - 63;
+                result |= (b & 0x1f) << shift;
+                shift += 5;
+            } while (b >= 0x20);
+            int dlng = ((result & 1) != 0 ? ~(result >> 1) : (result >> 1));
+            lng += dlng;
+
+            LatLng p = new LatLng((((double) lat / 1E5)),(((double) lng / 1E5)));
+            poly.add(p);
+        }
+
+        for(int i=0;i<poly.size();i++){
+            Log.i("Location", "Point sent: Latitude: "+poly.get(i).latitude+" Longitude: "+poly.get(i).longitude);
+        }
+        return poly;
     }
 }
