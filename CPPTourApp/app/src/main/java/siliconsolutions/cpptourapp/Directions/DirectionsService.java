@@ -16,6 +16,7 @@ import retrofit2.http.Query;
  */
 
 public interface DirectionsService {
+
     @GET("maps/api/directions/json")
     public Call<GeoCodeResponse> getJson(@Query("origin") String origin, @Query("destination") String destination,@Query("mode") String mode);
 

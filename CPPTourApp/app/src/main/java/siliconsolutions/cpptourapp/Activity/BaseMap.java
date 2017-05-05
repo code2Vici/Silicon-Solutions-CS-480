@@ -321,8 +321,8 @@ public class BaseMap extends AppCompatActivity implements
             poly.add(p);
         }
 
-        for(int i=0;i<poly.size();i++){
-            Log.i("Location", "Point sent: Latitude: "+poly.get(i).latitude+" Longitude: "+poly.get(i).longitude);
+        for(int i=0;i < poly.size(); i++){
+            Log.i("Location", "Point sent: Latitude: " + poly.get(i).latitude + " Longitude: " + poly.get(i).longitude);
         }
         return poly;
     }
