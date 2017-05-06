@@ -1,29 +1,51 @@
 package siliconsolutions.passwordmanager;
 
-import Encryption.*;
-import Encryption.Credentials;
-
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.DialogFragment;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.*;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.InputType;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import java.io.FileOutputStream;
 import java.io.ObjectOutputStream;
+import java.math.BigInteger;
+import java.security.SecureRandom;
+import java.util.Collections;
 import java.util.LinkedList;
+
+import Encryption.Credential;
+import Encryption.Credentials;
+import Encryption.Encryptor;
+
+import static org.bouncycastle.crypto.tls.ContentType.alert;
 
 public class MainActivity extends AppCompatActivity {
 
-    String username;
-    String password;
-    LinkedList<Credentials> credentials;
-    Credentials myCreds;
+    private Credentials credentials;
+    private String password;
+    private LinkedList<Credential> credentialList;
+    private String m_Website;
+    private String m_Username;
+    private String m_password;
+    private ListView mListView;
+
+    private static final String CREDENTIAL_FILE_NAME = "Creds.ser";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,52 +54,210 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                //        .setAction("Action", null).show();
-                displayToast(username);
+        m_Website ="";
+        m_Username ="";
+        m_password ="";
+
+        mListView = (ListView) findViewById(R.id.password_list_view);
+
+
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            public void onItemClick(AdapterView <?> parentAdapter, View view, int position,
+                                    long id) {
+                    String s =(String) mListView.getItemAtPosition(position);
+                    String[] splitWebsiteAndUsername = s.split("\n");
+                    Credential reqCreds = null;
+                for(Credential c : credentialList){
+                        if(c.getUsername().equals(splitWebsiteAndUsername[1])){
+                            if(c.getWebsite().equals(splitWebsiteAndUsername[0])){
+                                reqCreds = c;
+                            }
+                        }
+                    }
+                String display = null;
+                try {
+                    display = reqCreds.getWebsite() + "\n" + reqCreds.getUsername() +"\n" + Encryptor.decrypt(reqCreds.getPassword(),password);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                Toast.makeText(getApplicationContext(), display, Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getApplicationContext(), id, Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getApplicationContext(), position, Toast.LENGTH_SHORT).show();
+
+
+                //  Place code here with the action
+
             }
         });
 
         Intent myIntent = this.getIntent();
         Bundle bundle = myIntent.getExtras();
 
-        credentials = (LinkedList<Credentials>) bundle.getSerializable("credentialList");
-        username = myIntent.getStringExtra("username");
-        password = myIntent.getStringExtra("password");
-        loadCreds(username);
-    }
-    public void loadCreds(String username){
-        for(Credentials c: credentials){
-            if(c.getUsername().equals(username)){
-                myCreds = c;
-            }
+        credentials = (Credentials) bundle.getSerializable("credentials");
+        password = bundle.getString("password");
+
+        credentialList = credentials.getCredentials();
+
+        //displayToast(password);
+
+        if(credentials.getCredentials().size() >0){
+            populateList();
         }
+
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+     //           getAddInfo(true);
+                    getAddInfo();
+            }
+        });
     }
-    public void displayToast(String s){
+    public void displayToast(String s) {
         Toast.makeText(this, s,
                 Toast.LENGTH_LONG).show();
     }
 
-    private void saveCredentials(String fileName){
+    //WIP
+    private void getAddInfo(boolean b){
+        final Dialog dialog = new Dialog(MainActivity.this);
+        dialog.setContentView(R.layout.dialogue_display);
+        dialog.setTitle("PIN number:");
+        dialog.setCancelable(true);
+
+        Button okButton = (Button) dialog.findViewById(R.id.Ok);
+        okButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+        Button closeButton = (Button) dialog.findViewById(R.id.Close);
+        closeButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+        Button randButton = (Button) dialog.findViewById(R.id.GenerateRandom);
+        randButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        dialog.show();
+    }
+    private void getAddInfo(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Website");
+// Set up the input
+        final EditText inputWebsite = new EditText(this);
+            inputWebsite.setHint("Website");
+        final EditText inputUsername = new EditText(this);
+            inputUsername.setHint("Username");
+        final EditText inputPassword = new EditText(this);
+            inputPassword.setHint("Password");
+
+        inputWebsite.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_NORMAL);
+        inputUsername.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_NORMAL);
+        inputPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_NORMAL);
+
+        LinearLayout layout = new LinearLayout(getApplicationContext());
+        layout.setOrientation(LinearLayout.VERTICAL);
+
+
+        layout.addView(inputWebsite);
+        layout.addView(inputUsername);
+        layout.addView(inputPassword);
+
+       // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
+
+        builder.setView(layout);
+
+ // Set up the buttons
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                m_Website = inputWebsite.getText().toString();
+                m_Username = inputUsername.getText().toString();
+                m_password = inputPassword.getText().toString();
+                addEntry();
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        builder.show();
+
+    }
+    private String generateRandom(){
+        SecureRandom random = new SecureRandom();
+        return new BigInteger(130, random).toString(32);
+    }
+    private void addEntry(){
+        boolean alreadyExists = false;
+        for(Credential c: credentialList){
+            try {
+                if(Encryptor.decrypt(c.getPassword(),password).equals(m_password)){
+                    displayToast("Another website uses this same password! Consider changing it.");
+                }
+                if(c.getWebsite().toLowerCase().equals(m_Website.toLowerCase()) && c.getUsername().toLowerCase().equals(m_Username.toLowerCase())){
+                    alreadyExists = true;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        }
+        if(alreadyExists){
+            displayToast("This account already exists! Please update or delete the existing account!");
+        }
+        else {
+            try {
+                credentialList.add(new Credential(m_Username, Encryptor.encrypt(m_password, password), m_Website));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        //update Data Struct
+        credentials.setCredentials(credentialList);
+        saveCredentials(CREDENTIAL_FILE_NAME);
+        updateEntry();
+    }
+    private void saveCredentials(String fileName) {
         try {
             FileOutputStream fos = this.openFileOutput(fileName, this.MODE_PRIVATE);
             ObjectOutputStream os = new ObjectOutputStream(fos);
             os.writeObject(credentials);
             os.close();
             fos.close();
-        }
-        catch(Exception e){
-            Log.d("TAG",e.getLocalizedMessage());
-            Log.d("TAG","save credentials failed");
+        } catch (Exception e) {
+            Log.d("TAG", e.getLocalizedMessage());
+            Log.d("TAG", "save credentials failed");
             e.printStackTrace();
         }
     }
-    public void checkPasswordComplexity(String password){
-
+    private void updateEntry(){
+        populateList();
+    }
+    private void populateList(){
+        String[] listItems = new String[credentialList.size()];
+        Collections.sort(credentialList);
+        for(int i=0; i<listItems.length; i++){
+            listItems[i] = credentialList.get(i).getWebsite() + "\n" + credentialList.get(i).getUsername();
+        }
+        ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, listItems);
+        mListView.setAdapter(adapter);
     }
 
 }
