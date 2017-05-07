@@ -43,7 +43,12 @@ public class MainActivity extends AppCompatActivity {
     private String m_Website;
     private String m_Username;
     private String m_password;
+    private String d_Website;
+    private String d_Username;
+    private String d_password;
     private ListView mListView;
+    private boolean lazy;
+
 
     private static final String CREDENTIAL_FILE_NAME = "Creds.ser";
 
@@ -57,6 +62,13 @@ public class MainActivity extends AppCompatActivity {
         m_Website ="";
         m_Username ="";
         m_password ="";
+
+        EditText mUsernameView;
+        EditText mPasswordView;
+        EditText mWebsiteView;
+        mWebsiteView = (EditText) findViewById(R.id.d_website);
+        mUsernameView = (EditText) findViewById(R.id.d_username);
+        mPasswordView = (EditText) findViewById(R.id.d_password);
 
         mListView = (ListView) findViewById(R.id.password_list_view);
 
@@ -75,13 +87,11 @@ public class MainActivity extends AppCompatActivity {
                             }
                         }
                     }
-                String display = null;
-                try {
-                    display = reqCreds.getWebsite() + "\n" + reqCreds.getUsername() +"\n" + Encryptor.decrypt(reqCreds.getPassword(),password);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                Toast.makeText(getApplicationContext(), display, Toast.LENGTH_SHORT).show();
+
+//                getAddInfo();
+                displayFromList(reqCreds);
+//                displayFromList();
+
 //                Toast.makeText(getApplicationContext(), id, Toast.LENGTH_SHORT).show();
 //                Toast.makeText(getApplicationContext(), position, Toast.LENGTH_SHORT).show();
 
@@ -114,106 +124,189 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
     public void displayToast(String s) {
         Toast.makeText(this, s,
                 Toast.LENGTH_LONG).show();
     }
 
-    //WIP
-    private void getAddInfo(boolean b){
+//    private void displayFromList(Credential c){
+    private void displayFromList(Credential c){
         final Dialog dialog = new Dialog(MainActivity.this);
-        dialog.setContentView(R.layout.dialogue_display);
-        dialog.setTitle("PIN number:");
+        dialog.setContentView(R.layout.dialogue_display_from_list);
+        dialog.setTitle("View entry");
         dialog.setCancelable(true);
 
-        Button okButton = (Button) dialog.findViewById(R.id.Ok);
+        final String prevUsername = c.getUsername();
+        final String prevPassword = c.getPassword();
+        final String prevWebsite = c.getWebsite();
+
+
+        EditText editWebsite=(EditText)dialog.findViewById(R.id.dfl_website);
+        editWebsite.setText(c.getWebsite());
+
+        EditText editUsername=(EditText)dialog.findViewById(R.id.dfl_username);
+
+        editUsername.setText(c.getUsername());
+        EditText editPassword=(EditText)dialog.findViewById(R.id.dfl_password);
+        try {
+            editPassword.setText(Encryptor.decrypt(c.getPassword(),password));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        Button okButton = (Button) dialog.findViewById(R.id.dfl_ok);
         okButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
+                EditText editWebsite=(EditText)dialog.findViewById(R.id.dfl_website);
+                m_Website=editWebsite.getText().toString();
+                EditText editUsername=(EditText)dialog.findViewById(R.id.dfl_username);
+                m_Username=editUsername.getText().toString();
+                EditText editPassword=(EditText)dialog.findViewById(R.id.dfl_password);
+                m_password=editPassword.getText().toString();
+
+                if((prevUsername.equals(m_Username) && prevWebsite.equals(m_Website)) || !entryExists(m_Website,m_Username)){
+                    deleteEntry(prevWebsite,prevUsername);
+                    addEntry();
+                    dialog.dismiss();
+                }
+               else{
+                    displayToast("Not updated!" + "\n Account already exists in another entry");
+                }
 
             }
         });
-        Button closeButton = (Button) dialog.findViewById(R.id.Close);
+
+        Button closeButton = (Button) dialog.findViewById(R.id.dfl_close);
         closeButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
 
+
+                dialog.dismiss();
+
+
             }
         });
-        Button randButton = (Button) dialog.findViewById(R.id.GenerateRandom);
+        Button randButton = (Button) dialog.findViewById(R.id.dfl_generateRandom);
         randButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
 
+
+                EditText editPassword=(EditText)dialog.findViewById(R.id.dfl_password);
+                editPassword.setText(generateRandom());
+
+
+            }
+        });
+        Button deleteButton = (Button) dialog.findViewById(R.id.dfl_deleteEntry);
+        deleteButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+
+
+                //ARE YOU SURE?
+
+                deleteEntry(prevWebsite,prevUsername);
+                updateEntry();
+                dialog.dismiss();
+            }
+        });
+
+
+        dialog.show();
+
+
+    }
+
+    private boolean deleteEntry(String website, String username){
+
+        for(Credential c: credentialList){
+            if(c.getWebsite().toLowerCase().equals(website.toLowerCase()) && c.getUsername().toLowerCase().equals(username.toLowerCase())){
+                credentialList.remove(c);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void getAddInfo(){
+        final Dialog dialog = new Dialog(MainActivity.this);
+        dialog.setContentView(R.layout.dialogue_display);
+        dialog.setTitle("New Entry");
+        dialog.setCancelable(true);
+
+        Button okButton = (Button) dialog.findViewById(R.id.ok);
+        okButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                EditText editWebsite=(EditText)dialog.findViewById(R.id.d_website);
+                m_Website=editWebsite.getText().toString();
+                EditText editUsername=(EditText)dialog.findViewById(R.id.d_username);
+                m_Username=editUsername.getText().toString();
+                EditText editPassword=(EditText)dialog.findViewById(R.id.d_password);
+                m_password=editPassword.getText().toString();
+                addEntry();
+                dialog.dismiss();
+
+            }
+        });
+        Button closeButton = (Button) dialog.findViewById(R.id.close);
+        closeButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                dialog.cancel();
+            }
+        });
+        Button randButton = (Button) dialog.findViewById(R.id.generateRandom);
+        randButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                EditText editPassword=(EditText)dialog.findViewById(R.id.d_password);
+                editPassword.setText(generateRandom());
             }
         });
 
         dialog.show();
     }
-    private void getAddInfo(){
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Website");
-// Set up the input
-        final EditText inputWebsite = new EditText(this);
-            inputWebsite.setHint("Website");
-        final EditText inputUsername = new EditText(this);
-            inputUsername.setHint("Username");
-        final EditText inputPassword = new EditText(this);
-            inputPassword.setHint("Password");
 
-        inputWebsite.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_NORMAL);
-        inputUsername.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_NORMAL);
-        inputPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_NORMAL);
-
-        LinearLayout layout = new LinearLayout(getApplicationContext());
-        layout.setOrientation(LinearLayout.VERTICAL);
-
-
-        layout.addView(inputWebsite);
-        layout.addView(inputUsername);
-        layout.addView(inputPassword);
-
-       // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
-
-        builder.setView(layout);
-
- // Set up the buttons
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                m_Website = inputWebsite.getText().toString();
-                m_Username = inputUsername.getText().toString();
-                m_password = inputPassword.getText().toString();
-                addEntry();
-            }
-        });
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
-
-        builder.show();
-
-    }
     private String generateRandom(){
         SecureRandom random = new SecureRandom();
-        return new BigInteger(130, random).toString(32);
+        return new BigInteger(40, random).toString(32);
     }
-    private void addEntry(){
+
+    private boolean entryExists(String website, String username){
         boolean alreadyExists = false;
+        for(Credential c: credentialList){
+            if(c.getWebsite().toLowerCase().equals(website.toLowerCase()) && c.getUsername().toLowerCase().equals(username.toLowerCase())){
+                alreadyExists = true;
+            }
+        }
+        return alreadyExists;
+    }
+
+    private void addEntry(){
+        if(m_Website.equals("") || m_Username.equals("") || m_password.equals("") || m_Website == null || m_Username == null || m_password == null){
+            displayToast("Please fill in all fields!");
+            return;
+        }
+        boolean alreadyExists = false;
+        alreadyExists = entryExists(m_Website,m_Username);
         for(Credential c: credentialList){
             try {
                 if(Encryptor.decrypt(c.getPassword(),password).equals(m_password)){
                     displayToast("Another website uses this same password! Consider changing it.");
                 }
-                if(c.getWebsite().toLowerCase().equals(m_Website.toLowerCase()) && c.getUsername().toLowerCase().equals(m_Username.toLowerCase())){
-                    alreadyExists = true;
-                }
+
             } catch (Exception e) {
                 e.printStackTrace();
             }
