@@ -1,9 +1,11 @@
 package siliconsolutions.cpptourapp.Activity;
 
 import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.os.Bundle;
@@ -19,8 +21,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
-
+import java.lang.reflect.Type;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -28,7 +31,11 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,6 +49,7 @@ import siliconsolutions.cpptourapp.Directions.Polyline;
 import siliconsolutions.cpptourapp.Directions.Route;
 import siliconsolutions.cpptourapp.GPS.GPSTracker;
 import siliconsolutions.cpptourapp.GPS.GPSTrackerListener;
+import siliconsolutions.cpptourapp.Model.Building;
 import siliconsolutions.cpptourapp.Model.GlobalVars;
 import siliconsolutions.cpptourapp.Model.MyLocation;
 import siliconsolutions.cpptourapp.R;
@@ -58,6 +66,10 @@ public class BaseMap extends AppCompatActivity implements
     private GPSTracker gpsTracker;
     private com.google.android.gms.maps.model.Polyline line;
 
+
+    private ProgressDialog progressDialog;
+    private ArrayList<Building> buildingsArrayList;
+    private StringBuffer postList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,12 +130,22 @@ public class BaseMap extends AppCompatActivity implements
                 } else if (id == R.id.nav_left_tools) {
 
                 } else if (id == R.id.nav_left_check_1) {
-                    if (item.isChecked()) item.setChecked(false);
-                    else item.setChecked(true);
-                    /*SpannableString spanString = new SpannableString(item.getTitle().toString());
-                    spanString.setSpan(new ForegroundColorSpan(Color.RED), 0, spanString.length(), 0); // fix the color to white
-                    item.setTitle(spanString);
-                    return true;*/
+                    if (item.isChecked()) {
+                        item.setChecked(false);
+                        mMap.clear();
+                        mMap.addMarker(new MarkerOptions().position(new LatLng(34.056502, -117.821465)));
+                    } else {
+                        item.setChecked(true);
+                        Type listType = new TypeToken<ArrayList<Building>>() {
+                        }.getType();
+                        buildingsArrayList = new GsonBuilder().create().fromJson(loadJSONFromAsset(), listType);
+                        postList = new StringBuffer();
+                        for (Building post : buildingsArrayList) {
+                            postList.append("\n latitude: " + post.getLatitude() + "\n longtitude: " + post.getLongtitude() +
+                                    "\n building name: " + post.getBuildingName() + "\n building number: " + post.getBuildingNumber() + "\n\n");
+                            mMap.addMarker(new MarkerOptions().position(new LatLng(Double.parseDouble(post.getLatitude()), Double.parseDouble(post.getLongtitude()))));
+                        }
+                    }
                 } else if (id == R.id.nav_left_check_2) {
                     if (item.isChecked())
                         item.setChecked(false);
@@ -326,4 +348,22 @@ public class BaseMap extends AppCompatActivity implements
         }
         return poly;
     }
+
+    public String loadJSONFromAsset() {
+        String json = null;
+        try {
+            InputStream is = getAssets().open("location.json");
+            int size = is.available();
+            byte[] buffer = new byte[size];
+            is.read(buffer);
+            is.close();
+            json = new String(buffer, "UTF-8");
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            return null;
+        }
+        return json;
+
+    }
+
 }
