@@ -1,0 +1,440 @@
+[
+		{
+			"latitude": "34.059534",
+			"longtitude": "-117.824159",
+			"name": "Building One",
+			"number": "1"
+		},
+		{
+			"latitude": "34.057613",
+			"longtitude": "-117.826722",
+			"name": "College of Agriculture",
+			"number": "2"
+		},
+		{
+			"latitude": "34.058005",
+			"longtitude": "-117.825393",
+			"name": "Science Laboratory",
+			"number": "3"
+		},
+		{
+			"latitude": "34.057498",
+			"longtitude": "-117.825093",
+			"name": "Biotechnology",
+			"number": "4"
+		},
+		{
+			"latitude": "34.057498",
+			"longtitude": "-117.825093",
+			"name": "College of Letters, Arts and Social Sciences",
+			"number": "5"
+		},
+		{
+			"latitude": "34.058599",
+			"longtitude": "-117.822829",
+			"name": "Classrooms (formerly CBA)",
+			"number": "6"
+		},
+		{
+			"latitude": "34.057115",
+			"longtitude": "-117.82743",
+			"name": "College of Environmental Design",
+			"number": "7"
+		},
+		{
+			"latitude": "34.057498",
+			"longtitude": "-117.825093",
+			"name": "College of Science",
+			"number": "8"
+		},
+		{
+			"latitude": "34.058927",
+			"longtitude": "-117.822284",
+			"name": "College of Engineering",
+			"number": "9"
+		},
+		{
+			"latitude": "34.058742",
+			"longtitude": "-117.820802",
+			"name": "Art Department and Engineering Annex",
+			"number": "13"
+		},
+		{
+			"latitude": "34.057921",
+			"longtitude": "-117.821341",
+			"name": "Library",
+			"number": "15"
+		},
+		{
+			"latitude": "34.060005",
+			"longtitude": "-117.821009",
+			"name": "Engineering Laboratories",
+			"number": "17"
+		},
+		{
+			"latitude": "34.062315",
+			"longtitude": "-117.820915",
+			"name": "Residence Hall, Encinitas",
+			"number": "20"
+		},
+		{
+			"latitude": "34.0621737",
+			"longtitude": "-117.8180418",
+			"name": "Residence Hall, Alamitos",
+			"number": "22"
+		},
+		{
+			"latitude": "34.0628732",
+			"longtitude": "-117.8178452",
+			"name": "Residence Hall, Aliso",
+			"number": "23"
+		},
+		{
+			"latitude": "34.056965",
+			"longtitude": "-117.822711",
+			"name": "Music",
+			"number": "24"
+		},
+		{
+			"latitude": "34.056047",
+			"longtitude": "-117.822649",
+			"name": "Drama Department/Theatre",
+			"number": "25"
+		},
+		{
+			"latitude": "34.0586695",
+			"longtitude": "-117.814733",
+			"name": "W.K. Kellogg Arabian Horse Center",
+			"number": "29"
+		},
+		{
+			"latitude": "34.055126",
+			"longtitude": "-117.828482",
+			"name": "Beef Unit Feed Shed",
+			"number": "32"
+		},
+		{
+			"latitude": "34.056123",
+			"longtitude": "-117.821242",
+			"name": "Bronco Student Center",
+			"number": "35"
+		},
+		{
+			"latitude": "34.052231",
+			"longtitude": "-117.822907",
+			"name": "Swine Unit/Shelters",
+			"number": "37"
+		},
+		{
+			"latitude": "34.052219",
+			"longtitude": "-117.822342",
+			"name": "Sheep/Wool Unit",
+			"number": "38"
+		},
+		{
+			"latitude": "34.05403",
+			"longtitude": "-117.821299",
+			"name": "Darlene May Gymnasium",
+			"number": "41"
+		},
+		{
+			"latitude": "34.054025",
+			"longtitude": "-117.821286",
+			"name": "Bronco Recreation Intramural Complex (BRIC)",
+			"number": "42"
+		},
+		{
+			"latitude": "34.054283",
+			"longtitude": "-117.819003",
+			"name": "Kellogg Gymnasium",
+			"number": "43"
+		},
+		{
+			"latitude": "34.0610187",
+			"longtitude": "-117.8111215",
+			"name": "Agricultural Engineering Building",
+			"number": "45"
+		},
+		{
+			"latitude": "34.055696",
+			"longtitude": "-117.818844",
+			"name": "Residence Suites, Vista De La Estrellas",
+			"number": "54"
+		},
+		{
+			"latitude": "34.056274",
+			"longtitude": "-117.819834",
+			"name": "Foundation Administration Offices",
+			"number": "55"
+		},
+		{
+			"latitude": "34.06052",
+			"longtitude": "-117.822334",
+			"name": "Residence Hall, Palmitas",
+			"number": "57"
+		},
+		{
+			"latitude": "34.061524",
+			"longtitude": "-117.821189",
+			"name": "Residence Hall, Cedritos",
+			"number": "58"
+		},
+		{
+			"latitude": "34.060816",
+			"longtitude": "-117.821966",
+			"name": "La Cienege Center (Univ. Housing Services)",
+			"number": "59"
+		},
+		{
+			"latitude": "34.054834",
+			"longtitude": "-117.818581",
+			"name": "Residence Suites, Vista Bonita",
+			"number": "60"
+		},
+		{
+			"latitude": "34.05476",
+			"longtitude": "-117.818001",
+			"name": "Residence Suites, Vista Del Sol",
+			"number": "61"
+		},
+		{
+			"latitude": "34.054426",
+			"longtitude": "-117.817415",
+			"name": "Residence Suites, Vista De Las Montanas",
+			"number": "62"
+		},
+		{
+			"latitude": "34.053777",
+			"longtitude": "-117.817421",
+			"name": "Residence Suites, Vista De La Luna",
+			"number": "63"
+		},
+		{
+			"latitude": "34.055954",
+			"longtitude": "-117.820448",
+			"name": "Bronco Bookstore",
+			"number": "66"
+		},
+		{
+			"latitude": "34.0596694",
+			"longtitude": "-117.8141489",
+			"name": "Equine Research Facility",
+			"number": "67"
+		},
+		{
+			"latitude": "34.062368",
+			"longtitude": "-117.821586",
+			"name": "Los Olivos Commons",
+			"number": "70"
+		},
+		{
+			"latitude": "34.0630128",
+			"longtitude": "-117.8167031",
+			"name": "Recreation/Maintenance Building",
+			"number": "71"
+		},
+		{
+			"latitude": "34.056697",
+			"longtitude": "-117.8247",
+			"name": "Kellogg West Education/Dining",
+			"number": "76"
+		},
+		{
+			"latitude": "34.056288",
+			"longtitude": "-117.825939",
+			"name": "Kellogg West Main Lodge",
+			"number": "77"
+		},
+		{
+			"latitude": "34.056688",
+			"longtitude": "-117.825821",
+			"name": "Kellog West Addition",
+			"number": "78"
+		},
+		{
+			"latitude": "34.05506",
+			"longtitude": "-117.824406",
+			"name": "Collins College of Hospitality Management",
+			"number": "79"
+		},
+		{
+			"latitude": "34.050954",
+			"longtitude": "-117.819501",
+			"name": "I-Poly High School",
+			"number": "85"
+		},
+		{
+			"latitude": "34.053343",
+			"longtitude": "-117.819722",
+			"name": "English Language Institute",
+			"number": "86"
+		},
+		{
+			"latitude": "34.0604758",
+			"longtitude": "-117.8122982",
+			"name": "Interim Design Center",
+			"number": "89"
+		},
+		{
+			"latitude": "34.059374",
+			"longtitude": "-117.823327",
+			"name": "University Office Building",
+			"number": "94"
+		},
+		{
+			"latitude": "34.057986",
+			"longtitude": "-117.822583",
+			"name": "Cultural Centers",
+			"number": "95"
+		},
+		{
+			"latitude": "34.057727",
+			"longtitude": "-117.823561",
+			"name": "Campus Center",
+			"number": "97"
+		},
+		{
+			"latitude": "34.059359",
+			"longtitude": "-117.819967",
+			"name": "CLA (Classroom/Laboratory/Administration)",
+			"number": "98"
+		},
+		{
+			"latitude": "34.0607632",
+			"longtitude": "-117.8159437",
+			"name": "Police and Parking Services",
+			"number": "109"
+		},
+		{
+			"latitude": "34.060484",
+			"longtitude": "-117.822935",
+			"name": "Manor House",
+			"number": "111"
+		},
+		{
+			"latitude": "34.062565",
+			"longtitude": "-117.824439",
+			"name": "Kellogg House Pomona",
+			"number": "112"
+		},
+		{
+			"latitude": "34.056055",
+			"longtitude": "-117.819533",
+			"name": "Child Care Center",
+			"number": "116"
+		},
+		{
+			"latitude": "34.057231",
+			"longtitude": "-117.820868",
+			"name": "M.A.S.A (Mexican-American Student Association)",
+			"number": "150"
+		},
+		{
+			"latitude": "34.061276",
+			"longtitude": "-117.819575",
+			"name": "College of Business Administration",
+			"number": "162"
+		},
+		{
+			"latitude": "34.061195",
+			"longtitude": "-117.82011",
+			"name": "College of Business Administration",
+			"number": "163"
+		},
+		{
+			"latitude": "34.061618",
+			"longtitude": "-117.819818",
+			"name": "College of Business Administration",
+			"number": "164"
+		},
+		{
+			"latitude": "34.055337",
+			"longtitude": "-117.824476",
+			"name": "Center for Regenerative Studies",
+			"number": "209"
+		},
+		{
+			"latitude": "34.048478",
+			"longtitude": "-117.819251",
+			"name": "Agriscapes/Farm Store",
+			"number": "211"
+		},
+		{
+			"latitude": "34.058241",
+			"longtitude": "-117.820762",
+			"name": "Army ROTC",
+			"number": "13A"
+		},
+		{
+			"latitude": "34.058357",
+			"longtitude": "-117.820676",
+			"name": "Army ROTC",
+			"number": "13B"
+		},
+		{
+			"latitude": "34.058468",
+			"longtitude": "-117.820455",
+			"name": "Pre-College TRIO",
+			"number": "13C"
+		},
+		{
+			"latitude": "34.048233",
+			"longtitude": "-117.819648",
+			"name": "Agriscapes",
+			"number": "211A"
+		},
+		{
+			"latitude": "34.0563",
+			"longtitude": "-117.822453",
+			"name": "Temporary Classroom A",
+			"number": "24A"
+		},
+		{
+			"latitude": "34.056171",
+			"longtitude": "-117.822386",
+			"name": "Temporary Classroom B",
+			"number": "24B"
+		},
+		{
+			"latitude": "34.055918",
+			"longtitude": "-117.822381",
+			"name": "Temporary Classroom C",
+			"number": "24C"
+		},
+		{
+			"latitude": "34.056007",
+			"longtitude": "-117.822526",
+			"name": "Temporary Classroom D",
+			"number": "24D"
+		},
+		{
+			"latitude": "34.056198",
+			"longtitude": "-117.822623",
+			"name": "Temporary Classroom E",
+			"number": "24E"
+		},
+		{
+			"latitude": "34.056715",
+			"longtitude": "-117.820553",
+			"name": "Student Orientation Center",
+			"number": "26A"
+		},
+		{
+			"latitude": "34.056123",
+			"longtitude": "-117.821242",
+			"name": "W. Keith and Janet Kellogg University Art Gallery",
+			"number": "35A"
+		},
+		{
+			"latitude": "34.055097",
+			"longtitude": "-117.824776",
+			"name": "Collins College of Hospitality Management",
+			"number": "79A"
+		},
+		{
+			"latitude": "34.055337",
+			"longtitude": "-117.824476",
+			"name": "Collins College of Hospitality Management",
+			"number": "79B"
+		}
+]
