@@ -21,6 +21,10 @@ import Encryption.Encryptor;
 public class PasswordLogin extends AppCompatActivity {
     private EditText mPasswordView;
     private Credentials credentials;
+    private Button loginButton;
+    private Button forgotPasswordButton;
+    private Button newVaultButton;
+
     private static final String CREDENTIAL_FILE_NAME = "Creds.ser";
 
     @Override
@@ -38,7 +42,7 @@ public class PasswordLogin extends AppCompatActivity {
 
         mPasswordView = (EditText) findViewById(R.id.password);
 
-        Button loginButton = (Button) findViewById(R.id.login_button);
+        loginButton = (Button) findViewById(R.id.login_button);
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -47,7 +51,7 @@ public class PasswordLogin extends AppCompatActivity {
         });
 
 
-        Button forgotPasswordButton = (Button) findViewById(R.id.forgot_password_button);
+        forgotPasswordButton = (Button) findViewById(R.id.forgot_password_button);
         forgotPasswordButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -55,6 +59,15 @@ public class PasswordLogin extends AppCompatActivity {
 //                forgotPassword();
             }
         });
+
+        /*newVaultButton = (Button) findViewById(R.id.newVaultButton);
+        newVaultButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent loginIntent = new Intent(PasswordLogin.this, RegistrationActivity.class);
+                startActivity(loginIntent);
+            }
+        });*/
     }
     private void createAndShowAlertDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(PasswordLogin.this);
