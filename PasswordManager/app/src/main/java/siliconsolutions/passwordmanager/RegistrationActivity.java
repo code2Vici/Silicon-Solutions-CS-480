@@ -42,7 +42,7 @@ public class RegistrationActivity extends AppCompatActivity {
                 startActivity(myIntent);
             }
             else if(credentials.getAuthType().equals("Pin")){
-//                Intent myIntent = new Intent(RegistrationActivity.this, PinLogin.class);
+//              Intent myIntent = new Intent(RegistrationActivity.this, PinLogin.class);
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("credentials", credentials);
 //                myIntent.putExtras(bundle);

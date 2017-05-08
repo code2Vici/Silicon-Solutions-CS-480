@@ -7,6 +7,7 @@
 
 
     <EditText
+        android:layout_margin="10dp"
         android:id="@+id/d_website"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -18,6 +19,7 @@
         android:maxLines="1"
         android:singleLine="true" />
     <EditText
+        android:layout_margin="10dp"
         android:id="@+id/d_username"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -29,6 +31,7 @@
         android:maxLines="1"
         android:singleLine="true" />
     <EditText
+        android:layout_margin="10dp"
         android:id="@+id/d_password"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -46,12 +49,12 @@
         android:orientation="horizontal">
 
         <Button
-        android:id="@+id/Ok"
+            android:id="@+id/Ok"
             style="?android:textAppearanceSmall"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-        android:text="Ok"/>
+            android:text="Ok"/>
 
         <Button
             android:id="@+id/Close"
@@ -66,7 +69,7 @@
             style="?android:textAppearanceSmall"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="60dp"
+            android:layout_marginTop="16dp"
             android:text="GenerateRandom"/>
     </LinearLayout>
     <!--<LinearLayout
