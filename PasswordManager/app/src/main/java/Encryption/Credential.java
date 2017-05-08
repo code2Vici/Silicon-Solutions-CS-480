@@ -1,8 +1,15 @@
 package Encryption;
 
+import android.support.annotation.NonNull;
+
+import java.io.ObjectInput;
 import java.io.Serializable;
 
-public class Credential implements Serializable {
+        import java.io.Serializable;
+
+import static org.bouncycastle.asn1.x500.style.RFC4519Style.c;
+
+public class Credential<T> implements Serializable,Comparable {
     private String username;
     private String password;
     private String website;
@@ -33,6 +40,20 @@ public class Credential implements Serializable {
     }
 
 
+    @Override
+    public int compareTo(Object o) {
+        Credential c = (Credential) o;
+        String website = c.getWebsite().toLowerCase();
+        String username =c.getUsername().toLowerCase();
+        String website1 = this.website.toLowerCase();
+        String username1 = this.username.toLowerCase();
 
+        if(website1.compareTo(c.website)==0){
+            return username1.compareTo(username);
+        }
+
+
+        return website1.compareTo(website);
+    }
 }
 

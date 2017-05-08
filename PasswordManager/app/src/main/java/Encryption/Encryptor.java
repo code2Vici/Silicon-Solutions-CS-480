@@ -1,17 +1,12 @@
 package Encryption;
 
-import java.io.UnsupportedEncodingException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
+//import java.util.Base64;s
 
 import org.bouncycastle.crypto.CryptoException;
 import org.bouncycastle.crypto.engines.BlowfishEngine;
 import org.bouncycastle.crypto.paddings.PaddedBufferedBlockCipher;
 import org.bouncycastle.crypto.params.KeyParameter;
 import org.bouncycastle.util.encoders.Base64;
-
-
-//import java.util.Base64;s
 
 public class Encryptor {
     private static int workload = 5;
