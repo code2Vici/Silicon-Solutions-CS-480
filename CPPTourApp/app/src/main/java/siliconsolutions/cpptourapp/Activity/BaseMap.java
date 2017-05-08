@@ -23,11 +23,14 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.lang.reflect.Array;
 import java.lang.reflect.Type;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
@@ -51,7 +54,9 @@ import siliconsolutions.cpptourapp.GPS.GPSTracker;
 import siliconsolutions.cpptourapp.GPS.GPSTrackerListener;
 import siliconsolutions.cpptourapp.Model.Building;
 import siliconsolutions.cpptourapp.Model.GlobalVars;
+import siliconsolutions.cpptourapp.Model.Landmarks;
 import siliconsolutions.cpptourapp.Model.MyLocation;
+import siliconsolutions.cpptourapp.Model.ParkingLots;
 import siliconsolutions.cpptourapp.R;
 
 public class BaseMap extends AppCompatActivity implements
@@ -69,6 +74,8 @@ public class BaseMap extends AppCompatActivity implements
 
     private ProgressDialog progressDialog;
     private ArrayList<Building> buildingsArrayList;
+    private ArrayList<Landmarks> landmarksArrayList;
+    private ArrayList<ParkingLots> parkingLotsArrayList;
     private StringBuffer postList;
 
     @Override
@@ -138,24 +145,48 @@ public class BaseMap extends AppCompatActivity implements
                         item.setChecked(true);
                         Type listType = new TypeToken<ArrayList<Building>>() {
                         }.getType();
-                        buildingsArrayList = new GsonBuilder().create().fromJson(loadJSONFromAsset(), listType);
+                        buildingsArrayList = new GsonBuilder().create().fromJson(loadBuildingJSONFromAsset(), listType);
                         postList = new StringBuffer();
                         for (Building post : buildingsArrayList) {
                             postList.append("\n latitude: " + post.getLatitude() + "\n longtitude: " + post.getLongtitude() +
                                     "\n building name: " + post.getBuildingName() + "\n building number: " + post.getBuildingNumber() + "\n\n");
-                            mMap.addMarker(new MarkerOptions().position(new LatLng(Double.parseDouble(post.getLatitude()), Double.parseDouble(post.getLongtitude()))));
+                            mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)).title(post.getBuildingName()).snippet(post.getBuildingNumber()).position(new LatLng(Double.parseDouble(post.getLatitude()), Double.parseDouble(post.getLongtitude()))));
                         }
                     }
                 } else if (id == R.id.nav_left_check_2) {
-                    if (item.isChecked())
+                    if (item.isChecked()) {
                         item.setChecked(false);
-                    else item.setChecked(true);
-                    return true;
+                        mMap.clear();
+                        mMap.addMarker(new MarkerOptions().position(new LatLng(34.056502, -117.821465)));
+                    }   else {
+                        item.setChecked(true);
+                        Type listType = new TypeToken<ArrayList<Landmarks>>() {
+                        }.getType();
+                        landmarksArrayList = new GsonBuilder().create().fromJson(loadLandmarksJSONFromAsset(), listType);
+                        postList = new StringBuffer();
+                        for (Landmarks post : landmarksArrayList) {
+                            postList.append("\n latitude: " + post.getLatitude() + "\n longtitude: " + post.getLongtitude() +
+                                    "\n building name: " + post.getLandmarkName() + "\n building number: " + post.getLandmarkNumber() + "\n\n");
+                            mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)).title(post.getLandmarkName()).snippet(post.getLandmarkNumber()).position(new LatLng(Double.parseDouble(post.getLatitude()), Double.parseDouble(post.getLongtitude()))));
+                        }
+                        return true;
+                    }
                 } else if (id == R.id.nav_left_check_3) {
-                    if (item.isChecked())
+                    if (item.isChecked()) {
                         item.setChecked(false);
-                    else item.setChecked(true);
-                    return true;
+                    } else {
+                        item.setChecked(true);
+                        Type listType = new TypeToken<ArrayList<ParkingLots>>() {
+                        }.getType();
+                        parkingLotsArrayList = new GsonBuilder().create().fromJson(loadParkingLotsJSONFromAsset(), listType);
+                        postList = new StringBuffer();
+                        for (ParkingLots post : parkingLotsArrayList) {
+                            postList.append("\n latitude: " + post.getLatitude() + "\n longtitude: " + post.getLongtitude() +
+                                    "\n building name: " + post.getParkingLotsName() + "\n building number: " + post.getParkingLotsNumber() + "\n\n");
+                            mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)).title(post.getParkingLotsName()).snippet(post.getParkingLotsNumber()).position(new LatLng(Double.parseDouble(post.getLatitude()), Double.parseDouble(post.getLongtitude()))));
+                        }
+                        return true;
+                    }
                 } else if (id == R.id.nav_left_settings) {
 
                 }
@@ -349,10 +380,44 @@ public class BaseMap extends AppCompatActivity implements
         return poly;
     }
 
-    public String loadJSONFromAsset() {
+    public String loadBuildingJSONFromAsset() {
         String json = null;
         try {
             InputStream is = getAssets().open("location.json");
+            int size = is.available();
+            byte[] buffer = new byte[size];
+            is.read(buffer);
+            is.close();
+            json = new String(buffer, "UTF-8");
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            return null;
+        }
+        return json;
+
+    }
+
+    public String loadLandmarksJSONFromAsset() {
+        String json = null;
+        try {
+            InputStream is = getAssets().open("landmark.json");
+            int size = is.available();
+            byte[] buffer = new byte[size];
+            is.read(buffer);
+            is.close();
+            json = new String(buffer, "UTF-8");
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            return null;
+        }
+        return json;
+
+    }
+
+    public String loadParkingLotsJSONFromAsset() {
+        String json = null;
+        try {
+            InputStream is = getAssets().open("parkinglot.json");
             int size = is.available();
             byte[] buffer = new byte[size];
             is.read(buffer);
