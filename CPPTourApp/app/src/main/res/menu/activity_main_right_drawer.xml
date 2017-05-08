@@ -2,25 +2,18 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <group android:checkableBehavior="single">
-        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="@dimen/activity_horizontal_margin">
-            <TextView
-                android:id="@+id/email"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:paddingBottom="2dip"
-                android:textColor="@color/colorAccent" />
-
-            <TextView
-                android:id="@+id/mobile"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="#5d5d5d"
-                android:textStyle="bold" />
-        </LinearLayout>
+        <item
+            android:id="@+id/nav_camera1"
+            android:title="List Item 1" />
+        <item
+            android:id="@+id/nav_gallery1"
+            android:title="List Item 2" />
+        <item
+            android:id="@+id/nav_slideshow1"
+            android:title="List Item 3" />
+        <item
+            android:id="@+id/nav_manage1"
+            android:title="List Item 4" />
     </group>
 
 </menu>
