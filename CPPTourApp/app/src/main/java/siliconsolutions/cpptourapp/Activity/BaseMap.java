@@ -7,10 +7,12 @@ import android.graphics.Color;
 import android.location.Location;
 import android.os.Build;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -20,7 +22,10 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,11 +46,13 @@ import com.google.gson.reflect.TypeToken;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Dictionary;
 import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import siliconsolutions.cpptourapp.Adapters.BuildingsListAdapter;
 import siliconsolutions.cpptourapp.Directions.DirectionsService;
 import siliconsolutions.cpptourapp.Directions.GeoCodeResponse;
 import siliconsolutions.cpptourapp.Directions.Leg;
@@ -77,8 +84,11 @@ public class BaseMap extends AppCompatActivity implements
     private ArrayList<Building> buildingsArrayList;
     private ArrayList<Landmarks> landmarksArrayList;
     private ArrayList<ParkingLots> parkingLotsArrayList;
+    private ArrayList<Marker> markersArrayList;
     private Marker myMarker;
     private StringBuffer postList;
+    private StringBuffer landmarksPostList;
+    private StringBuffer parkingPostList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -124,8 +134,14 @@ public class BaseMap extends AppCompatActivity implements
             }
         });
 
-        NavigationView leftNavigationView = (NavigationView) findViewById(R.id.nav_view_left);
+        final NavigationView leftNavigationView = (NavigationView) findViewById(R.id.nav_view_left);
         leftNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+           /* NavigationView nav = (NavigationView)findViewById(R.id.navigation_view);
+            MenuItem switchItem = nav.getMenu().findItem(R.id.switch);
+            CompoundButton switchView = (CompoundButton)MenuItemCompat.getActionView(switchItem);
+switchView.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+                @Override public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) { }
+            });*/
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 int id = item.getItemId();
@@ -139,56 +155,50 @@ public class BaseMap extends AppCompatActivity implements
                 } else if (id == R.id.nav_left_tools) {
 
                 } else if (id == R.id.nav_left_check_1) {
+                    MenuItem checkItem = leftNavigationView.getMenu().findItem(R.id.nav_left_check_1);
+                    CompoundButton checkboxView = (CompoundButton) MenuItemCompat.getActionView(checkItem);
                     if (item.isChecked()) {
                         item.setChecked(false);
-                        for (Building post : buildingsArrayList) {
-                            mMap.clear();
-                        }
-                        mMap.addMarker(new MarkerOptions().position(new LatLng(34.056502, -117.821465)));
+                        checkboxView.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                            @Override public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                                for (int i = 0; i < buildingsArrayList.size();i++) {
+                                    markersArrayList.get(i).setVisible(false);
+                                }
+                            }
+                        });
                     } else {
                         item.setChecked(true);
-                        Type listType = new TypeToken<ArrayList<Building>>() {
-                        }.getType();
-                        buildingsArrayList = new GsonBuilder().create().fromJson(loadBuildingJSONFromAsset(), listType);
-                        postList = new StringBuffer();
-                        for (Building post : buildingsArrayList) {
-                            postList.append("\n latitude: " + post.getLatitude() + "\n longtitude: " + post.getLongtitude() +
-                                    "\n building name: " + post.getBuildingName() + "\n building number: " + post.getBuildingNumber() + "\n\n");
-                            myMarker = mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)).title(post.getBuildingName()).snippet(post.getBuildingNumber()).position(new LatLng(Double.parseDouble(post.getLatitude()), Double.parseDouble(post.getLongtitude()))));
-                        }
+                        checkboxView.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                            @Override public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                                for (int i = 0; i < buildingsArrayList.size();i++) {
+                                    markersArrayList.get(i).setVisible(true);
+                                }
+                            }
+                        });
                     }
                 } else if (id == R.id.nav_left_check_2) {
                     if (item.isChecked()) {
                         item.setChecked(false);
-                        mMap.clear();
-                        mMap.addMarker(new MarkerOptions().position(new LatLng(34.056502, -117.821465)));
+                        for(int i = buildingsArrayList.size(); i < (buildingsArrayList.size() + landmarksArrayList.size()); i++){
+                            markersArrayList.get(i).setVisible(false);
+                        }
                     }   else {
                         item.setChecked(true);
-                        Type listType = new TypeToken<ArrayList<Landmarks>>() {
-                        }.getType();
-                        landmarksArrayList = new GsonBuilder().create().fromJson(loadLandmarksJSONFromAsset(), listType);
-                        postList = new StringBuffer();
-                        for (Landmarks post : landmarksArrayList) {
-                            postList.append("\n latitude: " + post.getLatitude() + "\n longtitude: " + post.getLongtitude() +
-                                    "\n building name: " + post.getLandmarkName() + "\n building number: " + post.getLandmarkNumber() + "\n\n");
-                            myMarker = mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)).title(post.getLandmarkName()).snippet(post.getLandmarkNumber()).position(new LatLng(Double.parseDouble(post.getLatitude()), Double.parseDouble(post.getLongtitude()))));
+                        for(int i = buildingsArrayList.size(); i < (buildingsArrayList.size() + landmarksArrayList.size()); i++){
+                            markersArrayList.get(i).setVisible(true);
                         }
                     }
                 } else if (id == R.id.nav_left_check_3) {
                     if (item.isChecked()) {
                         item.setChecked(false);
-                        mMap.clear();
-                        mMap.addMarker(new MarkerOptions().position(new LatLng(34.056502, -117.821465)));
+                        for(int i = (buildingsArrayList.size() + landmarksArrayList.size()); i < (buildingsArrayList.size() + landmarksArrayList.size() + parkingLotsArrayList.size()); i++){
+                            markersArrayList.get(i).setVisible(false);
+                        }
                     } else {
                         item.setChecked(true);
-                        Type listType = new TypeToken<ArrayList<ParkingLots>>() {
-                        }.getType();
-                        parkingLotsArrayList = new GsonBuilder().create().fromJson(loadParkingLotsJSONFromAsset(), listType);
-                        postList = new StringBuffer();
-                        for (ParkingLots post : parkingLotsArrayList) {
-                            postList.append("\n latitude: " + post.getLatitude() + "\n longtitude: " + post.getLongtitude() +
-                                    "\n building name: " + post.getParkingLotsName() + "\n building number: " + post.getParkingLotsNumber() + "\n\n");
-                            myMarker = mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)).title(post.getParkingLotsName()).snippet(post.getParkingLotsNumber()).position(new LatLng(Double.parseDouble(post.getLatitude()), Double.parseDouble(post.getLongtitude()))));
+
+                        for(int i = (buildingsArrayList.size() + landmarksArrayList.size()); i < (buildingsArrayList.size() + landmarksArrayList.size() + parkingLotsArrayList.size()); i++){
+                            markersArrayList.get(i).setVisible(true);
                         }
                     }
                 } else if (id == R.id.nav_left_settings) {
@@ -201,16 +211,42 @@ public class BaseMap extends AppCompatActivity implements
             }
 
         });
-        NavigationView rightNavigationView = (NavigationView) findViewById(R.id.nav_view_right);
-
         initialize();
+        final NavigationView rightNavigationView = (NavigationView) findViewById(R.id.nav_view_right);
+        ListView rightNavigationListView = (ListView) findViewById(R.id.right_nav_listView);
 
+        BuildingsListAdapter buildingsListAdapter = new BuildingsListAdapter(this,R.id.right_nav_listView,buildingsArrayList);
+        rightNavigationListView.setAdapter(buildingsListAdapter);
+        rightNavigationListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                if (drawer.isDrawerOpen(GravityCompat.END))
+                    drawer.closeDrawer(GravityCompat.END);
+                if(!markersArrayList.get(i).isVisible())
+                    markersArrayList.get(i).setVisible(true);
+                markersArrayList.get(i).showInfoWindow();
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(markersArrayList.get(i).getPosition(),16));
+            }
+        });
     }
 
 
     private void initialize() {
         initComponents();
+        initLocations();
         initGPS();
+    }
+
+    private void initLocations() {
+        Type listType = new TypeToken<ArrayList<Building>>() {
+        }.getType();
+        Type landmarksListType = new TypeToken<ArrayList<Landmarks>>() {
+        }.getType();
+        Type parkingListType = new TypeToken<ArrayList<ParkingLots>>() {
+        }.getType();
+        buildingsArrayList = new GsonBuilder().create().fromJson(loadBuildingJSONFromAsset(), listType);
+        landmarksArrayList = new GsonBuilder().create().fromJson(loadLandmarksJSONFromAsset(), landmarksListType);
+        parkingLotsArrayList = new GsonBuilder().create().fromJson(loadParkingLotsJSONFromAsset(), parkingListType);
     }
 
     private void initGPS() {
@@ -218,7 +254,7 @@ public class BaseMap extends AppCompatActivity implements
         if (gpsTracker.canGetLocation()) {
             double lat = gpsTracker.getLatitude();
             double lng = gpsTracker.getLongitude();
-            Toast.makeText(getApplicationContext(), lat + " " + lng, Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "Latitude" +lat + " " + lng, Toast.LENGTH_SHORT).show();
             if (lat != 0 || lng != 0) {
                 GlobalVars.location = new MyLocation(lat, lng);
             }
@@ -248,19 +284,40 @@ public class BaseMap extends AppCompatActivity implements
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+        mMap.getUiSettings().setMapToolbarEnabled(false);
         mMap.setOnMarkerClickListener(this);
         // Add a marker in Sydney and move the camera
         LatLng cpp = new LatLng(34.056502, -117.821465);
         setMarkers();
         //mMap.addMarker(new MarkerOptions().position(cpp).title("Cal Poly Pomona"));
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(cpp, 16));
+
     }
 
     public void setMarkers() {
-        LatLng building8 = new LatLng(34.058664, -117.824796);
-        LatLng building7 = new LatLng(34.057115,-117.82743);
-        mMap.addMarker(new MarkerOptions().position(building8).title("Building 8"));
-        mMap.addMarker(new MarkerOptions().position(building7).title("Building 7"));
+        markersArrayList = new ArrayList<>();
+        postList = new StringBuffer();
+        landmarksPostList = new StringBuffer();
+        for (Building post : buildingsArrayList) {
+            postList.append("\n latitude: " + post.getLatitude() + "\n longtitude: " + post.getLongtitude() +
+                    "\n building name: " + post.getBuildingName() + "\n building number: " + post.getBuildingNumber() + "\n\n");
+            myMarker = mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)).visible(false).title(post.getBuildingName()).snippet(post.getBuildingNumber()).position(new LatLng(Double.parseDouble(post.getLatitude()), Double.parseDouble(post.getLongtitude()))));
+            markersArrayList.add(myMarker);
+        }
+        for (Landmarks post : landmarksArrayList) {
+            landmarksPostList.append("\n latitude: " + post.getLatitude() + "\n longtitude: " + post.getLongtitude() +
+                    "\n building name: " + post.getLandmarkName() + "\n building number: " + post.getLandmarkNumber() + "\n\n");
+
+            myMarker = mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)).title(post.getLandmarkName()).snippet(post.getLandmarkNumber()).position(new LatLng(Double.parseDouble(post.getLatitude()), Double.parseDouble(post.getLongtitude()))));
+            markersArrayList.add(myMarker);
+        }
+        parkingPostList = new StringBuffer();
+        for (ParkingLots post : parkingLotsArrayList) {
+            parkingPostList.append("\n latitude: " + post.getLatitude() + "\n longtitude: " + post.getLongtitude() +
+                    "\n building name: " + post.getParkingLotsName() + "\n building number: " + post.getParkingLotsNumber() + "\n\n");
+            myMarker = mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)).visible(false).title(post.getParkingLotsName()).snippet(post.getParkingLotsNumber()).position(new LatLng(Double.parseDouble(post.getLatitude()), Double.parseDouble(post.getLongtitude()))));
+            markersArrayList.add(myMarker);
+        }
     }
 
     @Override
@@ -293,7 +350,6 @@ public class BaseMap extends AppCompatActivity implements
     }
 
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else if (drawer.isDrawerOpen(GravityCompat.END)) {
