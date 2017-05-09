@@ -42,18 +42,18 @@ public class RegistrationActivity extends AppCompatActivity {
                 startActivity(myIntent);
             }
             else if(credentials.getAuthType().equals("Pin")){
-//              Intent myIntent = new Intent(RegistrationActivity.this, PinLogin.class);
+                Intent myIntent = new Intent(RegistrationActivity.this, PinLogin.class);
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("credentials", credentials);
-//                myIntent.putExtras(bundle);
-//                startActivity(myIntent);
+                myIntent.putExtras(bundle);
+                startActivity(myIntent);
             }
             else if(credentials.getAuthType().equals("Swipe")){
-//                Intent myIntent = new Intent(RegistrationActivity.this, SwipeLogin.class);
+                Intent myIntent = new Intent(RegistrationActivity.this, SwipeLogin.class);
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("credentials", credentials);
-//                myIntent.putExtras(bundle);
-//                startActivity(myIntent);
+                myIntent.putExtras(bundle);
+                startActivity(myIntent);
             }
         }
         else{
@@ -124,17 +124,15 @@ public class RegistrationActivity extends AppCompatActivity {
         startActivity(myIntent);
     }
     private void pinRegister(){
-       // Intent myIntent = new Intent(RegistrationActivity.this,PinRegistration.class);
-        //Bundle bundle = new Bundle();
-        //startActivity(myIntent);
+        Intent myIntent = new Intent(RegistrationActivity.this,PinRegistration.class);
+        Bundle bundle = new Bundle();
+        startActivity(myIntent);
     }
     private void swipeRegister(){
-        //Intent myIntent = new Intent(RegistrationActivity.this,SwipeRegistration.class);
-        //Bundle bundle = new Bundle();
-        //startActivity(myIntent);
+        Intent myIntent = new Intent(RegistrationActivity.this,SwipeRegistration.class);
+        Bundle bundle = new Bundle();
+        startActivity(myIntent);
     }
-
-
 
 
 }

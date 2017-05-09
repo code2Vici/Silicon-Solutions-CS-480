@@ -129,6 +129,9 @@ public class MainActivity extends AppCompatActivity {
         Toast.makeText(this, s,
                 Toast.LENGTH_LONG).show();
     }
+    /*@Override
+    public void onBackPressed() {
+    }*/
 
 //    private void displayFromList(Credential c){
     private void displayFromList(Credential c){
