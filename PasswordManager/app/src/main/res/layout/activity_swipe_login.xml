@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#00BFFF"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="siliconsolutions.passwordmanager.SwipeLogin">
+
+
+
+    <Button
+        android:id="@+id/forgot_password_swipe"
+        android:layout_width="373dp"
+        android:layout_height="62dp"
+        android:text="Forgot Password"
+        tools:layout_constraintTop_creator="1"
+        tools:layout_constraintLeft_creator="1"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="90dp" />
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/pattern"
+        android:gravity="center"
+        android:text="Draw pattern to unlock:"
+        android:textColor="#fff"
+        android:textSize="22sp" />
+
+    <com.amnix.materiallockview.MaterialLockView
+        xmlns:lockview="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/pattern"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        lockview:LOCK_COLOR="#fff"
+        lockview:WRONG_COLOR="#ff0000"
+        lockview:CORRECT_COLOR="#00ff00"/>
+</RelativeLayout>
