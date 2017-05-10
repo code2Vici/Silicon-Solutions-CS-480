@@ -1,6 +1,7 @@
 package siliconsolutions.cpptourapp.Adapters;
 
 import android.content.Context;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,15 +9,15 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import java.util.List;
-import siliconsolutions.cpptourapp.Model.Building;
+import siliconsolutions.cpptourapp.Model.Landmarks;
 import siliconsolutions.cpptourapp.R;
 
-public class BuildingsListAdapter extends ArrayAdapter<Building> {
-    List<Building> buildings;
+public class LandmarksListAdapter extends ArrayAdapter<Landmarks> {
+    List<Landmarks> landmarks;
 
-    public BuildingsListAdapter(Context context, int resource, List<Building> buildings) {
-        super(context, resource, buildings);
-        this.buildings = buildings;
+    public LandmarksListAdapter(Context context, int resource, List<Landmarks> landmarks) {
+        super(context, resource, landmarks);
+        this.landmarks = landmarks;
     }
 
     @Override
@@ -25,13 +26,13 @@ public class BuildingsListAdapter extends ArrayAdapter<Building> {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.locations_list_item_layout,parent,false);
         }
 
-        TextView buildingText = (TextView) convertView.findViewById(R.id.locations_list_building_text);
+        TextView landmarksNameText = (TextView) convertView.findViewById(R.id.locations_list_building_text);
         TextView distanceText = (TextView) convertView.findViewById(R.id.locations_list_distance_text);
-        TextView buildingNumberText = (TextView) convertView.findViewById(R.id.locations_list_building_number_text);
+        TextView landmarksNumberText = (TextView) convertView.findViewById(R.id.locations_list_building_number_text);
 
-        buildingText.setText(buildings.get(position).getBuildingName());
+        landmarksNameText.setText(landmarks.get(position).getLandmarkName());
         distanceText.setText("0 mi");
-        buildingNumberText.setText(buildings.get(position).getBuildingNumber());
+        landmarksNumberText.setText(landmarks.get(position).getLandmarkNumber());
 
         convertView.setTag(position);
         return convertView;

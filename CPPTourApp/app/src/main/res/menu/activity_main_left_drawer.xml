@@ -2,8 +2,9 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <group android:checkableBehavior="single"
-        android:id="@+id/menu_left_top">
+    <group
+        android:id="@+id/menu_left_top"
+        android:checkableBehavior="single">
         <item
             android:id="@+id/nav_left_start"
             android:icon="@drawable/ic_menu_send"
@@ -22,34 +23,34 @@
             android:title="Tools" />
     </group>
 
-    <group
-        android:id="@+id/menu_left_middle"
-        android:checkable="true"
-        android:checked="true">
-        <item
-            android:id="@+id/nav_left_check_1"
-            android:title="Buildings"
-            app:actionLayout="@layout/widget_check_buildings"/>
-        <item
-            android:id="@+id/nav_left_check_2"
-            android:title="Interest Locations"
-            android:checked="true"
-            app:actionLayout="@layout/widget_check_interest"
-             />
-        <item
-            android:id="@+id/nav_left_check_3"
-            android:title="Parking Lots"
-            app:actionLayout="@layout/widget_check_buildings"
-            />
-    </group>
+    <item android:title="Filters">
+        <menu
+            android:id="@+id/menu_left_middle"
+            android:checkable="true"
+            android:checked="true">
+            <item
+                android:id="@+id/nav_left_check_1"
+                android:title="Buildings"
+                app:actionLayout="@layout/widget_check_buildings" />
+            <item
+                android:id="@+id/nav_left_check_2"
+                android:checked="true"
+                android:title="Interest Locations"
+                app:actionLayout="@layout/widget_check_interest" />
+            <item
+                android:id="@+id/nav_left_check_3"
+                android:title="Parking Lots"
+                app:actionLayout="@layout/widget_check_buildings" />
+        </menu>
+    </item>
 
     <group
         android:id="@+id/menu_left_bottom"
         android:checkableBehavior="none">
-            <item
-                android:id="@+id/nav_left_settings"
-                android:icon="@drawable/ic_menu_settings"
-                android:title="Settings" />
+        <item
+            android:id="@+id/nav_left_settings"
+            android:icon="@drawable/ic_menu_settings"
+            android:title="Settings" />
 
     </group>
 

@@ -53,6 +53,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import siliconsolutions.cpptourapp.Adapters.BuildingsListAdapter;
+import siliconsolutions.cpptourapp.Adapters.LandmarksListAdapter;
+import siliconsolutions.cpptourapp.Adapters.ParkingListAdapter;
+import siliconsolutions.cpptourapp.Adapters.Utilities;
 import siliconsolutions.cpptourapp.Directions.DirectionsService;
 import siliconsolutions.cpptourapp.Directions.GeoCodeResponse;
 import siliconsolutions.cpptourapp.Directions.Leg;
@@ -78,8 +81,7 @@ public class BaseMap extends AppCompatActivity implements
     private ImageView btnOpenFavoriteDrawer;
     private GPSTracker gpsTracker;
     private com.google.android.gms.maps.model.Polyline line;
-
-
+    NavigationView leftNavigationView;
     private ProgressDialog progressDialog;
     private ArrayList<Building> buildingsArrayList;
     private ArrayList<Landmarks> landmarksArrayList;
@@ -89,6 +91,12 @@ public class BaseMap extends AppCompatActivity implements
     private StringBuffer postList;
     private StringBuffer landmarksPostList;
     private StringBuffer parkingPostList;
+    MenuItem buildingsMenuItem;
+    MenuItem landmarksMenuItem;
+    MenuItem parkingMenuItem;
+    CompoundButton buildingsCheckbox;
+    CompoundButton landmarksCheckbox;
+    CompoundButton parkingCheckbox;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -134,14 +142,10 @@ public class BaseMap extends AppCompatActivity implements
             }
         });
 
-        final NavigationView leftNavigationView = (NavigationView) findViewById(R.id.nav_view_left);
+         leftNavigationView = (NavigationView) findViewById(R.id.nav_view_left);
+        setFilters();
+
         leftNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-           /* NavigationView nav = (NavigationView)findViewById(R.id.navigation_view);
-            MenuItem switchItem = nav.getMenu().findItem(R.id.switch);
-            CompoundButton switchView = (CompoundButton)MenuItemCompat.getActionView(switchItem);
-switchView.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-                @Override public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) { }
-            });*/
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 int id = item.getItemId();
@@ -155,51 +159,26 @@ switchView.setOnCheckedChangeListener(new OnCheckedChangeListener() {
                 } else if (id == R.id.nav_left_tools) {
 
                 } else if (id == R.id.nav_left_check_1) {
-                    MenuItem checkItem = leftNavigationView.getMenu().findItem(R.id.nav_left_check_1);
-                    CompoundButton checkboxView = (CompoundButton) MenuItemCompat.getActionView(checkItem);
-                    if (item.isChecked()) {
+                    buildingsCheckbox.performClick();
+                    if(item.isChecked()){
                         item.setChecked(false);
-                        checkboxView.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                            @Override public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                                for (int i = 0; i < buildingsArrayList.size();i++) {
-                                    markersArrayList.get(i).setVisible(false);
-                                }
-                            }
-                        });
-                    } else {
-                        item.setChecked(true);
-                        checkboxView.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                            @Override public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                                for (int i = 0; i < buildingsArrayList.size();i++) {
-                                    markersArrayList.get(i).setVisible(true);
-                                }
-                            }
-                        });
+                    }
+                    else{
+                      item.setChecked(true);
                     }
                 } else if (id == R.id.nav_left_check_2) {
+                    landmarksCheckbox.performClick();
                     if (item.isChecked()) {
                         item.setChecked(false);
-                        for(int i = buildingsArrayList.size(); i < (buildingsArrayList.size() + landmarksArrayList.size()); i++){
-                            markersArrayList.get(i).setVisible(false);
-                        }
                     }   else {
                         item.setChecked(true);
-                        for(int i = buildingsArrayList.size(); i < (buildingsArrayList.size() + landmarksArrayList.size()); i++){
-                            markersArrayList.get(i).setVisible(true);
-                        }
                     }
                 } else if (id == R.id.nav_left_check_3) {
+                    parkingCheckbox.performClick();
                     if (item.isChecked()) {
                         item.setChecked(false);
-                        for(int i = (buildingsArrayList.size() + landmarksArrayList.size()); i < (buildingsArrayList.size() + landmarksArrayList.size() + parkingLotsArrayList.size()); i++){
-                            markersArrayList.get(i).setVisible(false);
-                        }
-                    } else {
+                    }   else {
                         item.setChecked(true);
-
-                        for(int i = (buildingsArrayList.size() + landmarksArrayList.size()); i < (buildingsArrayList.size() + landmarksArrayList.size() + parkingLotsArrayList.size()); i++){
-                            markersArrayList.get(i).setVisible(true);
-                        }
                     }
                 } else if (id == R.id.nav_left_settings) {
 
@@ -209,15 +188,16 @@ switchView.setOnCheckedChangeListener(new OnCheckedChangeListener() {
                 drawer.closeDrawer(GravityCompat.START);
                 return true;
             }
-
         });
         initialize();
         final NavigationView rightNavigationView = (NavigationView) findViewById(R.id.nav_view_right);
-        ListView rightNavigationListView = (ListView) findViewById(R.id.right_nav_listView);
+        ListView buildingsListView = (ListView) findViewById(R.id.right_nav_building_listView);
+        ListView landmarksListView = (ListView) findViewById(R.id.right_nav_landmarks_listView);
+        ListView parkingListView = (ListView) findViewById(R.id.right_nav_parking_listView);
 
-        BuildingsListAdapter buildingsListAdapter = new BuildingsListAdapter(this,R.id.right_nav_listView,buildingsArrayList);
-        rightNavigationListView.setAdapter(buildingsListAdapter);
-        rightNavigationListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        BuildingsListAdapter buildingsListAdapter = new BuildingsListAdapter(this,R.id.right_nav_building_listView,buildingsArrayList);
+        buildingsListView.setAdapter(buildingsListAdapter);
+        buildingsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 if (drawer.isDrawerOpen(GravityCompat.END))
@@ -226,6 +206,91 @@ switchView.setOnCheckedChangeListener(new OnCheckedChangeListener() {
                     markersArrayList.get(i).setVisible(true);
                 markersArrayList.get(i).showInfoWindow();
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(markersArrayList.get(i).getPosition(),16));
+            }
+        });
+        LandmarksListAdapter landmarksListAdapter = new LandmarksListAdapter(this,R.id.right_nav_landmarks_listView,landmarksArrayList);
+        landmarksListView.setAdapter(landmarksListAdapter);
+        landmarksListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                i += buildingsArrayList.size();
+                if (drawer.isDrawerOpen(GravityCompat.END))
+                    drawer.closeDrawer(GravityCompat.END);
+                if(!markersArrayList.get(i).isVisible())
+                    markersArrayList.get(i).setVisible(true);
+                markersArrayList.get(i).showInfoWindow();
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(markersArrayList.get(i).getPosition(),16));
+            }
+        });
+        ParkingListAdapter parkingListAdapter = new ParkingListAdapter(this,R.id.right_nav_parking_listView,parkingLotsArrayList);
+        parkingListView.setAdapter(parkingListAdapter);
+        parkingListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                i += buildingsArrayList.size() + landmarksArrayList.size();
+                if (drawer.isDrawerOpen(GravityCompat.END))
+                    drawer.closeDrawer(GravityCompat.END);
+                if(!markersArrayList.get(i).isVisible())
+                    markersArrayList.get(i).setVisible(true);
+                markersArrayList.get(i).showInfoWindow();
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(markersArrayList.get(i).getPosition(),16));
+            }
+        });
+        Utilities.setListViewHeightBasedOnChildren(buildingsListView);
+        Utilities.setListViewHeightBasedOnChildren(landmarksListView);
+        Utilities.setListViewHeightBasedOnChildren(parkingListView);
+    }
+
+    private void setFilters() {
+        buildingsMenuItem = leftNavigationView.getMenu().findItem(R.id.nav_left_check_1);
+        buildingsCheckbox = (CompoundButton) MenuItemCompat.getActionView(buildingsMenuItem);
+        buildingsCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                if(isChecked){
+                    for (int i = 0; i < buildingsArrayList.size();i++) {
+                        markersArrayList.get(i).setVisible(true);
+                    }
+                }
+                else{
+                    for (int i = 0; i < buildingsArrayList.size();i++) {
+                        markersArrayList.get(i).setVisible(false);
+                    }
+                }
+            }
+        });
+        landmarksMenuItem = leftNavigationView.getMenu().findItem(R.id.nav_left_check_2);
+        landmarksCheckbox = (CompoundButton) MenuItemCompat.getActionView(landmarksMenuItem);
+        landmarksCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                if(isChecked){
+                    for(int i = buildingsArrayList.size(); i < (buildingsArrayList.size() + landmarksArrayList.size()); i++){
+                        markersArrayList.get(i).setVisible(true);
+                    }
+                }
+                else{
+                    for(int i = buildingsArrayList.size(); i < (buildingsArrayList.size() + landmarksArrayList.size()); i++){
+                        markersArrayList.get(i).setVisible(false);
+                    }
+                }
+            }
+        });
+        parkingMenuItem = leftNavigationView.getMenu().findItem(R.id.nav_left_check_3);
+        parkingCheckbox = (CompoundButton) MenuItemCompat.getActionView(parkingMenuItem);
+        parkingCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                if(isChecked){
+                    for(int i = (buildingsArrayList.size() + landmarksArrayList.size()); i < (buildingsArrayList.size() + landmarksArrayList.size() + parkingLotsArrayList.size()); i++){
+                        markersArrayList.get(i).setVisible(true);
+                    }
+                }
+                else{
+                    for(int i = (buildingsArrayList.size() + landmarksArrayList.size()); i < (buildingsArrayList.size() + landmarksArrayList.size() + parkingLotsArrayList.size()); i++){
+                        markersArrayList.get(i).setVisible(false);
+                    }
+                }
             }
         });
     }

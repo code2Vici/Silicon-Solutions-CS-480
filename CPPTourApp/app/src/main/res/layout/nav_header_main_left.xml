@@ -26,6 +26,4 @@
         android:text="CPP Tour"
         android:textSize="20sp"
         android:textAppearance="@style/TextColor" />
-
-
 </LinearLayout>
