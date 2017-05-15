@@ -107,3 +107,30 @@ Checkpoint 4 ( Day 7 ):
 ·       Complete testing
 ·       Complete documentation and report
 
+
+######################################################################################
+
+Project ID #: 13 (Password Manager) Estimated Development Time: 10 Days
+
+Project Description:
+
+This is an android based application implemented in Java that handles password storage safely. Its purpose is to help the user store all his/her passwords in one place so that there is no need to remember them. This application gives the user the option to set up a one time master authentication as either a password, pin, or swipe pattern. Whatever the user prefers to use, the authenticity is encrypted using the Blowfish encryption algorithm, a symmetric block cipher. Once logging in, the user enters the vault where an add button is placed to create a new entry with three attributes: website, username, and password. The password can either be entered manually or randomly generated. The program handles duplicate passwords, so that the user’s passwords are all different for each service account. If the user forgets his/her master authentication password to access the vault, we gave the option to delete all data so that it is not breached by any attacker that may be trying to access personal information,
+ 
+Preliminary Development Plan:
+
+Android based application using Java.
+
+Checkpoint 1 (Day 1 & 2):
+·        Create an underlying Java class to save, load, encrypt, and decrypt passwords.
+ 
+Checkpoint 2 (Day 3 & 4):
+·        Create login screen and credential store for initial login.
+ 
+Checkpoint 3 (Day 5 & 6 & 7):
+·        Create GUI for application and link to underlying java class
+ 
+Checkpoint 4 (Day 8 & 9):
+·        Test product and fix bugs
+ 
+Checkpoint 4 (Day 10):
+·        Finish report and documentation.
