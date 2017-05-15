@@ -10,6 +10,7 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.MenuItemCompat;
@@ -57,6 +58,7 @@ import siliconsolutions.cpptourapp.Directions.GeoCodeResponse;
 import siliconsolutions.cpptourapp.Directions.Leg;
 import siliconsolutions.cpptourapp.Directions.Polyline;
 import siliconsolutions.cpptourapp.Directions.Route;
+import siliconsolutions.cpptourapp.Directions.Step;
 import siliconsolutions.cpptourapp.GPS.GPSTracker;
 import siliconsolutions.cpptourapp.GPS.GPSTrackerListener;
 import siliconsolutions.cpptourapp.Model.Building;
@@ -82,8 +84,8 @@ public class BaseMap extends AppCompatActivity implements
     private ArrayList<Building> buildingsArrayList;
     private ArrayList<Landmarks> landmarksArrayList;
     private ArrayList<ParkingLots> parkingLotsArrayList;
-
     private ArrayList<Marker> markersArrayList;
+    private ArrayList<Marker> favoritesArrayList;
     private Marker myMarker;
     private StringBuffer postList;
     private StringBuffer landmarksPostList;
@@ -100,7 +102,9 @@ public class BaseMap extends AppCompatActivity implements
     private FloatingActionButton favoritesBtn;
     private View bottomSheet;
     private ImageButton likeDetailBtn;
+    private ImageButton navigationDetailBtn;
     private boolean markerSelected = false;
+    private DirectionsService service;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,6 +120,7 @@ public class BaseMap extends AppCompatActivity implements
 
 
         likeDetailBtn = (ImageButton) findViewById(R.id.favorites_detail_selection);
+        navigationDetailBtn = (ImageButton) findViewById(R.id.navigation_detail_selection);
         favoritesBtn = (FloatingActionButton) findViewById(R.id.btnOpenFavoriteDrawer);
         locationBtn = (FloatingActionButton) findViewById(R.id.btnMyLocation);
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -124,32 +129,7 @@ public class BaseMap extends AppCompatActivity implements
         drawer.setDrawerListener(toggle);
         toggle.syncState();
         setDetailView();
-
-        DirectionsService service = DirectionsService.retrofit.create(DirectionsService.class);
-        String origin = "34.058664,-117.824796";
-        String dest = "34.057115,-117.82743";
-        String mode = "walking";
-
-        service.getJson(origin, dest, mode).enqueue(new Callback<GeoCodeResponse>() {
-            @Override
-            public void onResponse(Call<GeoCodeResponse> call, Response<GeoCodeResponse> response) {
-                List<Route> routes = response.body().routes;
-                List<Leg> legs = routes.get(0).getLegs();
-                String polyLine = routes.get(0).getOverviewPolyline().getPoints();
-                List<LatLng> latLngs = decodePoly(polyLine);
-                for(int i = 0; i < latLngs.size() - 1;i++){
-                    LatLng src = latLngs.get(i);
-                    LatLng dest = latLngs.get(i + 1);
-                    line = mMap.addPolyline(new PolylineOptions().add(new LatLng(src.latitude,src.longitude),new LatLng(dest.latitude,dest.longitude))
-                    .width(5).color(Color.BLUE).geodesic(true));
-                }
-            }
-
-            @Override
-            public void onFailure(Call<GeoCodeResponse> call, Throwable t) {
-                Log.i("FAILURE","did not receive call");
-            }
-        });
+        service = DirectionsService.retrofit.create(DirectionsService.class);
 
 
         leftNavigationView = (NavigationView) findViewById(R.id.nav_view_left);
@@ -277,6 +257,7 @@ public class BaseMap extends AppCompatActivity implements
             }
         });
 
+
         Utilities.setListViewHeightBasedOnChildren(buildingsListView);
         Utilities.setListViewHeightBasedOnChildren(landmarksListView);
         Utilities.setListViewHeightBasedOnChildren(parkingListView);
@@ -350,6 +331,7 @@ public class BaseMap extends AppCompatActivity implements
         }.getType();
         Type parkingListType = new TypeToken<ArrayList<ParkingLots>>() {
         }.getType();
+        favoritesArrayList = new ArrayList<>();
         buildingsArrayList = new GsonBuilder().create().fromJson(loadBuildingJSONFromAsset(), listType);
         landmarksArrayList = new GsonBuilder().create().fromJson(loadLandmarksJSONFromAsset(), landmarksListType);
         parkingLotsArrayList = new GsonBuilder().create().fromJson(loadParkingLotsJSONFromAsset(), parkingListType);
@@ -372,7 +354,6 @@ public class BaseMap extends AppCompatActivity implements
     private void initComponents() {
         btnMyLocation = (ImageView) findViewById(R.id.btnMyLocation);
         btnMyLocation.setOnClickListener(this);
-
         btnOpenFavoriteDrawer = (ImageView) findViewById(R.id.btnOpenFavoriteDrawer);
         btnOpenFavoriteDrawer.setOnClickListener(this);
     }
@@ -417,6 +398,8 @@ public class BaseMap extends AppCompatActivity implements
                         locationBtn.setVisibility(View.GONE);
                         mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
                         bottomSheetHeading.setText(marker.getTitle());
+                        favoritesBtnListener(marker);
+                        navigationBtnListener(marker);
                         return false;
                     }
                 });
@@ -481,16 +464,6 @@ public class BaseMap extends AppCompatActivity implements
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    //for creating the transparent effect of status bar
-    public int getStatusBarHeight() {
-        int result = 0;
-        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
-        if (resourceId > 0) {
-            result = getResources().getDimensionPixelSize(resourceId);
-        }
-        return result;
     }
 
     public void onBackPressed() {
@@ -641,6 +614,65 @@ public class BaseMap extends AppCompatActivity implements
         }
         return json;
 
+    }
+
+    private void favoritesBtnListener(final Marker m){
+        likeDetailBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                likeDetailBtn.setImageResource(R.drawable.ic_like_filled);
+                favoritesArrayList.add(m);
+            }
+        });
+    }
+
+    private void navigationBtnListener(final Marker m){
+        navigationDetailBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                initDirections(m.getPosition());
+            }
+        });
+    }
+
+    private void initDirections(final LatLng latLng) {
+        String permission = "Manifest.permission.ACCESS_FINE_LOCATION";
+        int res = getApplicationContext().checkCallingOrSelfPermission(permission);
+
+        if(ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED){
+            String origin = gpsTracker.getLatitude() + "," + gpsTracker.getLongitude();
+            String dest = latLng.latitude+ "," + latLng.longitude;
+            String mode = "walking";
+
+            service.getJson(origin, dest, mode).enqueue(new Callback<GeoCodeResponse>() {
+                @Override
+                public void onResponse(Call<GeoCodeResponse> call, Response<GeoCodeResponse> response) {
+                    List<Route> routes = response.body().routes;
+                    List<Leg> legs = routes.get(0).getLegs();
+                    String polyLine = routes.get(0).getOverviewPolyline().getPoints();
+                    List<Step> steps = legs.get(0).getSteps();
+                    List<LatLng> latLngs = decodePoly(polyLine);
+                    for(int i = 0; i < latLngs.size() - 1;i++){
+                        LatLng src = latLngs.get(i);
+                        LatLng dest = latLngs.get(i + 1);
+                        /*Marker m = mMap.addMarker(new MarkerOptions().position(latLng));
+                        m.setAlpha(0.0f);
+                        m.setVisible(true);
+                        m.setInfoWindowAnchor(.5f,1.0f);*/
+                        line = mMap.addPolyline(new PolylineOptions().add(new LatLng(src.latitude,src.longitude),new LatLng(dest.latitude,dest.longitude))
+                                .width(5).color(Color.BLUE).geodesic(true));
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<GeoCodeResponse> call, Throwable t) {
+                    Log.i("FAILURE","did not receive call");
+                }
+            });
+        }
+        else{
+            Toast.makeText(this, "Location services needed to access navigation.", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override

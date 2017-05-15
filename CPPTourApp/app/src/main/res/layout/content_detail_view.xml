@@ -32,7 +32,19 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_toEndOf="@+id/textView"
+        android:layout_alignParentEnd="true"
         app:srcCompat="@drawable/ic_like_clear"
         android:background="@null"/>
+
+    <ImageButton
+        android:id="@+id/navigation_detail_selection"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginEnd="10dp"
+        android:layout_toStartOf="@+id/favorites_detail_selection"
+        android:background="@null"
+        android:scaleType="centerCrop"
+        app:srcCompat="@drawable/navigation_btn" />
+
 </RelativeLayout>
