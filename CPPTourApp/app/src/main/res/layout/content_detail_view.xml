@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/bottomSheetLayout"
+    android:layout_width="match_parent"
+    android:layout_height="300dp"
+    android:background="@color/colorDetail"
+    android:padding="@dimen/activity_vertical_margin"
+    app:behavior_hideable="true"
+    app:behavior_peekHeight="80dp"
+    app:layout_behavior="@string/bottom_sheet_behavior">
+
+    <TextView
+        android:id="@+id/bottomSheetHeading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="EXPAND ME"
+        android:textAppearance="@android:style/TextAppearance.Large" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/bottomSheetHeading"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/activity_horizontal_margin"
+        android:text="WELCOME TO THIS DETAIL"
+        android:textAppearance="@android:style/TextAppearance.Large"
+        android:id="@+id/textView" />
+
+    <ImageButton
+        android:id="@+id/favorites_detail_selection"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        app:srcCompat="@drawable/ic_like_clear"
+        android:background="@null"/>
+
+    <ImageButton
+        android:id="@+id/navigation_detail_selection"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginEnd="10dp"
+        android:layout_toStartOf="@+id/favorites_detail_selection"
+        android:background="@null"
+        android:scaleType="centerCrop"
+        app:srcCompat="@drawable/navigation_btn" />
+
+</RelativeLayout>
