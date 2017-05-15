@@ -5,8 +5,8 @@ import android.app.ProgressDialog;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
-import android.os.Build;
-import android.support.annotation.NonNull;
+import android.support.design.widget.BottomSheetBehavior;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.os.Bundle;
@@ -24,12 +24,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.CompoundButton;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import java.lang.reflect.Array;
 import java.lang.reflect.Type;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -42,13 +41,10 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Dictionary;
 import java.util.List;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -86,17 +82,25 @@ public class BaseMap extends AppCompatActivity implements
     private ArrayList<Building> buildingsArrayList;
     private ArrayList<Landmarks> landmarksArrayList;
     private ArrayList<ParkingLots> parkingLotsArrayList;
+
     private ArrayList<Marker> markersArrayList;
     private Marker myMarker;
     private StringBuffer postList;
     private StringBuffer landmarksPostList;
     private StringBuffer parkingPostList;
-    MenuItem buildingsMenuItem;
-    MenuItem landmarksMenuItem;
-    MenuItem parkingMenuItem;
-    CompoundButton buildingsCheckbox;
-    CompoundButton landmarksCheckbox;
-    CompoundButton parkingCheckbox;
+    private MenuItem buildingsMenuItem;
+    private MenuItem landmarksMenuItem;
+    private MenuItem parkingMenuItem;
+    private CompoundButton buildingsCheckbox;
+    private CompoundButton landmarksCheckbox;
+    private CompoundButton parkingCheckbox;
+    private BottomSheetBehavior mBottomSheetBehavior;
+    private TextView bottomSheetHeading;
+    private FloatingActionButton locationBtn;
+    private FloatingActionButton favoritesBtn;
+    private View bottomSheet;
+    private ImageButton likeDetailBtn;
+    private boolean markerSelected = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,11 +114,16 @@ public class BaseMap extends AppCompatActivity implements
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
+
+        likeDetailBtn = (ImageButton) findViewById(R.id.favorites_detail_selection);
+        favoritesBtn = (FloatingActionButton) findViewById(R.id.btnOpenFavoriteDrawer);
+        locationBtn = (FloatingActionButton) findViewById(R.id.btnMyLocation);
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
+        setDetailView();
 
         DirectionsService service = DirectionsService.retrofit.create(DirectionsService.class);
         String origin = "34.058664,-117.824796";
@@ -142,12 +151,12 @@ public class BaseMap extends AppCompatActivity implements
             }
         });
 
-         leftNavigationView = (NavigationView) findViewById(R.id.nav_view_left);
-        setFilters();
 
+        leftNavigationView = (NavigationView) findViewById(R.id.nav_view_left);
+        setFilters();
         leftNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            public boolean onNavigationItemSelected(MenuItem item) {
                 int id = item.getItemId();
 
                 if (id == R.id.nav_left_start) {
@@ -206,6 +215,18 @@ public class BaseMap extends AppCompatActivity implements
                     markersArrayList.get(i).setVisible(true);
                 markersArrayList.get(i).showInfoWindow();
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(markersArrayList.get(i).getPosition(),16));
+                bottomSheetHeading.setText(markersArrayList.get(i).getTitle());
+                mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                if(btnMyLocation.getVisibility() == View.VISIBLE){
+                    CoordinatorLayout.LayoutParams p1 = (CoordinatorLayout.LayoutParams) favoritesBtn.getLayoutParams();
+                    CoordinatorLayout.LayoutParams p2 = (CoordinatorLayout.LayoutParams) locationBtn.getLayoutParams();
+                    p1.setAnchorId(View.NO_ID);
+                    p2.setAnchorId(View.NO_ID);
+                    favoritesBtn.setLayoutParams(p1);
+                    locationBtn.setLayoutParams(p2);
+                    favoritesBtn.setVisibility(View.GONE);
+                    locationBtn.setVisibility(View.GONE);
+                }
             }
         });
         LandmarksListAdapter landmarksListAdapter = new LandmarksListAdapter(this,R.id.right_nav_landmarks_listView,landmarksArrayList);
@@ -219,7 +240,16 @@ public class BaseMap extends AppCompatActivity implements
                 if(!markersArrayList.get(i).isVisible())
                     markersArrayList.get(i).setVisible(true);
                 markersArrayList.get(i).showInfoWindow();
-                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(markersArrayList.get(i).getPosition(),16));
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(markersArrayList.get(i).getPosition(),16));if(btnMyLocation.getVisibility() == View.VISIBLE){
+                    CoordinatorLayout.LayoutParams p1 = (CoordinatorLayout.LayoutParams) favoritesBtn.getLayoutParams();
+                    CoordinatorLayout.LayoutParams p2 = (CoordinatorLayout.LayoutParams) locationBtn.getLayoutParams();
+                    p1.setAnchorId(View.NO_ID);
+                    p2.setAnchorId(View.NO_ID);
+                    favoritesBtn.setLayoutParams(p1);
+                    locationBtn.setLayoutParams(p2);
+                    favoritesBtn.setVisibility(View.GONE);
+                    locationBtn.setVisibility(View.GONE);
+                }
             }
         });
         ParkingListAdapter parkingListAdapter = new ParkingListAdapter(this,R.id.right_nav_parking_listView,parkingLotsArrayList);
@@ -234,8 +264,19 @@ public class BaseMap extends AppCompatActivity implements
                     markersArrayList.get(i).setVisible(true);
                 markersArrayList.get(i).showInfoWindow();
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(markersArrayList.get(i).getPosition(),16));
+                if(btnMyLocation.getVisibility() == View.VISIBLE){
+                    CoordinatorLayout.LayoutParams p1 = (CoordinatorLayout.LayoutParams) favoritesBtn.getLayoutParams();
+                    CoordinatorLayout.LayoutParams p2 = (CoordinatorLayout.LayoutParams) locationBtn.getLayoutParams();
+                    p1.setAnchorId(View.NO_ID);
+                    p2.setAnchorId(View.NO_ID);
+                    favoritesBtn.setLayoutParams(p1);
+                    locationBtn.setLayoutParams(p2);
+                    favoritesBtn.setVisibility(View.GONE);
+                    locationBtn.setVisibility(View.GONE);
+                }
             }
         });
+
         Utilities.setListViewHeightBasedOnChildren(buildingsListView);
         Utilities.setListViewHeightBasedOnChildren(landmarksListView);
         Utilities.setListViewHeightBasedOnChildren(parkingListView);
@@ -356,6 +397,44 @@ public class BaseMap extends AppCompatActivity implements
         setMarkers();
         //mMap.addMarker(new MarkerOptions().position(cpp).title("Cal Poly Pomona"));
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(cpp, 16));
+        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener()
+        {
+            @Override
+            public void onMapClick(LatLng latLng)
+            {
+                mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener()
+                {
+                    @Override
+                    public boolean onMarkerClick(Marker marker)
+                    {
+                        CoordinatorLayout.LayoutParams p1 = (CoordinatorLayout.LayoutParams) favoritesBtn.getLayoutParams();
+                        CoordinatorLayout.LayoutParams p2 = (CoordinatorLayout.LayoutParams) locationBtn.getLayoutParams();
+                        p1.setAnchorId(View.NO_ID);
+                        p2.setAnchorId(View.NO_ID);
+                        favoritesBtn.setLayoutParams(p1);
+                        locationBtn.setLayoutParams(p2);
+                        favoritesBtn.setVisibility(View.GONE);
+                        locationBtn.setVisibility(View.GONE);
+                        mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                        bottomSheetHeading.setText(marker.getTitle());
+                        return false;
+                    }
+                });
+                if(favoritesBtn.getVisibility() == View.GONE){
+                    CoordinatorLayout.LayoutParams p1 = (CoordinatorLayout.LayoutParams) favoritesBtn.getLayoutParams();
+                    CoordinatorLayout.LayoutParams p2 = (CoordinatorLayout.LayoutParams) locationBtn.getLayoutParams();
+                    p1.setAnchorId(R.id.include);
+                    p2.setAnchorId(R.id.include);
+                    favoritesBtn.setLayoutParams(p1);
+                    locationBtn.setLayoutParams(p2);
+                    favoritesBtn.setVisibility(View.VISIBLE);
+                    locationBtn.setVisibility(View.VISIBLE);
+                }
+                if(mBottomSheetBehavior.getState() != BottomSheetBehavior.STATE_HIDDEN){
+                    mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+                }
+            }
+        });
 
     }
 
@@ -466,6 +545,14 @@ public class BaseMap extends AppCompatActivity implements
     @Override
     public void onGPSTrackerStatusChanged(String provider, int status, Bundle extra) {
 
+    }
+
+    private void setDetailView(){
+        bottomSheet = findViewById(R.id.bottomSheetLayout);
+        mBottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
+        mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+        bottomSheetHeading = (TextView) findViewById(R.id.bottomSheetHeading);
+        Log.i("Peek Height", String.valueOf(mBottomSheetBehavior.getPeekHeight()));
     }
 
     private ArrayList<LatLng> decodePoly(String encoded) {
