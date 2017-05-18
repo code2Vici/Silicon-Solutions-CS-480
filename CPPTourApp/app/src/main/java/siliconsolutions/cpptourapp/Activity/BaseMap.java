@@ -1,7 +1,11 @@
 package siliconsolutions.cpptourapp.Activity;
 
 import android.Manifest;
+import android.app.DialogFragment;
+import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
@@ -10,15 +14,18 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -42,6 +49,9 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+
+import org.greenrobot.eventbus.EventBus;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -50,21 +60,23 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import siliconsolutions.cpptourapp.Adapters.BuildingsListAdapter;
+import siliconsolutions.cpptourapp.Adapters.FavoritesListAdapter;
 import siliconsolutions.cpptourapp.Adapters.LandmarksListAdapter;
 import siliconsolutions.cpptourapp.Adapters.ParkingListAdapter;
 import siliconsolutions.cpptourapp.Adapters.Utilities;
 import siliconsolutions.cpptourapp.Directions.DirectionsService;
 import siliconsolutions.cpptourapp.Directions.GeoCodeResponse;
 import siliconsolutions.cpptourapp.Directions.Leg;
-import siliconsolutions.cpptourapp.Directions.Polyline;
 import siliconsolutions.cpptourapp.Directions.Route;
 import siliconsolutions.cpptourapp.Directions.Step;
+import siliconsolutions.cpptourapp.FavoritesFragment.FavoritesFragment;
 import siliconsolutions.cpptourapp.GPS.GPSTracker;
 import siliconsolutions.cpptourapp.GPS.GPSTrackerListener;
 import siliconsolutions.cpptourapp.Model.Building;
 import siliconsolutions.cpptourapp.Model.GlobalVars;
 import siliconsolutions.cpptourapp.Model.Landmarks;
 import siliconsolutions.cpptourapp.Model.MyLocation;
+import siliconsolutions.cpptourapp.Model.Navigation;
 import siliconsolutions.cpptourapp.Model.ParkingLots;
 import siliconsolutions.cpptourapp.R;
 
@@ -77,8 +89,7 @@ public class BaseMap extends AppCompatActivity implements
     private DrawerLayout drawer;
     private ImageView btnMyLocation;
     private ImageView btnOpenFavoriteDrawer;
-    private GPSTracker gpsTracker;
-    private com.google.android.gms.maps.model.Polyline line;
+    public static GPSTracker gpsTracker;
     NavigationView leftNavigationView;
     private ProgressDialog progressDialog;
     private ArrayList<Building> buildingsArrayList;
@@ -104,7 +115,6 @@ public class BaseMap extends AppCompatActivity implements
     private ImageButton likeDetailBtn;
     private ImageButton navigationDetailBtn;
     private boolean markerSelected = false;
-    private DirectionsService service;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -129,8 +139,6 @@ public class BaseMap extends AppCompatActivity implements
         drawer.setDrawerListener(toggle);
         toggle.syncState();
         setDetailView();
-        service = DirectionsService.retrofit.create(DirectionsService.class);
-
 
         leftNavigationView = (NavigationView) findViewById(R.id.nav_view_left);
         setFilters();
@@ -257,10 +265,30 @@ public class BaseMap extends AppCompatActivity implements
             }
         });
 
+        favoritesBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showDialog();
+            }
+        });
 
         Utilities.setListViewHeightBasedOnChildren(buildingsListView);
         Utilities.setListViewHeightBasedOnChildren(landmarksListView);
         Utilities.setListViewHeightBasedOnChildren(parkingListView);
+    }
+
+    private void showDialog() {
+        View view = getLayoutInflater().inflate(R.layout.favorites_dialog, null );
+        RecyclerView rv;
+        rv = (RecyclerView) view.findViewById(R.id.favoritesList);
+        rv.setHasFixedSize(true);
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
+        rv.setLayoutManager(mLayoutManager);
+        FavoritesListAdapter adapter = new FavoritesListAdapter(favoritesArrayList);
+        rv.setAdapter(adapter);
+        AlertDialog.Builder dialog = new AlertDialog.Builder( this );
+        dialog.setView(view);
+        dialog.show();
     }
 
     private void setFilters() {
@@ -317,7 +345,6 @@ public class BaseMap extends AppCompatActivity implements
         });
     }
 
-
     private void initialize() {
         initComponents();
         initLocations();
@@ -358,6 +385,35 @@ public class BaseMap extends AppCompatActivity implements
         btnOpenFavoriteDrawer.setOnClickListener(this);
     }
 
+    public void setMarkers() {
+        markersArrayList = new ArrayList<>();
+        postList = new StringBuffer();
+        landmarksPostList = new StringBuffer();
+        for (Building post : buildingsArrayList) {
+            postList.append("\n latitude: " + post.getLatitude() + "\n longtitude: " + post.getLongtitude() +
+                    "\n building name: " + post.getBuildingName() + "\n building number: " + post.getBuildingNumber() + "\n\n");
+            myMarker = mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)).visible(false).title(post.getBuildingName()).snippet(post.getBuildingNumber()).position(new LatLng(Double.parseDouble(post.getLatitude()), Double.parseDouble(post.getLongtitude()))));
+            myMarker.setTag(markersArrayList.size());
+            markersArrayList.add(myMarker);
+        }
+        for (Landmarks post : landmarksArrayList) {
+            landmarksPostList.append("\n latitude: " + post.getLatitude() + "\n longtitude: " + post.getLongtitude() +
+                    "\n building name: " + post.getLandmarkName() + "\n building number: " + post.getLandmarkNumber() + "\n\n");
+
+            myMarker = mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)).title(post.getLandmarkName()).snippet(post.getLandmarkNumber()).position(new LatLng(Double.parseDouble(post.getLatitude()), Double.parseDouble(post.getLongtitude()))));
+            myMarker.setTag(markersArrayList.size());
+            markersArrayList.add(myMarker);
+        }
+        parkingPostList = new StringBuffer();
+        for (ParkingLots post : parkingLotsArrayList) {
+            parkingPostList.append("\n latitude: " + post.getLatitude() + "\n longtitude: " + post.getLongtitude() +
+                    "\n building name: " + post.getParkingLotsName() + "\n building number: " + post.getParkingLotsNumber() + "\n\n");
+            myMarker = mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)).visible(false).title(post.getParkingLotsName()).snippet(post.getParkingLotsNumber()).position(new LatLng(Double.parseDouble(post.getLatitude()), Double.parseDouble(post.getLongtitude()))));
+            myMarker.setTag(markersArrayList.size());
+            markersArrayList.add(myMarker);
+
+        }
+    }
 
     /**
      * Manipulates the map once available.
@@ -372,6 +428,7 @@ public class BaseMap extends AppCompatActivity implements
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         mMap.getUiSettings().setMapToolbarEnabled(false);
+        mMap.getUiSettings().setCompassEnabled(true);
         mMap.setOnMarkerClickListener(this);
         // Add a marker in Sydney and move the camera
         LatLng cpp = new LatLng(34.056502, -117.821465);
@@ -408,6 +465,7 @@ public class BaseMap extends AppCompatActivity implements
                     CoordinatorLayout.LayoutParams p2 = (CoordinatorLayout.LayoutParams) locationBtn.getLayoutParams();
                     p1.setAnchorId(R.id.include);
                     p2.setAnchorId(R.id.include);
+                    likeDetailBtn.setImageResource(R.drawable.ic_like_clear);
                     favoritesBtn.setLayoutParams(p1);
                     locationBtn.setLayoutParams(p2);
                     favoritesBtn.setVisibility(View.VISIBLE);
@@ -419,32 +477,6 @@ public class BaseMap extends AppCompatActivity implements
             }
         });
 
-    }
-
-    public void setMarkers() {
-        markersArrayList = new ArrayList<>();
-        postList = new StringBuffer();
-        landmarksPostList = new StringBuffer();
-        for (Building post : buildingsArrayList) {
-            postList.append("\n latitude: " + post.getLatitude() + "\n longtitude: " + post.getLongtitude() +
-                    "\n building name: " + post.getBuildingName() + "\n building number: " + post.getBuildingNumber() + "\n\n");
-            myMarker = mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)).visible(false).title(post.getBuildingName()).snippet(post.getBuildingNumber()).position(new LatLng(Double.parseDouble(post.getLatitude()), Double.parseDouble(post.getLongtitude()))));
-            markersArrayList.add(myMarker);
-        }
-        for (Landmarks post : landmarksArrayList) {
-            landmarksPostList.append("\n latitude: " + post.getLatitude() + "\n longtitude: " + post.getLongtitude() +
-                    "\n building name: " + post.getLandmarkName() + "\n building number: " + post.getLandmarkNumber() + "\n\n");
-
-            myMarker = mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)).title(post.getLandmarkName()).snippet(post.getLandmarkNumber()).position(new LatLng(Double.parseDouble(post.getLatitude()), Double.parseDouble(post.getLongtitude()))));
-            markersArrayList.add(myMarker);
-        }
-        parkingPostList = new StringBuffer();
-        for (ParkingLots post : parkingLotsArrayList) {
-            parkingPostList.append("\n latitude: " + post.getLatitude() + "\n longtitude: " + post.getLongtitude() +
-                    "\n building name: " + post.getParkingLotsName() + "\n building number: " + post.getParkingLotsNumber() + "\n\n");
-            myMarker = mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)).visible(false).title(post.getParkingLotsName()).snippet(post.getParkingLotsNumber()).position(new LatLng(Double.parseDouble(post.getLatitude()), Double.parseDouble(post.getLongtitude()))));
-            markersArrayList.add(myMarker);
-        }
     }
 
     @Override
@@ -528,42 +560,6 @@ public class BaseMap extends AppCompatActivity implements
         Log.i("Peek Height", String.valueOf(mBottomSheetBehavior.getPeekHeight()));
     }
 
-    private ArrayList<LatLng> decodePoly(String encoded) {
-
-        Log.i("Location", "String received: "+encoded);
-        ArrayList<LatLng> poly = new ArrayList<LatLng>();
-        int index = 0, len = encoded.length();
-        int lat = 0, lng = 0;
-
-        while (index < len) {
-            int b, shift = 0, result = 0;
-            do {
-                b = encoded.charAt(index++) - 63;
-                result |= (b & 0x1f) << shift;
-                shift += 5;
-            } while (b >= 0x20);
-            int dlat = ((result & 1) != 0 ? ~(result >> 1) : (result >> 1));
-            lat += dlat;
-
-            shift = 0;
-            result = 0;
-            do {
-                b = encoded.charAt(index++) - 63;
-                result |= (b & 0x1f) << shift;
-                shift += 5;
-            } while (b >= 0x20);
-            int dlng = ((result & 1) != 0 ? ~(result >> 1) : (result >> 1));
-            lng += dlng;
-
-            LatLng p = new LatLng((((double) lat / 1E5)),(((double) lng / 1E5)));
-            poly.add(p);
-        }
-
-        for(int i=0;i < poly.size(); i++){
-            Log.i("Location", "Point sent: Latitude: " + poly.get(i).latitude + " Longitude: " + poly.get(i).longitude);
-        }
-        return poly;
-    }
 
     public String loadBuildingJSONFromAsset() {
         String json = null;
@@ -630,45 +626,31 @@ public class BaseMap extends AppCompatActivity implements
         navigationDetailBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                initDirections(m.getPosition());
+                Intent intent = new Intent(BaseMap.this, NavigationActivity.class);
+                Bundle args = new Bundle();
+                LatLng mLatLng = m.getPosition();
+                args.putString("title",m.getTitle());
+                args.putString("snippet",m.getSnippet());
+                args.putParcelable("position", mLatLng);
+                args.putString("header",m.getTitle());
+                intent.putExtra("bundle", args);
+                startActivity(intent);
+
+                //initNavigation(m);
             }
         });
     }
 
-    private void initDirections(final LatLng latLng) {
-        String permission = "Manifest.permission.ACCESS_FINE_LOCATION";
-        int res = getApplicationContext().checkCallingOrSelfPermission(permission);
 
+    private void initNavigation(final Marker m) {
         if(ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED){
-            String origin = gpsTracker.getLatitude() + "," + gpsTracker.getLongitude();
-            String dest = latLng.latitude+ "," + latLng.longitude;
-            String mode = "walking";
-
-            service.getJson(origin, dest, mode).enqueue(new Callback<GeoCodeResponse>() {
-                @Override
-                public void onResponse(Call<GeoCodeResponse> call, Response<GeoCodeResponse> response) {
-                    List<Route> routes = response.body().routes;
-                    List<Leg> legs = routes.get(0).getLegs();
-                    String polyLine = routes.get(0).getOverviewPolyline().getPoints();
-                    List<Step> steps = legs.get(0).getSteps();
-                    List<LatLng> latLngs = decodePoly(polyLine);
-                    for(int i = 0; i < latLngs.size() - 1;i++){
-                        LatLng src = latLngs.get(i);
-                        LatLng dest = latLngs.get(i + 1);
-                        /*Marker m = mMap.addMarker(new MarkerOptions().position(latLng));
-                        m.setAlpha(0.0f);
-                        m.setVisible(true);
-                        m.setInfoWindowAnchor(.5f,1.0f);*/
-                        line = mMap.addPolyline(new PolylineOptions().add(new LatLng(src.latitude,src.longitude),new LatLng(dest.latitude,dest.longitude))
-                                .width(5).color(Color.BLUE).geodesic(true));
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<GeoCodeResponse> call, Throwable t) {
-                    Log.i("FAILURE","did not receive call");
-                }
-            });
+            Navigation navigation = Navigation.getInstance();
+            navigation.setGPSTracker(gpsTracker);
+            navigation.setDestination(m.getPosition());
+            navigation.setMap(mMap);
+            navigation.setMarker(m);
+            navigation.setMarkersList(markersArrayList);
+            navigation.start();
         }
         else{
             Toast.makeText(this, "Location services needed to access navigation.", Toast.LENGTH_SHORT).show();
@@ -693,5 +675,15 @@ public class BaseMap extends AppCompatActivity implements
         // for the default behavior to occur (which is for the camera to move such that the
         // marker is centered and for the marker's info window to open, if it has one).
         return false;
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
     }
 }

@@ -15,12 +15,14 @@ public class Building {
     private String buildingName;
     @SerializedName("number")
     private String buildingNumber;
+    private boolean isFavorite;
 
     public Building(String latitude, String longtitude, String buildingName, String buildingNumber) {
         this.latitude = latitude;
         this.longtitude = longtitude;
         this.buildingName = buildingName;
         this.buildingNumber = buildingNumber;
+        isFavorite = false;
     }
 
     public String getLatitude() {
@@ -53,5 +55,13 @@ public class Building {
 
     public void setBuildingNumber(String buildingNumber) {
         this.buildingNumber = buildingNumber;
+    }
+
+    public boolean isFavorite() {
+        return isFavorite;
+    }
+
+    public void setFavorite(boolean favorite) {
+        isFavorite = favorite;
     }
 }
