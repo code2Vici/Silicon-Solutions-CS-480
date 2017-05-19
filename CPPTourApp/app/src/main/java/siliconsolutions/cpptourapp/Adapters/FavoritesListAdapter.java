@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.model.Marker;
 
 import java.util.List;
@@ -42,12 +43,21 @@ public class FavoritesListAdapter extends RecyclerView.Adapter<FavoritesListAdap
     }
 
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         // each data item is just a string in this case
         public TextView mTextView;
         public ViewHolder(View v) {
             super(v);
             mTextView = (TextView) v.findViewById(R.id.item_name_favorites);
+            v.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+            /*favorites.get(i).showInfoWindow();
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(favorites.get(i).getPosition(),16));
+            bottomSheetHeading.setText(favorites.get(i).getTitle());
+            mergedAppBarLayoutBehavior.setToolbarTitle(favorites.get(i).getTitle());*/
         }
     }
 }

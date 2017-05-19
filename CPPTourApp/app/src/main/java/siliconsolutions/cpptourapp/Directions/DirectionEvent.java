@@ -1,8 +1,16 @@
 package siliconsolutions.cpptourapp.Directions;
 
-/**
- * Created by user on 5/18/17.
- */
+import android.util.Log;
 
-class DirectionEvent {
+import retrofit2.Response;
+
+
+
+public class DirectionEvent {
+    public Response<GeoCodeResponse> response;
+
+    public DirectionEvent(Response<GeoCodeResponse> response){
+        this.response = response;
+        Log.i("is","com");
+    }
 }

@@ -2,6 +2,7 @@ package siliconsolutions.cpptourapp.Model;
 
 import android.graphics.Color;
 import android.util.Log;
+import android.widget.ImageButton;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -16,6 +17,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import siliconsolutions.cpptourapp.Adapters.Utilities;
+import siliconsolutions.cpptourapp.Directions.Bounds;
 import siliconsolutions.cpptourapp.Directions.DirectionsService;
 import siliconsolutions.cpptourapp.Directions.GeoCodeResponse;
 import siliconsolutions.cpptourapp.Directions.Leg;
@@ -31,15 +33,16 @@ public class Navigation {
     private com.google.android.gms.maps.model.Polyline line;
     private GoogleMap mMap;
     private Marker marker;
-    private ArrayList<Marker> markersList;
     private String distance;
     private String duration;
-    List<Route> routes;
-    List<Leg> legs;
-    List<Step> steps;
-    List<LatLng> latLngsList;
+    private Response<GeoCodeResponse> response;
+    private List<Route> routes;
+    private List<Leg> legs;
+    private List<Step> steps;
+    private List<LatLng> latLngsList;
+    private List<Marker> markers;
+    private Bounds bounds;
     final String[] polyLine;
-    private boolean isCalculated;
 
     public static Navigation getInstance(){
         if(instance == null){
@@ -49,21 +52,10 @@ public class Navigation {
     }
 
     private Navigation(){
-        service = DirectionsService.retrofit.create(DirectionsService.class);
         polyLine = new String[1];
         distance = "";
         duration = "";
-        isCalculated = false;
-
-    }
-
-    private void onParseComplete() {
-        generatePolyLine();
-        generateMarkers();
-        distance = legs.get(0).getDistance().getText();
-        duration = legs.get(0).getDuration().getText();
-        isCalculated = true;
-
+        markers = new ArrayList<>();
     }
 
     private void generatePolyLine(){
@@ -79,49 +71,31 @@ public class Navigation {
     private void generateMarkers(){
         for(int i = 0; i < steps.size();i++){
             String s = Utilities.htmlToText(steps.get(i).getHtmlInstructions());
-            //steps.get(i).getStartLocation()
-            //markersArrayList.add(marker);
             Marker m = mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)).visible(true).
                     title(s)
                     .position(new LatLng(steps.get(i).getStartLocation().getLat(),steps.get(i).getStartLocation().getLng())));
+            markers.add(m);
             //mMap.addMarker(new MarkerOptions().position(latLng).title(s));
             //m.setAlpha(0.0f);
             //m.setVisible(true);
             //m.setInfoWindowAnchor(.5f,1.0f);
-            Log.i("Instructions",s);
         }
+    }
+
+    public void setUp(){
+        routes = response.body().routes;
+        bounds = response.body().routes.get(0).getBounds();
+        legs = routes.get(0).getLegs();
+        steps = legs.get(0).getSteps();
+        polyLine[0] = routes.get(0).getOverviewPolyline().getPoints();
+        generatePolyLine();
+        generateMarkers();
+        distance = legs.get(0).getDistance().getText();
+        duration = legs.get(0).getDuration().getText();
     }
 
     public void start(){
-        String origin = gpsTracker.getLatitude() + "," + gpsTracker.getLongitude();
-        String dest = destination.latitude+ "," + destination.longitude;
-        String mode = "walking";
 
-        prepareMap();
-        service.getJson(origin, dest, mode).enqueue(new Callback<GeoCodeResponse>() {
-            @Override
-            public void onResponse(Call<GeoCodeResponse> call, Response<GeoCodeResponse> response) {
-                routes = response.body().routes;
-                legs = routes.get(0).getLegs();
-                steps = legs.get(0).getSteps();
-                polyLine[0] = routes.get(0).getOverviewPolyline().getPoints();
-                onParseComplete();
-            }
-
-            @Override
-            public void onFailure(Call<GeoCodeResponse> call, Throwable t) {
-                Log.i("FAILURE","did not receive call");
-            }
-        });
-
-    }
-
-    private void prepareMap() {
-        /*int markerIndex = Integer.parseInt(marker.getTag().toString());
-        for(int i = 0; i < markersList.size();i++){
-            markersList.get(i).setVisible(false);
-        }
-        markersList.get(markerIndex).setVisible(true);*/
     }
 
     private ArrayList<LatLng> decodePoly(String encoded) {
@@ -175,18 +149,39 @@ public class Navigation {
         this.marker = marker;
     }
 
-    public void setMarkersList(ArrayList<Marker> markersList) {
-        this.markersList = markersList;
+    public List<Marker> getMarkers() {
+        return markers;
     }
 
     public String getDistance() {
         return distance;
     }
 
-    public boolean isCalculated(){ return isCalculated;}
-
     public String getDuration() {
         return duration;
     }
 
+    public void setSteps(List<Step> steps) {
+        this.steps = steps;
+    }
+
+    public List<Step> getSteps() {
+        return steps;
+    }
+
+    public void setResponse(Response<GeoCodeResponse> response) {
+        this.response = response;
+    }
+
+    public void setMarkersList(ArrayList<Marker> markersList) {
+        this.markers = markersList;
+    }
+
+    public Bounds getBounds() {
+        return bounds;
+    }
+
+    public void setBounds(Bounds bounds) {
+        this.bounds = bounds;
+    }
 }
