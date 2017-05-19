@@ -1,12 +1,14 @@
 package siliconsolutions.cpptourapp.Adapters;
 
 import android.content.Context;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.model.Marker;
 
 import java.util.List;
@@ -14,26 +16,48 @@ import java.util.List;
 import siliconsolutions.cpptourapp.Model.Building;
 import siliconsolutions.cpptourapp.R;
 
-/**
- * Created by user on 5/14/17.
- */
-
-public class FavoritesListAdapter extends ArrayAdapter<Marker> {
+public class FavoritesListAdapter extends RecyclerView.Adapter<FavoritesListAdapter.ViewHolder>{
     List<Marker> favorites;
 
-    public FavoritesListAdapter(Context context, int resource, List<Marker> favorites) {
-        super(context, resource, favorites);
+    public FavoritesListAdapter(List<Marker> favorites) {
         this.favorites = favorites;
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        if(convertView == null){
-            //convertView = LayoutInflater.from(getContext()).inflate(R.layout.locations_list_item_layout,parent,false);
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View v = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.favorite_item_cell, parent, false);
+
+        ViewHolder vh = new ViewHolder(v);
+        return vh;
+    }
+
+    @Override
+    public void onBindViewHolder(ViewHolder holder, int position) {
+        holder.mTextView.setText(favorites.get(position).getTitle());
+    }
+
+    @Override
+    public int getItemCount() {
+        return favorites.size();
+    }
+
+
+    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        // each data item is just a string in this case
+        public TextView mTextView;
+        public ViewHolder(View v) {
+            super(v);
+            mTextView = (TextView) v.findViewById(R.id.item_name_favorites);
+            v.setOnClickListener(this);
         }
 
-
-        convertView.setTag(position);
-        return convertView;
+        @Override
+        public void onClick(View view) {
+            /*favorites.get(i).showInfoWindow();
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(favorites.get(i).getPosition(),16));
+            bottomSheetHeading.setText(favorites.get(i).getTitle());
+            mergedAppBarLayoutBehavior.setToolbarTitle(favorites.get(i).getTitle());*/
+        }
     }
 }

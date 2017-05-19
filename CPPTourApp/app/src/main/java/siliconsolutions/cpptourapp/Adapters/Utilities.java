@@ -5,6 +5,8 @@ import android.view.ViewGroup;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
+import org.jsoup.Jsoup;
+
 
 public class Utilities {
     public static void setListViewHeightBasedOnChildren(ListView listView) {
@@ -22,5 +24,9 @@ public class Utilities {
         params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
         listView.setLayoutParams(params);
         listView.requestLayout();
+    }
+
+    public static String htmlToText(String s){
+        return Jsoup.parse(s).text();
     }
 }

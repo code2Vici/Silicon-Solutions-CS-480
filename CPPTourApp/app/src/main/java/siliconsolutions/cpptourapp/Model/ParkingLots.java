@@ -16,12 +16,14 @@ public class ParkingLots {
     private String parkingLotsName;
     @SerializedName("number")
     private String parkingLotsNumber;
+    private boolean isFavorite;
 
     public ParkingLots(String latitude, String longtitude, String parkingLotsName, String parkingLotsNumber) {
         this.latitude = latitude;
         this.longtitude = longtitude;
         this.parkingLotsName = parkingLotsName;
         this.parkingLotsNumber = parkingLotsNumber;
+        isFavorite = false;
     }
 
     public String getLatitude()
@@ -61,5 +63,13 @@ public class ParkingLots {
     public void setParkingLotsNumber(String parkingLotsNumber)
     {
         this.parkingLotsNumber = parkingLotsNumber;
+    }
+
+    public boolean isFavorite() {
+        return isFavorite;
+    }
+
+    public void setFavorite(boolean favorite) {
+        isFavorite = favorite;
     }
 }

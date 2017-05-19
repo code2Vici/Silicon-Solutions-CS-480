@@ -16,12 +16,14 @@ public class Landmarks {
     private String landmarksName;
     @SerializedName("number")
     private String landmarksNumber;
+    private boolean isFavorite;
 
     public Landmarks(String latitude, String longtitude, String landmarksName, String landmarksNumber) {
         this.latitude = latitude;
         this.longtitude = longtitude;
         this.landmarksName = landmarksName;
         this.landmarksNumber = landmarksNumber;
+        isFavorite = false;
     }
 
     public String getLatitude()
@@ -61,5 +63,13 @@ public class Landmarks {
     public void setLandmarkNumber(String landmarksNumber)
     {
         this.landmarksNumber = landmarksNumber;
+    }
+
+    public boolean isFavorite() {
+        return isFavorite;
+    }
+
+    public void setFavorite(boolean favorite) {
+        isFavorite = favorite;
     }
 }

@@ -30,7 +30,7 @@ public class BuildingsListAdapter extends ArrayAdapter<Building> {
         TextView buildingNumberText = (TextView) convertView.findViewById(R.id.locations_list_building_number_text);
 
         buildingText.setText(buildings.get(position).getBuildingName());
-        distanceText.setText("0 mi");
+        distanceText.setText("   ");
         buildingNumberText.setText(buildings.get(position).getBuildingNumber());
 
         convertView.setTag(position);

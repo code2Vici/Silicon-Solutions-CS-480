@@ -1,5 +1,7 @@
 package siliconsolutions.cpptourapp.Directions;
 
+import com.squareup.otto.Subscribe;
+
 import org.json.JSONObject;
 
 import java.util.List;

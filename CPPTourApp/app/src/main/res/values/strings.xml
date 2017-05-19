@@ -4,4 +4,11 @@
     <string name="title_activity_base_map">Map</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="title_activity_navigation">NavigationActivity</string>
+    <string name="BackDropBottomSheetBehavior">siliconsolutions.cpptourapp.View.BackdropBottomSheetBehavior</string>
+    <string name="BottomSheetBehaviorGoogleMapsLike">siliconsolutions.cpptourapp.View.BottomSheetBehaviorGoogleMapsLike</string>
+    <string name="ScrollAwareFABBehavior">siliconsolutions.cpptourapp.View.ScrollAwareFABBehavior</string>
+    <string name="MergedAppBarLayoutBehavior">siliconsolutions.cpptourapp.View.MergedAppBarLayoutBehavior</string>
+    <string name="ScrollingAppBarLayoutBehavior">siliconsolutions.cpptourapp.View.ScrollingAppBarLayoutBehavior</string>
+    <string name="key_binding_default_toolbar_name">Modal-Toolbar-Title</string>
 </resources>
