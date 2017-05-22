@@ -8,6 +8,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
@@ -51,6 +52,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import com.squareup.picasso.Picasso;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -87,7 +90,9 @@ public class BaseMap extends AppCompatActivity implements
         GPSTrackerListener, GoogleMap.OnMarkerClickListener {
 
     private GoogleMap mMap;
+    private Toolbar toolbar;
     private DrawerLayout drawer;
+    private Drawable hambugerDrawable;
     private ImageView btnMyLocation;
     private ImageView btnOpenFavoriteDrawer;
     public static GPSTracker gpsTracker;
@@ -105,11 +110,15 @@ public class BaseMap extends AppCompatActivity implements
     private MenuItem buildingsMenuItem;
     private MenuItem landmarksMenuItem;
     private MenuItem parkingMenuItem;
+    private TextView descriptionText;
+    private ImageView imageHeader;
     private CompoundButton buildingsCheckbox;
     private CompoundButton landmarksCheckbox;
     private CompoundButton parkingCheckbox;
     //private BottomSheetBehavior mBottomSheetBehavior;
     private TextView bottomSheetHeading;
+    private TextView bottomSheetSubHeading;
+    private TextView bottomSheetHeadingDistance;
     private FloatingActionButton locationBtn;
     private FloatingActionButton favoritesBtn;
     //private View bottomSheet;
@@ -125,15 +134,14 @@ public class BaseMap extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-
-
+        hambugerDrawable = toolbar.getNavigationIcon();
         likeDetailBtn = (ImageButton) findViewById(R.id.favorites_detail_selection);
         navigationDetailBtn = (ImageButton) findViewById(R.id.navigation_detail_selection);
         favoritesBtn = (FloatingActionButton) findViewById(R.id.btnOpenFavoriteDrawer);
@@ -197,7 +205,7 @@ public class BaseMap extends AppCompatActivity implements
         ListView landmarksListView = (ListView) findViewById(R.id.right_nav_landmarks_listView);
         ListView parkingListView = (ListView) findViewById(R.id.right_nav_parking_listView);
 
-        BuildingsListAdapter buildingsListAdapter = new BuildingsListAdapter(this,R.id.right_nav_building_listView,buildingsArrayList);
+        final BuildingsListAdapter buildingsListAdapter = new BuildingsListAdapter(this,R.id.right_nav_building_listView,buildingsArrayList);
         buildingsListView.setAdapter(buildingsListAdapter);
         buildingsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -208,8 +216,8 @@ public class BaseMap extends AppCompatActivity implements
                     markersArrayList.get(i).setVisible(true);
                 markersArrayList.get(i).showInfoWindow();
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(markersArrayList.get(i).getPosition(),16));
-                bottomSheetHeading.setText(markersArrayList.get(i).getTitle());
-                mergedAppBarLayoutBehavior.setToolbarTitle(markersArrayList.get(i).getTitle());
+                bottomSheetUpdateFromBuilding(buildingsArrayList.get(i));
+                bottomSheetUpdateFromMarker(markersArrayList.get(i));
                 // TODO:mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
             }
         });
@@ -222,9 +230,8 @@ public class BaseMap extends AppCompatActivity implements
                 if (drawer.isDrawerOpen(GravityCompat.END))
                     drawer.closeDrawer(GravityCompat.END);
                 markersArrayList.get(i).showInfoWindow();
-                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(markersArrayList.get(i).getPosition(),16));
-                bottomSheetHeading.setText(markersArrayList.get(i).getTitle());
-                mergedAppBarLayoutBehavior.setToolbarTitle(markersArrayList.get(i).getTitle());
+                bottomSheetUpdateFromLandmark(landmarksArrayList.get(i - buildingsArrayList.size()));
+                bottomSheetUpdateFromMarker(markersArrayList.get(i));
             }
         });
         ParkingListAdapter parkingListAdapter = new ParkingListAdapter(this,R.id.right_nav_parking_listView,parkingLotsArrayList);
@@ -239,8 +246,8 @@ public class BaseMap extends AppCompatActivity implements
                     markersArrayList.get(i).setVisible(true);
                 markersArrayList.get(i).showInfoWindow();
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(markersArrayList.get(i).getPosition(),16));
-                bottomSheetHeading.setText(markersArrayList.get(i).getTitle());
-                mergedAppBarLayoutBehavior.setToolbarTitle(markersArrayList.get(i).getTitle());
+                bottomSheetUpdateFromParking(parkingLotsArrayList.get(i - buildingsArrayList.size() - landmarksArrayList.size()));
+                bottomSheetUpdateFromMarker(markersArrayList.get(i));
             }
         });
 
@@ -371,14 +378,16 @@ public class BaseMap extends AppCompatActivity implements
         landmarksPostList = new StringBuffer();
         for (Building post : buildingsArrayList) {
             postList.append("\n latitude: " + post.getLatitude() + "\n longtitude: " + post.getLongtitude() +
-                    "\n building name: " + post.getBuildingName() + "\n building number: " + post.getBuildingNumber() + "\n\n");
+                    "\n building name: " + post.getBuildingName() + "\n building number: " + post.getBuildingNumber() +
+                    "\n imageurl: " + post.getImageUrl() + "\n description: " + post.getDescritption() + "\n\n");
             myMarker = mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)).visible(false).title(post.getBuildingName()).snippet(post.getBuildingNumber()).position(new LatLng(Double.parseDouble(post.getLatitude()), Double.parseDouble(post.getLongtitude()))));
             myMarker.setTag(markersArrayList.size());
             markersArrayList.add(myMarker);
         }
         for (Landmarks post : landmarksArrayList) {
             landmarksPostList.append("\n latitude: " + post.getLatitude() + "\n longtitude: " + post.getLongtitude() +
-                    "\n building name: " + post.getLandmarkName() + "\n building number: " + post.getLandmarkNumber() + "\n\n");
+                    "\n building name: " + post.getLandmarkName() + "\n building number: " + post.getLandmarkNumber() +
+                    "\n imageurl: " + post.getImageUrl() +"\n description: " + post.getDescription() + "\n\n");
 
             myMarker = mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)).title(post.getLandmarkName()).snippet(post.getLandmarkNumber()).position(new LatLng(Double.parseDouble(post.getLatitude()), Double.parseDouble(post.getLongtitude()))));
             myMarker.setTag(markersArrayList.size());
@@ -393,6 +402,51 @@ public class BaseMap extends AppCompatActivity implements
             markersArrayList.add(myMarker);
 
         }
+    }
+
+    private Object getLocationObject(int i){
+        if(i < buildingsArrayList.size()){
+            return buildingsArrayList.get(i);
+        }
+        if(i > buildingsArrayList.size() && i < (buildingsArrayList.size() + landmarksArrayList.size())){
+            return landmarksArrayList.get(i);
+        }
+        else{
+            return parkingLotsArrayList.get(i);
+        }
+    }
+
+    public void bottomSheetUpdateFromBuilding(Building b){
+        descriptionText.setText(b.getDescritption());
+        if(!b.getImageUrl().equals("")){
+            Picasso.with(getApplicationContext()).load(b.getImageUrl()).into(imageHeader);
+        }
+        else{
+            Picasso.with(getApplicationContext()).load(R.drawable.notavailableimg).into(imageHeader);
+        }
+    }
+
+    public void bottomSheetUpdateFromLandmark(Landmarks l){
+        descriptionText.setText(l.getDescription());
+    }
+
+    public void bottomSheetUpdateFromParking(ParkingLots p){
+        //
+    }
+
+    public void bottomSheetUpdateFromMarker(Marker m){
+        bottomSheetHeading.setText(m.getTitle());
+        if(!(m.getSnippet()).equals("")){
+            bottomSheetSubHeading.setText("Building " + m.getSnippet());
+        }
+        else{
+            bottomSheetSubHeading.setText(m.getSnippet());
+        }
+        float[] result = new float[1];
+        Location.distanceBetween(gpsTracker.getLatitude(),gpsTracker.getLongitude(),m.getPosition().latitude,m.getPosition().longitude,result);
+        String distance = Utilities.formatDistance(result[0]);
+        bottomSheetHeadingDistance.setText(distance + " ft away");
+        mergedAppBarLayoutBehavior.setToolbarTitle(m.getTitle());
     }
 
     /**
@@ -426,8 +480,17 @@ public class BaseMap extends AppCompatActivity implements
                     public boolean onMarkerClick(Marker marker)
                     {
                         behavior.setState(BottomSheetBehaviorGoogleMapsLike.STATE_COLLAPSED);
-                        bottomSheetHeading.setText(marker.getTitle());
-                        mergedAppBarLayoutBehavior.setToolbarTitle(marker.getTitle());
+                        int val = Integer.valueOf(marker.getTag().toString());
+                        if(val < buildingsArrayList.size()){
+                            bottomSheetUpdateFromBuilding(buildingsArrayList.get(val));
+                        }
+                        else if(val < (landmarksArrayList.size() + buildingsArrayList.size())){
+                            bottomSheetUpdateFromLandmark(landmarksArrayList.get(val - buildingsArrayList.size()));
+                        }
+                        else{
+                           bottomSheetUpdateFromParking(parkingLotsArrayList.get(val - buildingsArrayList.size() - landmarksArrayList.size()));
+                        }
+                        bottomSheetUpdateFromMarker(marker);
                         favoritesBtnListener(marker);
                         navigationBtnListener(marker);
                         return false;
@@ -520,6 +583,7 @@ public class BaseMap extends AppCompatActivity implements
             public void onStateChanged(View bottomSheet, int newState) {
                 switch (newState) {
                     case BottomSheetBehaviorGoogleMapsLike.STATE_COLLAPSED:
+                        toolbar.getNavigationIcon().setAlpha(255);
                         Log.d("bottomsheet-", "STATE_COLLAPSED");
                         break;
                     case BottomSheetBehaviorGoogleMapsLike.STATE_DRAGGING:
@@ -529,6 +593,8 @@ public class BaseMap extends AppCompatActivity implements
                         Log.d("bottomsheet-", "STATE_EXPANDED");
                         break;
                     case BottomSheetBehaviorGoogleMapsLike.STATE_ANCHOR_POINT:
+                        toolbar.getNavigationIcon().setAlpha(0);
+
                         Log.d("bottomsheet-", "STATE_ANCHOR_POINT");
                         break;
                     case BottomSheetBehaviorGoogleMapsLike.STATE_HIDDEN:
@@ -558,6 +624,10 @@ public class BaseMap extends AppCompatActivity implements
 
         behavior.setState(BottomSheetBehaviorGoogleMapsLike.STATE_COLLAPSED);
         bottomSheetHeading = (TextView) findViewById(R.id.bottomSheetHeading);
+        bottomSheetSubHeading = (TextView) findViewById(R.id.bottomSheetSubheader);
+        bottomSheetHeadingDistance = (TextView) findViewById(R.id.bottomSheetHeadingDistance);
+        descriptionText = (TextView) findViewById(R.id.description_bottom_sheet);
+        imageHeader = (ImageView) findViewById(R.id.bottomSheetImage);
     }
 
 

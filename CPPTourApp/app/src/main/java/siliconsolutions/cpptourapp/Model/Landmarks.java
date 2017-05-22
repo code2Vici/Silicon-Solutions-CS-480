@@ -16,6 +16,10 @@ public class Landmarks {
     private String landmarksName;
     @SerializedName("number")
     private String landmarksNumber;
+    @SerializedName("description")
+    private String description;
+    @SerializedName("image")
+    private String imageUrl;
     private boolean isFavorite;
 
     public Landmarks(String latitude, String longtitude, String landmarksName, String landmarksNumber) {
@@ -71,5 +75,21 @@ public class Landmarks {
 
     public void setFavorite(boolean favorite) {
         isFavorite = favorite;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }

@@ -7,59 +7,67 @@
     android:orientation="vertical"
     android:paddingBottom="16dp"
     android:background="@android:color/white">
+    
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/bottom_sheet_peek_height"
         android:background="@color/colorPrimary"
         android:paddingTop="8dp"
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
-        android:paddingBottom="8dp">
+        android:paddingBottom="8dp"
+        android:orientation="horizontal"
+        android:weightSum="7">
 
-        <LinearLayout
-            android:layout_width="wrap_content"
+        <RelativeLayout
+            android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_weight="6">
 
             <TextView
                 android:id="@+id/bottomSheetHeading"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Title dummy"
+                android:text="Select a marker on the map"
                 android:textColor="@android:color/white"
                 android:textSize="19sp"/>
 
             <TextView
-                android:id="@+id/text_dummy1"
+                android:id="@+id/bottomSheetSubheader"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Text dummy 1234 1234"
+                android:text=""
                 android:textColor="@android:color/white"
                 android:textSize="12sp"
-                android:layout_marginTop="5dp"/>
+                android:layout_alignParentBottom="true"
+                />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Text dummy qwer asdf zxcv"
-                android:textColor="@android:color/white"
-                android:textSize="12sp"
-                android:layout_marginTop="5dp"/>
-
-        </LinearLayout>
+        </RelativeLayout>
 
         <TextView
-            android:layout_width="wrap_content"
+            android:id="@+id/bottomSheetHeadingDistance"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="40dp"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="5 min"
+            android:text=""
             android:textColor="@android:color/white"
             android:textSize="14sp"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:paddingTop="8dp"/>
+            />
 
-    </RelativeLayout>
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/bottomSheetImage"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:background="@android:color/holo_green_light"
+        android:scaleType="centerCrop"
+        />
 
 
     <LinearLayout
@@ -77,19 +85,22 @@
             android:layout_height="match_parent">
 
             <ImageButton
-                android:id="@+id/button1"
+                android:id="@+id/callButton"
                 android:layout_width="70dp"
-                android:layout_height="60dp"
+                android:layout_height="50dp"
                 android:layout_centerHorizontal="true"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:src="@android:drawable/ic_dialog_map" />
+                android:layout_centerVertical="true"
+                android:background="@null"
+                app:srcCompat="@drawable/ic_phone_disabled" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:text="CALL"
+                android:layout_centerHorizontal="true"
                 android:layout_alignParentBottom="true"
-                android:text="BUTTON 1"
-                android:textColor="@android:color/black" />
+                android:gravity="center_horizontal"
+                android:textColor="@android:color/darker_gray" />
         </RelativeLayout>
 
 
@@ -137,6 +148,31 @@
                 android:textColor="@android:color/black" />
         </RelativeLayout>
     </LinearLayout>
+
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:text="DESCRIPTION"
+            android:textColor="@android:color/darker_gray"
+            android:textSize="18sp" />
+    </FrameLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:id="@+id/description_bottom_sheet"
+        android:text="Description goes here"
+        android:textColor="@android:color/black"
+        android:textSize="12sp" />
 
 
     <RelativeLayout
@@ -211,29 +247,17 @@
 
     </RelativeLayout>
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginStart="16dp">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:text="APACHE LICENSE"
-            android:textColor="@android:color/darker_gray"
-            android:textSize="18sp" />
-    </FrameLayout>
-
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
+        android:text="RESTROOM LOCATION"
+        android:layout_margin="10dp"/>
 
-        android:text="dummy_text"
-        android:textColor="@android:color/black"
-        android:textSize="12sp" />
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:layout_margin="10dp"
+        android:background="@color/colorDetail"/>
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -250,56 +274,3 @@
 
     </FrameLayout>
 </LinearLayout>
-
-    <!--
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/bottomSheetLayout"
-        android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:background="@color/colorDetail"
-        android:padding="@dimen/activity_vertical_margin"
-        app:behavior_hideable="true"
-        app:behavior_peekHeight="80dp"
-        app:layout_behavior="@string/bottom_sheet_behavior">
-
-        <TextView
-            android:id="@+id/bottomSheetHeading"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="EXPAND ME"
-            android:textAppearance="@android:style/TextAppearance.Large" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/bottomSheetHeading"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="@dimen/activity_horizontal_margin"
-            android:text="WELCOME TO THIS DETAIL"
-            android:textAppearance="@android:style/TextAppearance.Large"
-            android:id="@+id/textView" />
-
-        <ImageButton
-            android:id="@+id/favorites_detail_selection"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
-            app:srcCompat="@drawable/ic_like_clear"
-            android:background="@null"/>
-
-        <ImageButton
-            android:id="@+id/navigation_detail_selection"
-            android:layout_width="28dp"
-            android:layout_height="28dp"
-            android:layout_alignParentTop="true"
-            android:layout_marginEnd="10dp"
-            android:layout_toStartOf="@+id/favorites_detail_selection"
-            android:background="@null"
-            android:scaleType="centerCrop"
-            app:srcCompat="@drawable/navigation_btn" />
-
-    </RelativeLayout>
-
-    -->
