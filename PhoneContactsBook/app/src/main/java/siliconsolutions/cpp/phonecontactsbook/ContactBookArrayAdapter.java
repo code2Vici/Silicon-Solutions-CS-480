@@ -52,7 +52,7 @@ public class ContactBookArrayAdapter extends ArrayAdapter<ContactInfo> {//BaseEx
         ImageButton callButton = (ImageButton) convertView.findViewById(R.id.callButton);
         ImageButton emailButton = (ImageButton) convertView.findViewById(R.id.emailButton);
         TextView textViewName = (TextView) convertView.findViewById(R.id.contactNameTextView);
-        TextView textViewNum = (TextView) convertView.findViewById(R.id.phoneNumTextView);
+        final TextView textViewNum = (TextView) convertView.findViewById(R.id.phoneNumTextView);
         TextView textViewAddress = (TextView) convertView.findViewById(R.id.addressTextView);
         TextView textViewEmail = (TextView) convertView.findViewById(R.id.emailAddressTextView);
         TextView newEntryTextView = (TextView) convertView.findViewById(R.id.newEntryTextView);
@@ -90,11 +90,13 @@ public class ContactBookArrayAdapter extends ArrayAdapter<ContactInfo> {//BaseEx
         }
 
         phoneNumber = contactInfoList.get(position).getPhoneNumber();
+
         emailAddress = contactInfoList.get(position).getEmailAddress();
 
         callButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                phoneNumber = contactInfoList.get(position).getPhoneNumber();
                 Intent phoneIntent = new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", phoneNumber, null));
                 view.getContext().startActivity(phoneIntent);
                 Log.i("TEST", phoneNumber);
@@ -105,6 +107,7 @@ public class ContactBookArrayAdapter extends ArrayAdapter<ContactInfo> {//BaseEx
             @Override
             public void onClick(View view) {
 
+                emailAddress = contactInfoList.get(position).getEmailAddress();
                 Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts("mailto", emailAddress, null));
                 /*emailIntent.setType("text/plain");
                 emailIntent.putExtra(Intent.EXTRA_EMAIL, emailAddress)*/;
@@ -115,5 +118,7 @@ public class ContactBookArrayAdapter extends ArrayAdapter<ContactInfo> {//BaseEx
 
         return convertView;
     }
+
+
 
 }
