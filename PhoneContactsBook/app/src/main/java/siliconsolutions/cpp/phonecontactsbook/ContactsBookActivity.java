@@ -173,6 +173,11 @@ public class ContactsBookActivity extends AppCompatActivity {
                 phoneEditText = (EditText) addContactDialog.findViewById(R.id.phoneEditTextView);
                 addressEditText = (EditText) addContactDialog.findViewById(R.id.addressEditTextView);
                 emailEditText = (EditText) addContactDialog.findViewById(R.id.emailEditTextView);
+                newEntryEditText = (EditText) addContactDialog.findViewById(R.id.newEntryEditTextView);
+                newEntryEditText1 = (EditText) addContactDialog.findViewById(R.id.newEntryEditTextView1);
+                newEntryEditText2 = (EditText) addContactDialog.findViewById(R.id.newEntryEditTextView2);
+                newEntryEditText3 = (EditText) addContactDialog.findViewById(R.id.newEntryEditTextView3);
+                newEntryEditText4 = (EditText) addContactDialog.findViewById(R.id.newEntryEditTextView4);
 
                 contactData.setContactName(nameEditText.getText().toString());
                 contactData.setPhoneNumber(phoneEditText.getText().toString());
@@ -180,23 +185,24 @@ public class ContactsBookActivity extends AppCompatActivity {
                 contactData.setEmailAddress(emailEditText.getText().toString());
 
                 if(newEntryIsVisible) {
-                    newEntryTextView.setVisibility(View.VISIBLE);
+                    //displayToast(newEntryLinkedIn.getSelectedItem().toString() + ": " + newEntryEditText.getText().toString());
+                    //newEntryTextView.setVisibility(View.VISIBLE);
                     contactData.setLinkedInField(newEntryLinkedIn.getSelectedItem().toString() + ": " + newEntryEditText.getText().toString());
                 }
                 if(newEntry_1_IsVisible) {
-                    newEntryTextView1.setVisibility(View.VISIBLE);
+                    //newEntryTextView1.setVisibility(View.VISIBLE);
                     contactData.setInstagramField(newEntryInstagram.getSelectedItem().toString() + ": " + newEntryEditText1.getText().toString());
                 }
                 if(newEntry_2_IsVisible) {
-                    newEntryTextView2.setVisibility(View.VISIBLE);
+                    //newEntryTextView2.setVisibility(View.VISIBLE);
                     contactData.setSnapchatField(newEntrySnapchat.getSelectedItem().toString() + ": " + newEntryEditText2.getText().toString());
                 }
                 if(newEntry_3_IsVisible) {
-                    newEntryTextView3.setVisibility(View.VISIBLE);
+                    //newEntryTextView3.setVisibility(View.VISIBLE);
                     contactData.setOtherField(newEntryOther.getSelectedItem().toString() + ": " + newEntryEditText3.getText().toString());
                 }
                 if(newEntry_4_IsVisible) {
-                    newEntryTextView4.setVisibility(View.VISIBLE);
+                    //newEntryTextView4.setVisibility(View.VISIBLE);
                     contactData.setOtherField2(newEntryOther2.getSelectedItem().toString() + ": " + newEntryEditText4.getText().toString());
                 }
 
