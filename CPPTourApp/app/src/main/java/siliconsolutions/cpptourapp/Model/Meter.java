@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName;
  * Created by user on 5/22/17.
  */
 
-class Meter {
+public class Meter {
     @SerializedName("direction")
     private String description;
     @SerializedName("latitude")

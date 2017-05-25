@@ -2,11 +2,13 @@ package siliconsolutions.cpptourapp.Model;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 /**
  * Created by Phuoc on 5/8/2017.
  */
 
-public class Landmarks {
+public class Landmarks extends Location{
 
     @SerializedName("latitude")
     private String latitude;
@@ -20,13 +22,16 @@ public class Landmarks {
     private String description;
     @SerializedName("image")
     private String imageUrl;
+    @SerializedName("events")
+    private List<Event> eventList;
     private boolean isFavorite;
 
-    public Landmarks(String latitude, String longtitude, String landmarksName, String landmarksNumber) {
+    public Landmarks(String latitude, String longtitude, String landmarksName, String landmarksNumber,List<Event> eventList) {
         this.latitude = latitude;
         this.longtitude = longtitude;
         this.landmarksName = landmarksName;
         this.landmarksNumber = landmarksNumber;
+        this.eventList = eventList;
         isFavorite = false;
     }
 
@@ -91,5 +96,18 @@ public class Landmarks {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+    public List<Event> getEventList() {
+        return eventList;
+    }
+
+    public void setEventList(List<Event> eventList) {
+        this.eventList = eventList;
+    }
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
     }
 }

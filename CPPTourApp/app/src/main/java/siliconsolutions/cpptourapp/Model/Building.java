@@ -1,7 +1,9 @@
 package siliconsolutions.cpptourapp.Model;
 import com.google.gson.annotations.SerializedName;
 
-public class Building {
+import java.util.List;
+
+public class Building extends Location{
 
     @SerializedName("description")
     private String descritption;
@@ -13,8 +15,12 @@ public class Building {
     private String buildingName;
     @SerializedName("number")
     private String buildingNumber;
+    @SerializedName("offices")
+    private List<Office> officeList;
     @SerializedName("image")
     private String imageUrl;
+    @SerializedName("floorplan")
+    private String floorPlanUrl;
     private boolean isFavorite;
 
     public Building(String latitude, String longtitude, String buildingName, String buildingNumber, String description, String imageUrl) {
@@ -82,4 +88,22 @@ public class Building {
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
     }
+
+    public List<Office> getOfficeList() {
+        return officeList;
+    }
+
+    public void setOfficeList(List<Office> officeList) {
+        this.officeList = officeList;
+    }
+
+    public String getFloorPlanUrl() {
+        return floorPlanUrl;
+    }
+
+    public void setFloorPlanUrl(String floorPlanUrl) {
+        this.floorPlanUrl = floorPlanUrl;
+    }
+
+
 }

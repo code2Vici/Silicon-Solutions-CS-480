@@ -8,7 +8,7 @@ import java.util.List;
  * Created by Phuoc on 5/8/2017.
  */
 
-public class ParkingLots {
+public class ParkingLots extends Location{
 
     @SerializedName("latitude")
     private String latitude;
@@ -23,6 +23,8 @@ public class ParkingLots {
     private String description;
     @SerializedName("meters")
     private List<Meter> meters;
+    @SerializedName("image")
+    private String imageUrl;
 
     public ParkingLots(String latitude, String longtitude, String parkingLotsName, String parkingLotsNumber, List<Meter> meterList) {
         this.latitude = latitude;
@@ -94,5 +96,18 @@ public class ParkingLots {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
     }
 }

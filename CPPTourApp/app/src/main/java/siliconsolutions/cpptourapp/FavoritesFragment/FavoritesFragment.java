@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 
 import com.google.android.gms.maps.model.Marker;
 
@@ -45,12 +46,9 @@ public class FavoritesFragment extends DialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.favorites_dialog, container, false);
-        mRecyclerView = (RecyclerView) v.findViewById(R.id.favoritesList);
-        mRecyclerView.setHasFixedSize(true);
-        mLayoutManager = new LinearLayoutManager(getActivity());
-        mRecyclerView.setLayoutManager(mLayoutManager);
-        adapter = new FavoritesListAdapter(markerArrayList);
-        mRecyclerView.setAdapter(adapter);
+        ListView lv = (ListView) v.findViewById(R.id.favoritesList);
+        adapter = new FavoritesListAdapter(v.getContext(),R.id.favoritesList,markerArrayList);
+        lv.setAdapter(adapter);
         return v;
     }
 
