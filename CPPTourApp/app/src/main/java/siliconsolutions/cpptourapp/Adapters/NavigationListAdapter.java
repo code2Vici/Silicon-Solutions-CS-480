@@ -35,8 +35,8 @@ public class NavigationListAdapter extends ArrayAdapter<Step> {
         TextView distanceText = (TextView) convertView.findViewById(R.id.navigation_step_distance_text);
 
         String html = steps.get(position).getHtmlInstructions();
-        String instructions = Utilities.htmlToText(html);
-        stepInstructionsText.setText(instructions);
+
+        stepInstructionsText.setText(html);
         distanceText.setText(steps.get(position).getDistance().getText());
 
         return convertView;

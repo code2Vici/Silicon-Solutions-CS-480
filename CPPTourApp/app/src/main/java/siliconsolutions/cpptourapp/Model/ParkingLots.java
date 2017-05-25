@@ -2,6 +2,8 @@ package siliconsolutions.cpptourapp.Model;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 /**
  * Created by Phuoc on 5/8/2017.
  */
@@ -17,12 +19,17 @@ public class ParkingLots {
     @SerializedName("number")
     private String parkingLotsNumber;
     private boolean isFavorite;
+    @SerializedName("description")
+    private String description;
+    @SerializedName("meters")
+    private List<Meter> meters;
 
-    public ParkingLots(String latitude, String longtitude, String parkingLotsName, String parkingLotsNumber) {
+    public ParkingLots(String latitude, String longtitude, String parkingLotsName, String parkingLotsNumber, List<Meter> meterList) {
         this.latitude = latitude;
         this.longtitude = longtitude;
         this.parkingLotsName = parkingLotsName;
         this.parkingLotsNumber = parkingLotsNumber;
+        meters = meterList;
         isFavorite = false;
     }
 
@@ -71,5 +78,21 @@ public class ParkingLots {
 
     public void setFavorite(boolean favorite) {
         isFavorite = favorite;
+    }
+
+    public List<Meter> getMeters() {
+        return meters;
+    }
+
+    public void setLatitude(String latitude) {
+        this.latitude = latitude;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

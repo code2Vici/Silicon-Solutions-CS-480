@@ -1,12 +1,10 @@
 package siliconsolutions.cpptourapp.Model;
 import com.google.gson.annotations.SerializedName;
 
-/**
- * Created by Phuoc on 5/7/2017.
- */
-
 public class Building {
 
+    @SerializedName("description")
+    private String descritption;
     @SerializedName("latitude")
     private String latitude;
     @SerializedName("longtitude")
@@ -15,13 +13,17 @@ public class Building {
     private String buildingName;
     @SerializedName("number")
     private String buildingNumber;
+    @SerializedName("image")
+    private String imageUrl;
     private boolean isFavorite;
 
-    public Building(String latitude, String longtitude, String buildingName, String buildingNumber) {
+    public Building(String latitude, String longtitude, String buildingName, String buildingNumber, String description, String imageUrl) {
         this.latitude = latitude;
         this.longtitude = longtitude;
         this.buildingName = buildingName;
         this.buildingNumber = buildingNumber;
+        this.descritption = description;
+        this.imageUrl = imageUrl;
         isFavorite = false;
     }
 
@@ -63,5 +65,21 @@ public class Building {
 
     public void setFavorite(boolean favorite) {
         isFavorite = favorite;
+    }
+
+    public String getDescritption() {
+        return descritption;
+    }
+
+    public void setDescritption(String descritption) {
+        this.descritption = descritption;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }

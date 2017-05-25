@@ -1,5 +1,6 @@
 package siliconsolutions.cpptourapp.Adapters;
 
+import android.icu.text.DecimalFormat;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListAdapter;
@@ -28,5 +29,12 @@ public class Utilities {
 
     public static String htmlToText(String s){
         return Jsoup.parse(s).text();
+    }
+
+    public static String formatDistance(float v) {
+        String pattern = "###,###";
+        java.text.DecimalFormat decimalFormat = new java.text.DecimalFormat(pattern);
+        String result = decimalFormat.format(v * 3.28084);
+        return result;
     }
 }

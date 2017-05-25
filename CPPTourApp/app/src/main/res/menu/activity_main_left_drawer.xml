@@ -17,10 +17,6 @@
             android:id="@+id/nav_slideshow"
             android:icon="@drawable/ic_menu_slideshow"
             android:title="Slideshow" />
-        <item
-            android:id="@+id/nav_left_tools"
-            android:icon="@drawable/ic_menu_manage"
-            android:title="Tools" />
     </group>
 
     <item android:title="Filters">
@@ -40,6 +36,10 @@
             <item
                 android:id="@+id/nav_left_check_3"
                 android:title="Parking Lots"
+                app:actionLayout="@layout/widget_check_buildings" />
+            <item
+                android:id="@+id/nav_left_check_4"
+                android:title="Restaurants"
                 app:actionLayout="@layout/widget_check_buildings" />
         </menu>
     </item>

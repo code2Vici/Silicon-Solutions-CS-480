@@ -5,6 +5,8 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
+import siliconsolutions.cpptourapp.Adapters.Utilities;
+
 public class Step {
 
     @SerializedName("distance")
@@ -57,7 +59,8 @@ public class Step {
     }
 
     public String getHtmlInstructions() {
-        return htmlInstructions;
+        String s = Utilities.htmlToText(htmlInstructions);
+        return s;
     }
 
     public void setHtmlInstructions(String htmlInstructions) {
