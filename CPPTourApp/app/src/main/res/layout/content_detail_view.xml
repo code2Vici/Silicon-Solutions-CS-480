@@ -10,6 +10,7 @@
     
 
     <LinearLayout
+        android:id="@+id/bottom_sheet_peek_bar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/bottom_sheet_peek_height"
         android:background="@color/colorPrimary"
@@ -17,260 +18,272 @@
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
         android:paddingBottom="8dp"
-        android:orientation="horizontal"
-        android:weightSum="7">
+        android:orientation="horizontal">
 
-        <RelativeLayout
-            android:layout_width="0dp"
+        <LinearLayout
+            android:id="@+id/bottom_sheet_peek_bar_container"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:layout_weight="6">
+            android:orientation="horizontal"
+            android:weightSum="7">
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_weight="6">
+
+                <TextView
+                    android:id="@+id/bottomSheetHeading"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Select a marker on the map"
+                    android:textColor="@android:color/white"
+                    android:textSize="19sp"/>
+
+                <TextView
+                    android:id="@+id/bottomSheetSubheader"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textColor="@android:color/white"
+                    android:textSize="12sp"
+                    android:layout_alignParentBottom="true"
+                    />
+
+            </RelativeLayout>
 
             <TextView
-                android:id="@+id/bottomSheetHeading"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Select a marker on the map"
-                android:textColor="@android:color/white"
-                android:textSize="19sp"/>
-
-            <TextView
-                android:id="@+id/bottomSheetSubheader"
-                android:layout_width="wrap_content"
+                android:id="@+id/bottomSheetHeadingDistance"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="40dp"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text=""
                 android:textColor="@android:color/white"
-                android:textSize="12sp"
-                android:layout_alignParentBottom="true"
+                android:textSize="14sp"
                 />
-
-        </RelativeLayout>
-
-        <TextView
-            android:id="@+id/bottomSheetHeadingDistance"
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="40dp"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text=""
-            android:textColor="@android:color/white"
-            android:textSize="14sp"
-            />
+        </LinearLayout>
 
     </LinearLayout>
-
-    <ImageView
-        android:id="@+id/bottomSheetImage"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:background="@android:color/holo_green_light"
-        android:scaleType="centerCrop"
-        />
-
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/border_bottom"
-        android:gravity="center_horizontal"
-        android:orientation="horizontal"
-        android:paddingBottom="12dp"
-        android:paddingEnd="16dp"
-        android:paddingStart="16dp">
-
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent">
-
-            <ImageButton
-                android:id="@+id/callButton"
-                android:layout_width="70dp"
-                android:layout_height="50dp"
-                android:layout_centerHorizontal="true"
-                android:layout_centerVertical="true"
-                android:background="@null"
-                app:srcCompat="@drawable/ic_phone_disabled" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="CALL"
-                android:layout_centerHorizontal="true"
-                android:layout_alignParentBottom="true"
-                android:gravity="center_horizontal"
-                android:textColor="@android:color/darker_gray" />
-        </RelativeLayout>
-
-
-        <LinearLayout
-            android:id="@+id/establecimiento_layout_favoritos_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="20dp"
-            android:layout_marginStart="20dp"
-            android:orientation="vertical">
-
-            <ImageButton
-                android:id="@+id/navigation_detail_selection"
-                android:padding="15dp"
-                android:layout_width="70dp"
-                android:layout_height="50dp"
-                android:layout_centerHorizontal="true"
-                android:scaleType="centerCrop"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                app:srcCompat="@drawable/navigation_btn"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="NAVIGATE"
-                android:textColor="@android:color/black" />
-        </LinearLayout>
-
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent">
-
-            <ImageButton
-                android:id="@+id/favorites_detail_selection"
-                android:layout_width="70dp"
-                android:layout_height="60dp"
-                android:layout_centerHorizontal="true"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                app:srcCompat="@drawable/ic_like_clear"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:text="FAVORITE"
-                android:textColor="@android:color/black" />
-        </RelativeLayout>
-    </LinearLayout>
-
-
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginStart="16dp">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:text="DESCRIPTION"
-            android:textColor="@android:color/darker_gray"
-            android:textSize="18sp" />
-    </FrameLayout>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:id="@+id/description_bottom_sheet"
-        android:text="Description goes here"
-        android:textColor="@android:color/black"
-        android:textSize="12sp" />
-
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/border_bottom">
-
+        android:layout_height="match_parent"
+        android:orientation="vertical">
         <ImageView
-            android:id="@+id/establecimiento_icon_sucursales"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginEnd="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="12dp"
-            app:srcCompat="@android:drawable/ic_secure" />
-
-
+            android:id="@+id/bottomSheetImage"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:background="@android:color/holo_green_light"
+            android:scaleType="centerCrop"
+            />
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_toEndOf="@id/establecimiento_icon_sucursales"
-            android:orientation="vertical">
+            android:background="@drawable/border_bottom"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal"
+            android:paddingBottom="12dp"
+            android:paddingEnd="16dp"
+            android:paddingStart="16dp">
 
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="48dp">
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent">
 
-                <Button
-                    android:id="@+id/establecimiento_sucursal_row_button"
+                <ImageButton
+                    android:id="@+id/callButton"
+                    android:layout_width="70dp"
+                    android:layout_height="50dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:background="@null"
+                    app:srcCompat="@drawable/ic_phone_disabled" />
+
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
+                    android:text="CALL"
+                    android:layout_centerHorizontal="true"
+                    android:layout_alignParentBottom="true"
+                    android:gravity="center_horizontal"
+                    android:textColor="@android:color/darker_gray" />
+            </RelativeLayout>
+
+
+            <LinearLayout
+                android:id="@+id/establecimiento_layout_favoritos_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="20dp"
+                android:layout_marginStart="20dp"
+                android:orientation="vertical">
+
+                <ImageButton
+                    android:id="@+id/navigation_detail_selection"
+                    android:padding="15dp"
+                    android:layout_width="70dp"
+                    android:layout_height="50dp"
+                    android:layout_centerHorizontal="true"
+                    android:scaleType="centerCrop"
                     android:background="?attr/selectableItemBackgroundBorderless"
-                    android:text="Text dummy 1"
-                    android:textAllCaps="false"
-                    android:textColor="@android:color/black" />
-            </FrameLayout>
-
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="48dp">
-
-                <Button
+                    app:srcCompat="@drawable/navigation_btn"/>
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    android:text="Text dummy 2"
-                    android:textAllCaps="false"
+                    android:text="NAVIGATE"
                     android:textColor="@android:color/black" />
-            </FrameLayout>
+            </LinearLayout>
 
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="48dp">
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent">
 
-                <Button
+                <ImageButton
+                    android:id="@+id/favorites_detail_selection"
+                    android:layout_width="70dp"
+                    android:layout_height="60dp"
+                    android:layout_centerHorizontal="true"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    app:srcCompat="@drawable/ic_like_clear"/>
+
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    android:text="Text dummy 3"
-                    android:textAllCaps="false"
+                    android:layout_alignParentBottom="true"
+                    android:text="FAVORITE"
                     android:textColor="@android:color/black" />
-            </FrameLayout>
-
+            </RelativeLayout>
         </LinearLayout>
 
-    </RelativeLayout>
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="RESTROOM LOCATION"
-        android:layout_margin="10dp"/>
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginStart="16dp">
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:layout_margin="10dp"
-        android:background="@color/colorDetail"/>
-
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="620dp"
-        android:layout_marginTop="40dp"
-        android:background="@color/colorAccent">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="DESCRIPTION"
+                android:textColor="@android:color/darker_gray"
+                android:textSize="18sp" />
+        </FrameLayout>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="Your remaining content here"
-            android:textColor="@android:color/white" />
+            android:layout_margin="16dp"
+            android:id="@+id/description_bottom_sheet"
+            android:text="Description goes here"
+            android:textColor="@android:color/black"
+            android:textSize="12sp" />
+        <RelativeLayout
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/border_bottom">
 
-    </FrameLayout>
+            <ImageView
+                android:id="@+id/establecimiento_icon_sucursales"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginEnd="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="12dp"
+                app:srcCompat="@android:drawable/ic_secure" />
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_toEndOf="@id/establecimiento_icon_sucursales"
+                android:orientation="vertical">
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp">
+
+                    <Button
+                        android:id="@+id/establecimiento_sucursal_row_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:text="Text dummy 1"
+                        android:textAllCaps="false"
+                        android:textColor="@android:color/black" />
+                </FrameLayout>
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp">
+
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:text="Text dummy 2"
+                        android:textAllCaps="false"
+                        android:textColor="@android:color/black" />
+                </FrameLayout>
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp">
+
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:text="Text dummy 3"
+                        android:textAllCaps="false"
+                        android:textColor="@android:color/black" />
+                </FrameLayout>
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="RESTROOM LOCATION"
+            android:layout_margin="10dp"/>
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:layout_margin="10dp"
+            android:background="@color/colorDetail"/>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="620dp"
+            android:layout_marginTop="40dp"
+            android:background="@color/colorAccent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Your remaining content here"
+                android:textColor="@android:color/white" />
+
+        </FrameLayout>
+    </LinearLayout>
+
+
+
 </LinearLayout>

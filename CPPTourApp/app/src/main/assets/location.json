@@ -1,19 +1,40 @@
 [
   {
-    "description": "Economics Building, IT Service Desk",
-    "latitude": "34.059534",
-    "longtitude": "-117.824159",
-    "name": "Building One",
-    "number": "1",
-    "image": "http://i.imgur.com/SLs2mVX.gif"
-  },
-  {
     "description": "Agriculture/Plant Sciences Building",
     "latitude": "34.057613",
     "longtitude": "-117.826722",
     "name": "College of Agriculture",
     "number": "2",
-    "image": "http://i.imgur.com/RpzjZsi.gif"
+    "offices": [
+      {
+        "name": "Agribusiness & Food Industry Management Department",
+        "room": "207",
+        "phone": "(909) 869-2207"
+      },
+      {
+        "name": "Animal & Veterinary Sciences Department",
+        "room": "123",
+        "phone": "(909) 869-2216"
+      },
+      {
+        "name": "Plant Science Department",
+        "room": "209",
+        "phone": "(909) 869-2214"
+      }
+    ],
+    "image": "http://i.imgur.com/RpzjZsi.gif",
+    "floorplan": "http://FLOORPLAN_URL"
+  },
+  {
+    "description": "Economics Building, IT Service Desk",
+    "latitude": "34.059534",
+    "longtitude": "-117.824159",
+    "name": "Building One",
+    "number": "1",
+    "offices": [
+    ],
+    "image": "http://i.imgur.com/SLs2mVX.gif",
+    "floorplan": ""
   },
   {
     "description": "College of Science Advising Center, General Purpose Labs",
@@ -21,7 +42,10 @@
     "longtitude": "-117.825393",
     "name": "Science Laboratory",
     "number": "3",
-    "image": "http://i.imgur.com/0hT2tVO.gif"
+    "offices": [
+    ],
+    "image": "http://i.imgur.com/0hT2tVO.gif",
+    "floorplan": ""
   },
   {
     "description": "Biotechnology Building, Biology Labs",
@@ -29,7 +53,10 @@
     "longtitude": "-117.825093",
     "name": "Biotechnology",
     "number": "4",
-    "image": "http://i.imgur.com/qLWx58e.gif"
+    "offices": [
+    ],
+    "image": "http://i.imgur.com/qLWx58e.gif",
+    "floorplan": ""
   },
   {
     "description": "",
@@ -37,7 +64,10 @@
     "longtitude": "-117.824149",
     "name": "College of Letters, Arts and Social Sciences",
     "number": "5",
-    "image": "http://i.imgur.com/4US54Gj.gif"
+    "offices": [
+    ],
+    "image": "http://i.imgur.com/4US54Gj.gif",
+    "floorplan": ""
   },
   {
     "description": "College of Education and Integrative Studies",
@@ -45,7 +75,10 @@
     "longtitude": "-117.822829",
     "name": "Classrooms (formerly CBA)",
     "number": "6",
-    "image": "http://i.imgur.com/YIrPL4A.gif"
+    "offices": [
+    ],
+    "image": "http://i.imgur.com/YIrPL4A.gif",
+    "floorplan": ""
   },
   {
     "description": "Architecture Building, Food/Nutrition Department,",
@@ -53,7 +86,10 @@
     "longtitude": "-117.82743",
     "name": "College of Environmental Design",
     "number": "7",
-    "image": "http://i.imgur.com/laCEQQM.gif"
+    "offices": [
+    ],
+    "image": "http://i.imgur.com/laCEQQM.gif",
+    "floorplan": ""
   },
   {
     "description": "Biology Department, Computer Science Department, Mathematics Department, Physics Department",
@@ -61,7 +97,10 @@
     "longtitude": "-117.824517",
     "name": "College of Science",
     "number": "8",
-    "image": "http://i.imgur.com/vfa4sIc.gif"
+    "offices": [
+    ],
+    "image": "http://i.imgur.com/vfa4sIc.gif",
+    "floorplan": ""
   },
   {
     "description": "Engineering Classrooms",
@@ -69,7 +108,10 @@
     "longtitude": "-117.822284",
     "name": "College of Engineering",
     "number": "9",
-    "image": "http://i.imgur.com/NTeZ8l3.gif"
+    "offices": [
+    ],
+    "image": "http://i.imgur.com/NTeZ8l3.gif",
+    "floorplan": ""
   },
   {
     "description": "Art Department",
@@ -77,7 +119,10 @@
     "longtitude": "-117.820802",
     "name": "Art Department and Engineering Annex",
     "number": "13",
-    "image": "http://i.imgur.com/2KvzeGV.gif"
+    "offices": [
+    ],
+    "image": "http://i.imgur.com/2KvzeGV.gif",
+    "floorplan": ""
   },
   {
     "description": "Library, Starbucks, University Archives",
@@ -85,7 +130,10 @@
     "longtitude": "-117.821341",
     "name": "Library",
     "number": "15",
-    "image": "http://i.imgur.com/cLscPyB.gif"
+    "offices": [
+    ],
+    "image": "http://i.imgur.com/cLscPyB.gif",
+    "floorplan": ""
   },
   {
     "description": "Aerospace Engineering Department, Chemical Engineering Department, Civil Engineering Department, Mechanical Engineering Department",
@@ -93,7 +141,10 @@
     "longtitude": "-117.821009",
     "name": "Engineering Laboratories",
     "number": "17",
-    "image": "http://i.imgur.com/Qd6IEbJ.gif"
+    "offices": [
+    ],
+    "image": "http://i.imgur.com/Qd6IEbJ.gif",
+    "floorplan": ""
   },
   {
     "description": "Residential Halls",
@@ -101,7 +152,10 @@
     "longtitude": "-117.820915",
     "name": "Residence Hall, Encinitas",
     "number": "20",
-    "image": "http://i.imgur.com/siJGcgk.gif"
+    "offices": [
+    ],
+    "image": "http://i.imgur.com/siJGcgk.gif",
+    "floorplan": ""
   },
   {
     "description": "Residential Halls",
@@ -109,7 +163,10 @@
     "longtitude": "-117.8180418",
     "name": "Residence Hall, Alamitos",
     "number": "22",
-    "image": "http://i.imgur.com/QJOSmRE.gif"
+    "offices": [
+    ],
+    "image": "http://i.imgur.com/QJOSmRE.gif",
+    "floorplan": ""
   },
   {
     "description": "Residential Halls",
@@ -117,7 +174,10 @@
     "longtitude": "-117.8178452",
     "name": "Residence Hall, Aliso",
     "number": "23",
-    "image": "http://i.imgur.com/CWF80Xy.gif"
+    "offices": [
+    ],
+    "image": "http://i.imgur.com/CWF80Xy.gif",
+    "floorplan": ""
   },
   {
     "description": "Music Department, Foreign Languages Department",
@@ -125,7 +185,10 @@
     "longtitude": "-117.822711",
     "name": "Music",
     "number": "24",
-    "image": "http://i.imgur.com/jF9GPgr.gif"
+    "offices": [
+    ],
+    "image": "http://i.imgur.com/jF9GPgr.gif",
+    "floorplan": ""
   },
   {
     "description": "Department of Theatre and New Dance",
@@ -133,7 +196,10 @@
     "longtitude": "-117.822649",
     "name": "Drama Department/Theatre",
     "number": "25",
-    "image": "http://i.imgur.com/wv8htoR.gif"
+    "offices": [
+    ],
+    "image": "http://i.imgur.com/wv8htoR.gif",
+    "floorplan": ""
   },
   {
     "description": "’The Stables’, Student Clubs",
@@ -141,7 +207,10 @@
     "longtitude": "-117.8204747",
     "name": "University Plaza",
     "number": "26",
-    "image": "http://i.imgur.com/o9ZWXq5.gif"
+    "offices": [
+    ],
+    "image": "http://i.imgur.com/o9ZWXq5.gif",
+    "floorplan": ""
   },
   {
     "description": "Veterinarian Clinic and Office",
@@ -149,7 +218,10 @@
     "longtitude": "-117.814733",
     "name": "W.K. Kellogg Arabian Horse Center",
     "number": "29",
-    "image": "http://i.imgur.com/n2katQO.gif"
+    "offices": [
+    ],
+    "image": "http://i.imgur.com/n2katQO.gif",
+    "floorplan": ""
   },
   {
     "description": "Beef Unit/Feed Shed",
@@ -157,7 +229,10 @@
     "longtitude": "-117.828482",
     "name": "Beef Unit Feed Shed",
     "number": "32",
-    "image": "http://i.imgur.com/qaucLpj.gif"
+    "offices": [
+    ],
+    "image": "http://i.imgur.com/qaucLpj.gif",
+    "floorplan": ""
   },
   {
     "description": "Restaurantes, Games room, Lost and Found",
@@ -165,7 +240,10 @@
     "longtitude": "-117.821242",
     "name": "Bronco Student Center",
     "number": "35",
-    "image": "http://i.imgur.com/YC6kn7S.gif"
+    "offices": [
+    ],
+    "image": "http://i.imgur.com/YC6kn7S.gif",
+    "floorplan": ""
   },
   {
     "description": "Swine shelters",
@@ -173,7 +251,10 @@
     "longtitude": "-117.822907",
     "name": "Swine Unit/Shelters",
     "number": "37",
-    "image": ""
+    "offices": [
+    ],
+    "image": "",
+    "floorplan": ""
   },
   {
     "description": "Sheep unit",
@@ -181,7 +262,10 @@
     "longtitude": "-117.822342",
     "name": "Sheep/Wool Unit",
     "number": "38",
-    "image": ""
+    "offices": [
+    ],
+    "image": "",
+    "floorplan": ""
   },
   {
     "description": "Secondary Gymnasium",
@@ -189,7 +273,10 @@
     "longtitude": "-117.821299",
     "name": "Darlene May Gymnasium",
     "number": "41",
-    "image": "http://i.imgur.com/b1wMJAx.gif"
+    "offices": [
+    ],
+    "image": "http://i.imgur.com/b1wMJAx.gif",
+    "floorplan": ""
   },
   {
     "description": "On Campus Gym for Students",
@@ -197,7 +284,10 @@
     "longtitude": "-117.821286",
     "name": "Bronco Recreation Intramural Complex (BRIC)",
     "number": "42",
-    "image": ""
+    "offices": [
+    ],
+    "image": "",
+    "floorplan": ""
   },
   {
     "description": "Main Gymnasium",
@@ -205,7 +295,10 @@
     "longtitude": "-117.819003",
     "name": "Kellogg Gymnasium",
     "number": "43",
-    "image": "http://i.imgur.com/2amc1FC.gif"
+    "offices": [
+    ],
+    "image": "http://i.imgur.com/2amc1FC.gif",
+    "floorplan": ""
   },
   {
     "description": "Apparel Merchandising and Management Department",
@@ -213,7 +306,8 @@
     "longtitude": "-117.8111215",
     "name": "Agricultural Engineering Building",
     "number": "45",
-    "image": "http://i.imgur.com/8570exc.gif"
+    "image": "http://i.imgur.com/8570exc.gif",
+    "floorplan": ""
   },
   {
     "description": "Suite building for first year Students, Housing Center for Suite Residents",
@@ -221,7 +315,10 @@
     "longtitude": "-117.818844",
     "name": "Residence Suites, Vista De La Estrellas",
     "number": "54",
-    "image": ""
+    "offices": [
+    ],
+    "image": "",
+    "floorplan": ""
   },
   {
     "description": "Foundation Administration",
@@ -229,7 +326,10 @@
     "longtitude": "-117.819834",
     "name": "Foundation Administration Offices",
     "number": "55",
-    "image": "http://i.imgur.com/LPbE3KU.gif"
+    "offices": [
+    ],
+    "image": "http://i.imgur.com/LPbE3KU.gif",
+    "floorplan": ""
   },
   {
     "description": "Residence Hall",
@@ -237,7 +337,10 @@
     "longtitude": "-117.822334",
     "name": "Residence Hall, Palmitas",
     "number": "57",
-    "image": "http://i.imgur.com/nQIkRmD.gif"
+    "offices": [
+    ],
+    "image": "http://i.imgur.com/nQIkRmD.gif",
+    "floorplan": ""
   },
   {
     "description": "Residence Hall",
@@ -245,7 +348,10 @@
     "longtitude": "-117.821189",
     "name": "Residence Hall, Cedritos",
     "number": "58",
-    "image": "http://i.imgur.com/vdE9Jj9.gif"
+    "offices": [
+    ],
+    "image": "http://i.imgur.com/vdE9Jj9.gif",
+    "floorplan": ""
   },
   {
     "description": "Housing Services Center",
@@ -253,7 +359,10 @@
     "longtitude": "-117.821966",
     "name": "La Cienege Center (Univ. Housing Services)",
     "number": "59",
-    "image": "http://i.imgur.com/rWAxphz.gif"
+    "offices": [
+    ],
+    "image": "http://i.imgur.com/rWAxphz.gif",
+    "floorplan": ""
   },
   {
     "description": "Residential Suites",
@@ -261,7 +370,10 @@
     "longtitude": "-117.818581",
     "name": "Residence Suites, Vista Bonita",
     "number": "60",
-    "image": "http://i.imgur.com/0dEHr6e.gif"
+    "offices": [
+    ],
+    "image": "http://i.imgur.com/0dEHr6e.gif",
+    "floorplan": ""
   },
   {
     "description": "Residential Suites",
@@ -269,7 +381,10 @@
     "longtitude": "-117.818001",
     "name": "Residence Suites, Vista Del Sol",
     "number": "61",
-    "image": "http://i.imgur.com/324Blei.gif"
+    "offices": [
+    ],
+    "image": "http://i.imgur.com/324Blei.gif",
+    "floorplan": ""
   },
   {
     "description": "Residential Suites",
@@ -277,7 +392,10 @@
     "longtitude": "-117.817415",
     "name": "Residence Suites, Vista De Las Montanas",
     "number": "62",
-    "image": ""
+    "offices": [
+    ],
+    "image": "",
+    "floorplan": ""
   },
   {
     "description": "Residential Suites",
@@ -285,7 +403,10 @@
     "longtitude": "-117.817421",
     "name": "Residence Suites, Vista De La Luna",
     "number": "63",
-    "image": ""
+    "offices": [
+    ],
+    "image": "",
+    "floorplan": ""
   },
   {
     "description": "Bookstore, Kinesiology department",
@@ -293,7 +414,10 @@
     "longtitude": "-117.820448",
     "name": "Bronco Bookstore",
     "number": "66",
-    "image": "http://i.imgur.com/HKQdv3r.gif"
+    "offices": [
+    ],
+    "image": "http://i.imgur.com/HKQdv3r.gif",
+    "floorplan": ""
   },
   {
     "description": "Equine Research Facility",
@@ -301,7 +425,10 @@
     "longtitude": "-117.8141489",
     "name": "Equine Research Facility",
     "number": "67",
-    "image": "http://i.imgur.com/kOQ2t6k.gif"
+    "offices": [
+    ],
+    "image": "http://i.imgur.com/kOQ2t6k.gif",
+    "floorplan": ""
   },
   {
     "description": "Cafeteria",
@@ -309,7 +436,10 @@
     "longtitude": "-117.821586",
     "name": "Los Olivos Commons",
     "number": "70",
-    "image": "http://i.imgur.com/2gZfwpw.gif"
+    "offices": [
+    ],
+    "image": "http://i.imgur.com/2gZfwpw.gif",
+    "floorplan": ""
   },
   {
     "description": "Maintenance Building",
@@ -317,7 +447,10 @@
     "longtitude": "-117.8167031",
     "name": "Recreation/Maintenance Building",
     "number": "71",
-    "image": "http://i.imgur.com/5O14roS.gif"
+    "offices": [
+    ],
+    "image": "http://i.imgur.com/5O14roS.gif",
+    "floorplan": ""
   },
   {
     "description": "Dining hall for on campus hotel",
@@ -325,7 +458,10 @@
     "longtitude": "-117.8247",
     "name": "Kellogg West Education/Dining",
     "number": "76",
-    "image": "http://i.imgur.com/KQ3zwTR.gif"
+    "offices": [
+    ],
+    "image": "http://i.imgur.com/KQ3zwTR.gif",
+    "floorplan": ""
   },
   {
     "description": "Main Hotel Lodge",
@@ -333,7 +469,10 @@
     "longtitude": "-117.825939",
     "name": "Kellogg West Main Lodge",
     "number": "77",
-    "image": "http://i.imgur.com/dKeNClb.gif"
+    "offices": [
+    ],
+    "image": "http://i.imgur.com/dKeNClb.gif",
+    "floorplan": ""
   },
   {
     "description": "Additional hotel rooms",
@@ -341,7 +480,10 @@
     "longtitude": "-117.825821",
     "name": "Kellog West Addition",
     "number": "78",
-    "image": "http://i.imgur.com/D0agenh.gif"
+    "offices": [
+    ],
+    "image": "http://i.imgur.com/D0agenh.gif",
+    "floorplan": ""
   },
   {
     "description": "College of Hospitality",
@@ -349,7 +491,10 @@
     "longtitude": "-117.824406",
     "name": "Collins College of Hospitality Management",
     "number": "79",
-    "image": "http://i.imgur.com/PmlS16H.gif"
+    "offices": [
+    ],
+    "image": "http://i.imgur.com/PmlS16H.gif",
+    "floorplan": ""
   },
   {
     "description": "On Campus High School",
@@ -357,7 +502,10 @@
     "longtitude": "-117.819501",
     "name": "I-Poly High School",
     "number": "85",
-    "image": "http://i.imgur.com/j6AmLYy.gif"
+    "offices": [
+    ],
+    "image": "http://i.imgur.com/j6AmLYy.gif",
+    "floorplan": ""
   },
   {
     "description": "English Language Institute(ELI)",
@@ -365,7 +513,10 @@
     "longtitude": "-117.819722",
     "name": "English Language Institute",
     "number": "86",
-    "image": "http://i.imgur.com/tBNsbEA.gif"
+    "offices": [
+    ],
+    "image": "http://i.imgur.com/tBNsbEA.gif",
+    "floorplan": ""
   },
   {
     "description": "Interim Design Center",
@@ -373,7 +524,10 @@
     "longtitude": "-117.8122982",
     "name": "Interim Design Center",
     "number": "89",
-    "image": "http://i.imgur.com/WLUBRbP.gif"
+    "offices": [
+    ],
+    "image": "http://i.imgur.com/WLUBRbP.gif",
+    "floorplan": ""
   },
   {
     "description": "History Department, Political Science Department, Undeclared Major Advising",
@@ -381,7 +535,10 @@
     "longtitude": "-117.823327",
     "name": "University Office Building",
     "number": "94",
-    "image": "http://i.imgur.com/5pozF7o.gif"
+    "offices": [
+    ],
+    "image": "http://i.imgur.com/5pozF7o.gif",
+    "floorplan": ""
   },
   {
     "description": "Women’s Resource Center, African American Student Center, Cesar E. Chavez Center",
@@ -389,7 +546,10 @@
     "longtitude": "-117.822583",
     "name": "Cultural Centers",
     "number": "95",
-    "image": "http://i.imgur.com/C8Xq2M1.gif"
+    "offices": [
+    ],
+    "image": "http://i.imgur.com/C8Xq2M1.gif",
+    "floorplan": ""
   },
   {
     "description": "Career Center, Restaurants, The Cave(Computing Lab)",
@@ -397,7 +557,10 @@
     "longtitude": "-117.823561",
     "name": "Campus Center",
     "number": "97",
-    "image": "http://i.imgur.com/vF6kqa5.gif"
+    "offices": [
+    ],
+    "image": "http://i.imgur.com/vF6kqa5.gif",
+    "floorplan": ""
   },
   {
     "description": "Administrative Offices",
@@ -405,7 +568,10 @@
     "longtitude": "-117.819967",
     "name": "CLA (Classroom/Laboratory/Administration)",
     "number": "98",
-    "image": "http://i.imgur.com/xOILxWC.gif"
+    "offices": [
+    ],
+    "image": "http://i.imgur.com/xOILxWC.gif",
+    "floorplan": ""
   },
   {
     "description": "Parking Ticket Appeals, Rideshare Office",
@@ -413,7 +579,10 @@
     "longtitude": "-117.8159437",
     "name": "Police and Parking Services",
     "number": "109",
-    "image": "http://i.imgur.com/FJlOaky.gif"
+    "offices": [
+    ],
+    "image": "http://i.imgur.com/FJlOaky.gif",
+    "floorplan": ""
   },
   {
     "description": "Kellogg Manor",
@@ -421,7 +590,10 @@
     "longtitude": "-117.822935",
     "name": "Manor House",
     "number": "111",
-    "image": "http://i.imgur.com/JBdFk0L.gif"
+    "offices": [
+    ],
+    "image": "http://i.imgur.com/JBdFk0L.gif",
+    "floorplan": ""
   },
   {
     "description": "Kellogg house, Available for events",
@@ -429,7 +601,10 @@
     "longtitude": "-117.824439",
     "name": "Kellogg House Pomona",
     "number": "112",
-    "image": "http://i.imgur.com/GqoyXjk.gif"
+    "offices": [
+    ],
+    "image": "http://i.imgur.com/GqoyXjk.gif",
+    "floorplan": ""
   },
   {
     "description": "Children's daycare",
@@ -437,7 +612,10 @@
     "longtitude": "-117.819533",
     "name": "Child Care Center",
     "number": "116",
-    "image": "http://i.imgur.com/VuLR2FI.gif"
+    "offices": [
+    ],
+    "image": "http://i.imgur.com/VuLR2FI.gif",
+    "floorplan": ""
   },
   {
     "description": "Mexican-American Student Association (M.A.S.A.) Building",
@@ -445,7 +623,10 @@
     "longtitude": "-117.820868",
     "name": "M.A.S.A Building",
     "number": "150",
-    "image": "http://i.imgur.com/jKnDAfC.gif"
+    "offices": [
+    ],
+    "image": "http://i.imgur.com/jKnDAfC.gif",
+    "floorplan": ""
   },
   {
     "description": "College of Business Administration - Faculty and Administrative offices, Pony Express, Einstein Bagels",
@@ -453,7 +634,10 @@
     "longtitude": "-117.819575",
     "name": "College of Business Administration",
     "number": "162",
-    "image": ""
+    "offices": [
+    ],
+    "image": "",
+    "floorplan": ""
   },
   {
     "description": "College of Business Administration - Classrooms",
@@ -461,7 +645,10 @@
     "longtitude": "-117.82011",
     "name": "College of Business Administration",
     "number": "163",
-    "image": "http://i.imgur.com/7lmZjew.gif"
+    "offices": [
+    ],
+    "image": "http://i.imgur.com/7lmZjew.gif",
+    "floorplan": ""
   },
   {
     "description": "College of Business Administration - Auditorium.",
@@ -469,7 +656,10 @@
     "longtitude": "-117.819818",
     "name": "College of Business Administration",
     "number": "164",
-    "image": "http://i.imgur.com/OEpnb8b.gif"
+    "offices": [
+    ],
+    "image": "http://i.imgur.com/OEpnb8b.gif",
+    "floorplan": ""
   },
   {
     "description": "John T. Lyle Center for Regenerative Studies",
@@ -477,7 +667,10 @@
     "longtitude": "-117.824476",
     "name": "Center for Regenerative Studies",
     "number": "209",
-    "image": "http://i.imgur.com/4Wn2kjg.gif"
+    "offices": [
+    ],
+    "image": "http://i.imgur.com/4Wn2kjg.gif",
+    "floorplan": ""
   },
   {
     "description": "University farm store and Agriscapes main office",
@@ -485,7 +678,10 @@
     "longtitude": "-117.819251",
     "name": "Agriscapes/Farm Store",
     "number": "211",
-    "image": "http://i.imgur.com/jbGWBR6.gif"
+    "offices": [
+    ],
+    "image": "http://i.imgur.com/jbGWBR6.gif",
+    "floorplan": ""
   },
   {
     "description": "ROTC Center",
@@ -493,7 +689,10 @@
     "longtitude": "-117.820762",
     "name": "Army ROTC",
     "number": "13A",
-    "image": ""
+    "offices": [
+    ],
+    "image": "",
+    "floorplan": ""
   },
   {
     "description": "ROTC Center",
@@ -501,7 +700,10 @@
     "longtitude": "-117.820676",
     "name": "Army ROTC",
     "number": "13B",
-    "image": ""
+    "offices": [
+    ],
+    "image": "",
+    "floorplan": ""
   },
   {
     "description": "Pre-College program center",
@@ -509,7 +711,10 @@
     "longtitude": "-117.820455",
     "name": "Pre-College TRIO",
     "number": "13C",
-    "image": ""
+    "offices": [
+    ],
+    "image": "",
+    "floorplan": ""
   },
   {
     "description": "AGRIscapes Agricultural Outreach Center",
@@ -517,7 +722,10 @@
     "longtitude": "-117.819648",
     "name": "Agriscapes",
     "number": "211A",
-    "image": ""
+    "offices": [
+    ],
+    "image": "",
+    "floorplan": ""
   },
   {
     "description": "Extra classroom, reserved by teachers when needed",
@@ -525,7 +733,10 @@
     "longtitude": "-117.822453",
     "name": "Temporary Classroom A",
     "number": "24A",
-    "image": ""
+    "offices": [
+    ],
+    "image": "",
+    "floorplan": ""
   },
   {
     "description": "Extra classroom, reserved by teachers when needed",
@@ -533,7 +744,10 @@
     "longtitude": "-117.822386",
     "name": "Temporary Classroom B",
     "number": "24B",
-    "image": ""
+    "offices": [
+    ],
+    "image": "",
+    "floorplan": ""
   },
   {
     "description": "Extra classroom, reserved by teachers when needed",
@@ -541,7 +755,10 @@
     "longtitude": "-117.822381",
     "name": "Temporary Classroom C",
     "number": "24C",
-    "image": ""
+    "offices": [
+    ],
+    "image": "",
+    "floorplan": ""
   },
   {
     "description": "Extra classroom, reserved by teachers when needed",
@@ -549,7 +766,10 @@
     "longtitude": "-117.822526",
     "name": "Temporary Classroom D",
     "number": "24D",
-    "image": ""
+    "offices": [
+    ],
+    "image": "",
+    "floorplan": ""
   },
   {
     "description": "Extra classroom, reserved by teachers when needed",
@@ -557,7 +777,10 @@
     "longtitude": "-117.822623",
     "name": "Temporary Classroom E",
     "number": "24E",
-    "image": ""
+    "offices": [
+    ],
+    "image": "",
+    "floorplan": ""
   },
   {
     "description": "Orientation center, in University Plaza",
@@ -565,7 +788,10 @@
     "longtitude": "-117.820553",
     "name": "Student Orientation Center",
     "number": "26A",
-    "image": ""
+    "offices": [
+    ],
+    "image": "",
+    "floorplan": ""
   },
   {
     "description": "University Art Gallery, north of BSC",
@@ -573,6 +799,8 @@
     "longtitude": "-117.821242",
     "name": "W. Keith and Janet Kellogg University Art Gallery",
     "number": "35A",
+    "offices": [
+    ],
     "image": ""
   },
   {
@@ -581,7 +809,10 @@
     "longtitude": "-117.824776",
     "name": "Collins College of Hospitality Management",
     "number": "79A",
-    "image": ""
+    "offices": [
+    ],
+    "image": "",
+    "floorplan": ""
   },
   {
     "description": "College of Hospitality Management",
@@ -589,7 +820,10 @@
     "longtitude": "-117.824476",
     "name": "Collins College of Hospitality Management",
     "number": "79B",
-    "image": ""
+    "offices": [
+    ],
+    "image": "",
+    "floorplan": ""
   }
 ]
 

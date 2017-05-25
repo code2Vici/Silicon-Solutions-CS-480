@@ -5,6 +5,12 @@
     "longtitude": "-117.820038",
     "name": "University Plaza",
     "number": "26",
+    "events": [
+      {
+        "name": "Hot Dog Caper",
+        "description": "An annual all-you-can-eat hot dog event hosted by Cal Poly Foundation. Students get the chance to socialize and win some cool prizes."
+      }
+    ],
     "image": ""
   },
   {
@@ -13,6 +19,8 @@
     "longtitude": "-117.820527",
     "name": "Swimming Pool",
     "number": "44",
+    "events": [
+    ],
     "image": ""
   },
   {
@@ -21,6 +29,8 @@
     "longtitude": "-117.826497",
     "name": "BioTrek Learning Center - Ethnobotany Garden",
     "number": "4A",
+    "events": [
+    ],
     "image": ""
   },
   {
@@ -29,6 +39,8 @@
     "longtitude": "-117.820356",
     "name": "Rose Garden",
     "number": "",
+    "events": [
+    ],
     "image": ""
   },
   {
@@ -37,6 +49,8 @@
     "longtitude": "-117.81607",
     "name": "Scolinos Field (Baseball)",
     "number": "",
+    "events": [
+    ],
     "image": ""
   },
   {
@@ -45,6 +59,8 @@
     "longtitude": "-117.820975",
     "name": "University Park",
     "number": "",
+    "events": [
+    ],
     "image": ""
   },
   {
@@ -53,6 +69,8 @@
     "longtitude": "-117.823784",
     "name": "University Quad",
     "number": "",
+    "events": [
+    ],
     "image": ""
   },
   {
@@ -61,6 +79,12 @@
     "longtitude": "-117.820357",
     "name": "Tennis Courts",
     "number": "",
+    "events": [
+      {
+        "name": "",
+        "description": ""
+      }
+    ],
     "image": ""
   },
   {
@@ -69,6 +93,8 @@
     "longtitude": "-117.82042",
     "name": "Aratani Japanese Garden",
     "number": "",
+    "events": [
+    ],
     "image": ""
   },
   {
@@ -77,6 +103,8 @@
     "longtitude": "-117.818344",
     "name": "Auxiliary Activity Field",
     "number": "",
+    "events": [
+    ],
     "image": ""
   },
   {
@@ -85,6 +113,8 @@
     "longtitude": "-117.821114",
     "name": "Engineering Meadow",
     "number": "",
+    "events": [
+    ],
     "image": ""
   },
   {
@@ -93,6 +123,8 @@
     "longtitude": "-117.817013",
     "name": "Kellogg Track and Soccer Field",
     "number": "",
+    "events": [
+    ],
     "image": ""
   },
   {
@@ -101,6 +133,8 @@
     "longtitude": "-117.818305",
     "name": "Agriscapes Pumpkin Field",
     "number": "",
+    "events": [
+    ],
     "image": ""
   },
   {
@@ -109,6 +143,8 @@
     "longtitude": "-117.820268",
     "name": "Bronco Commons",
     "number": "",
+    "events": [
+    ],
     "image": ""
   },
   {
@@ -117,6 +153,8 @@
     "longtitude": "-117.818584",
     "name": "Voorhis Park",
     "number": "",
+    "events": [
+    ],
     "image": ""
   }
 ]

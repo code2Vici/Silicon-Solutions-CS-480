@@ -76,7 +76,7 @@
     <android.support.design.widget.AppBarLayout
         android:id="@+id/merged_appbarlayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="?android:attr/actionBarSize"
         android:background="@android:color/transparent"
         android:theme="@style/AppTheme.AppBarOverlay"
         android:tag="modal-appbar"

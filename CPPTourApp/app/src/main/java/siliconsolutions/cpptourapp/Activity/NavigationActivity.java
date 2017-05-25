@@ -2,8 +2,10 @@ package siliconsolutions.cpptourapp.Activity;
 
 import android.Manifest;
 import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
@@ -14,6 +16,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -51,6 +54,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
 import java.util.List;
 import siliconsolutions.cpptourapp.Adapters.NavigationListAdapter;
 import siliconsolutions.cpptourapp.Directions.APIService;
@@ -85,6 +89,8 @@ public class NavigationActivity extends AppCompatActivity implements OnMapReadyC
     private Bus mBus;
     private CameraUpdate cameraUpdate;
     private List<Step> instructionList;
+    private Geofence mGeofence;
+    //private List<Geofence> mGeofenceList;
     private final MyHandler mHandler = new MyHandler(this);
     private GoogleApiClient googleApiClient;
     public static final int MESSAGE_NOT_CONNECTED = 1;
@@ -98,7 +104,7 @@ public class NavigationActivity extends AppCompatActivity implements OnMapReadyC
     private static Marker geoFenceMarker;
     private static final long GEO_DURATION = 60 * 60 * 1000;
     private static final String GEOFENCE_REQ_ID = "My Geofence";
-    private static final float GEOFENCE_RADIUS = 100f * 3.28084f;
+    private static final float GEOFENCE_RADIUS = 10f * 3.28084f;
     private boolean isRunning = false;
     private PendingIntent geoFencePendingIntent;
     private final int GEOFENCE_REQ_CODE = 0;// in meters
@@ -276,6 +282,7 @@ public class NavigationActivity extends AppCompatActivity implements OnMapReadyC
     protected void onStart() {
         super.onStart();
         googleApiClient.connect();
+        //mGeofenceList = new ArrayList<>();
     }
 
     @Override
@@ -367,6 +374,11 @@ public class NavigationActivity extends AppCompatActivity implements OnMapReadyC
                     mMap.moveCamera(cameraUpdate);
                     changeCameraAngle(markers.get(0));
                     mHandler.postDelayed(sRunnable,100);
+                    markerForGeofence(markers.get(0).getPosition());
+                    startGeofence();
+                    LocalBroadcastManager lbc = LocalBroadcastManager.getInstance(getApplicationContext());
+                    GoogleReceiver receiver = new GoogleReceiver(NavigationActivity.this);
+                    lbc.registerReceiver(receiver, new IntentFilter("googlegeofence"));
                 }
             }
         });
@@ -375,8 +387,13 @@ public class NavigationActivity extends AppCompatActivity implements OnMapReadyC
             @Override
             public void onClick(View view) {
                 changeCameraAngle(markers.get(0));
-                markerForGeofence(markers.get(0).getPosition());
-                startGeofence();
+                /*for(Marker m : markers){
+                    geoFenceMarker = m;
+                    Geofence geofence = createGeofence( geoFenceMarker.getPosition(), GEOFENCE_RADIUS );
+                    mGeofenceList.add(geofence);
+                    GeofencingRequest geofenceRequest = createGeofenceRequest( geofence );
+                    addGeofence( geofenceRequest );
+                }*/
                 mHandler.postDelayed(sRunnable,100);
             }
         });
@@ -405,7 +422,9 @@ public class NavigationActivity extends AppCompatActivity implements OnMapReadyC
 
     private void updateInformationDisplay(){
         headerTextTv.setText(instructionList.get(0).getHtmlInstructions());
+
         //subTextUPDATE.setText(instructionList.get(0).getDistance());
+        timeTv.setText(instructionList.get(0).getDistance().getText());
         instructionList.remove(0);
         NavigationListAdapter adapter = (NavigationListAdapter) stepListView.getAdapter();
         adapter.notifyDataSetChanged();
@@ -533,13 +552,14 @@ public class NavigationActivity extends AppCompatActivity implements OnMapReadyC
 
     private Geofence createGeofence(LatLng latLng, float radius ) {
         Log.d("STATUS", "createGeofence");
-        return new Geofence.Builder()
+        mGeofence =  new Geofence.Builder()
                 .setRequestId(GEOFENCE_REQ_ID)
                 .setCircularRegion( latLng.latitude, latLng.longitude, radius)
                 .setExpirationDuration( GEO_DURATION )
                 .setTransitionTypes( Geofence.GEOFENCE_TRANSITION_ENTER
                         | Geofence.GEOFENCE_TRANSITION_EXIT )
                 .build();
+        return mGeofence;
     }
 
     // Create a Geofence Request
@@ -571,6 +591,15 @@ public class NavigationActivity extends AppCompatActivity implements OnMapReadyC
             ).setResultCallback(this);
     }
 
+    private void removeGeofence(){
+        Log.d("STATUS", "removeGeofence");
+        if(checkPermission()){
+            List<String> geofencesToRemove = new ArrayList<>();
+            geofencesToRemove.add(mGeofence.getRequestId());
+            LocationServices.GeofencingApi.removeGeofences(googleApiClient, geofencesToRemove);
+        }
+    }
+
     private void permissionsDenied() {
         Log.w("STATUS", "permissionsDenied()");
     }
@@ -579,6 +608,7 @@ public class NavigationActivity extends AppCompatActivity implements OnMapReadyC
     public void onResult(@NonNull Status status) {
         Log.i("STATUS", "onResult: " + status);
         if ( status.isSuccess() ) {
+
             drawGeofence();
         } else {
             // inform about fail
@@ -590,11 +620,26 @@ public class NavigationActivity extends AppCompatActivity implements OnMapReadyC
     private void drawGeofence() {
         Log.d("STATUS", "drawGeofence()");
 
-        if ( geoFenceLimits != null )
-            geoFenceLimits.remove();
+        //if ( geoFenceLimits != null )
+            //geoFenceLimits.remove();
 
         CircleOptions circleOptions = new CircleOptions()
                 .center( geoFenceMarker.getPosition())
+                .strokeColor(Color.argb(50, 70,70,70))
+                .fillColor( Color.argb(100, 150,150,150) )
+                .radius( GEOFENCE_RADIUS );
+        geoFenceLimits = mMap.addCircle( circleOptions );
+
+    }
+
+    private void drawGeofence(Marker m) {
+        Log.d("STATUS", "drawGeofence()");
+
+        //if ( geoFenceLimits != null )
+        //geoFenceLimits.remove();
+
+        CircleOptions circleOptions = new CircleOptions()
+                .center( m.getPosition())
                 .strokeColor(Color.argb(50, 70,70,70))
                 .fillColor( Color.argb(100, 150,150,150) )
                 .radius( GEOFENCE_RADIUS );
@@ -611,7 +656,7 @@ public class NavigationActivity extends AppCompatActivity implements OnMapReadyC
             Log.e("STATUS", "Geofence marker is null");
         }
     }
-    //String s = markers.get(0).getTitle();
+
     public static Intent makeNotificationIntent(Context geofenceService, String msg)
     {
         Log.d("THIS",msg);
@@ -652,6 +697,31 @@ public class NavigationActivity extends AppCompatActivity implements OnMapReadyC
                     //activity.changeCameraAngle();
                     Log.i("IN HANDLER","CHANGING CAMERA");
                     break;
+            }
+        }
+    }
+
+    class GoogleReceiver extends BroadcastReceiver{
+
+        NavigationActivity mActivity;
+        int index = 0;
+
+        public GoogleReceiver(NavigationActivity activity){
+            mActivity = (NavigationActivity) activity;
+        }
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.i("STRING","HERE");
+            if(index < instructionList.size() - 1){
+                geoFenceMarker.setVisible(false);
+                markers.get(index).setVisible(false);
+                updateInformationDisplay();
+                removeGeofence();
+                index++;
+                markerForGeofence(markers.get(index).getPosition());
+                changeCameraAngle(markers.get(index));
+                startGeofence();
             }
         }
     }
