@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "79805403302",
+    "firebase_url": "https://phonecontactsbook.firebaseio.com",
+    "project_id": "phonecontactsbook",
+    "storage_bucket": "phonecontactsbook.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:79805403302:android:a29e49f1dd6b8ada",
+        "android_client_info": {
+          "package_name": "siliconsolutions.cpp.phonecontactsbook"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "79805403302-fl28ltp3sk34etpspni3km6ie97if5ng.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "siliconsolutions.cpp.phonecontactsbook",
+            "certificate_hash": "cfa107f2bde8eb714335a8b63489b4889aeaf319"
+          }
+        },
+        {
+          "client_id": "79805403302-ujmj36h5349u9p0ogcivqdvc0fl79oss.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCjg2nXIGK1x7p5jB5K62tc4RBPA3GglN4"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "79805403302-ujmj36h5349u9p0ogcivqdvc0fl79oss.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
