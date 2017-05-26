@@ -435,7 +435,6 @@ public class BaseMap extends AppCompatActivity implements
                 else{
                     for(int i = (buildingsArrayList.size() + landmarksArrayList.size() + parkingLotsArrayList.size()); i < (buildingsArrayList.size() + landmarksArrayList.size() + parkingLotsArrayList.size() + restaurantsArrayList.size()); i++){
                         markersArrayList.get(i).setVisible(false);
-                        line.remove();
                     }
                 }
             }
