@@ -1,0 +1,92 @@
+[
+     {
+        "latitude": "34.057557",
+        "longtitude": "-117.821598",
+        "name": "Starbuck",
+        "number": "15"
+     },
+     {
+        "latitude": "34.054038",
+        "longtitude": "-117.818083",
+        "name": "The Den By Denny's",
+        "number": "52"
+     },
+     {
+        "latitude": "34.053949",
+        "longtitude": "-117.818072",
+        "name": "Vista Market",
+        "number": "52"
+     },
+     {
+        "latitude": "34.057727",
+        "longtitude": "-117.823322",
+        "name": "Panda Express",
+        "number": "97"
+     },
+     {
+        "latitude": "34.057715",
+        "longtitude": "-117.823238",
+        "name": "Carl's Jr.",
+        "number": "97"
+     },
+     {
+        "latitude": "34.061503",
+        "longtitude": "-117.811642",
+        "name": "QDOBA Mexican Eats",
+        "number": "Bronco Student Center / 35"
+     },
+     {
+        "latitude": "34.055931",
+        "longtitude": "-117.821138",
+        "name": "Hibachi-San",
+        "number": "Bronco Student Center / 35"
+     },
+     {
+        "latitude": "34.055877",
+        "longtitude": "-117.821093",
+        "name": "Subway",
+        "number": "Bronco Student Center / 35"
+     },
+     {
+        "latitude": "34.055829",
+        "longtitude": "-117.821050",
+        "name": "Peet's Cofee & Tea",
+        "number": "Bronco Student Center / 35"
+     },
+     {
+        "latitude": "34.054799",
+        "longtitude": "-117.823972",
+        "name": "The Restaurant At Kellogg Ranch",
+        "number": "Collins College of Hospitality Management"
+     },
+     {
+        "latitude": "34.056615",
+        "longtitude": "-117.824869",
+        "name": "波莫纳宾馆",
+        "number": "Kellogg West Education/Dining"
+     },
+     {
+        "latitude": "34.054301",
+        "longtitude": "-117.820438",
+        "name": "Jamba Juice",
+        "number": "BRIC"
+     },
+     {
+        "latitude": "34.061507",
+        "longtitude": "-117.820270",
+        "name": "Einstein Bros. Bagels",
+        "number": "163"
+     },
+     {
+        "latitude": "34.057707",
+        "longtitude": "-117.823113",
+        "name": "Taco Bell",
+        "number": "97"
+     },
+    {
+      "latitude": "34.055889",
+      "longtitude": "-117.821119",
+      "name": "The Round Table Pizza",
+      "number": "Bronco Student Center / 35"
+    }
+]
