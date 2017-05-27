@@ -2,22 +2,19 @@ package siliconsolutions.cpptourapp.Activity;
 
 import android.Manifest;
 import android.app.DialogFragment;
-import android.app.Fragment;
-import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.location.Location;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -28,7 +25,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -41,7 +37,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import java.lang.reflect.Type;
+
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -50,12 +46,16 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.squareup.picasso.Picasso;
+
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
+
 import siliconsolutions.cpptourapp.Adapters.BuildingsListAdapter;
 import siliconsolutions.cpptourapp.Adapters.EventsListAdapter;
 import siliconsolutions.cpptourapp.Adapters.FavoritesListAdapter;
@@ -67,11 +67,15 @@ import siliconsolutions.cpptourapp.Adapters.Utilities;
 import siliconsolutions.cpptourapp.GPS.GPSTracker;
 import siliconsolutions.cpptourapp.GPS.GPSTrackerListener;
 import siliconsolutions.cpptourapp.Model.Building;
+import siliconsolutions.cpptourapp.Model.BusRouteA;
 import siliconsolutions.cpptourapp.Model.GlobalVars;
 import siliconsolutions.cpptourapp.Model.Landmarks;
 import siliconsolutions.cpptourapp.Model.MyLocation;
 import siliconsolutions.cpptourapp.Model.ParkingLots;
+import siliconsolutions.cpptourapp.Model.Tour;
+import siliconsolutions.cpptourapp.Model.Restaurants;
 import siliconsolutions.cpptourapp.R;
+import siliconsolutions.cpptourapp.Tour.StartTourFragment;
 import siliconsolutions.cpptourapp.View.BottomSheetBehaviorGoogleMapsLike;
 import siliconsolutions.cpptourapp.View.MergedAppBarLayoutBehavior;
 
@@ -91,21 +95,29 @@ public class BaseMap extends AppCompatActivity implements
     private ArrayList<Building> buildingsArrayList;
     private ArrayList<Landmarks> landmarksArrayList;
     private ArrayList<ParkingLots> parkingLotsArrayList;
+    private ArrayList<Restaurants> restaurantsArrayList;
+    private ArrayList<BusRouteA> busRouteAArrayList;
     private ArrayList<Marker> markersArrayList;
     private ArrayList<Marker> favoritesArrayList;
     private Marker myMarker;
     private StringBuffer postList;
     private StringBuffer landmarksPostList;
     private StringBuffer parkingPostList;
+    private StringBuffer restaurantPostList;
+    private StringBuffer busRouteAPostList;
     private MenuItem buildingsMenuItem;
     private MenuItem landmarksMenuItem;
     private MenuItem parkingMenuItem;
+    private MenuItem restaurantMenuItem;
+    private MenuItem busRouteAMenuItem;
     private TextView bottomSheetDescriptionText;
     private LinearLayout bottomSheetPeekBar;
     private ImageView bottomImageHeader;
     private CompoundButton buildingsCheckbox;
     private CompoundButton landmarksCheckbox;
     private CompoundButton parkingCheckbox;
+    private CompoundButton restaurantCheckbox;
+    private CompoundButton busRouteACheckbox;
     private TextView bottomSheetHeading;
     private TextView bottomSheetSubHeading;
     private TextView bottomSheetHeadingDistance;
@@ -118,8 +130,10 @@ public class BaseMap extends AppCompatActivity implements
     private ImageButton navigationDetailBtn;
     private CoordinatorLayout coordinatorLayout;
     private View bottomSheet;
+    private int mStackLevel = 0;
     private MergedAppBarLayoutBehavior mergedAppBarLayoutBehavior;
     BottomSheetBehaviorGoogleMapsLike behavior;
+    private com.google.android.gms.maps.model.Polyline line;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -150,8 +164,8 @@ public class BaseMap extends AppCompatActivity implements
             public boolean onNavigationItemSelected(MenuItem item) {
                 int id = item.getItemId();
 
-                if (id == R.id.nav_left_start) {
-
+                if (id == R.id.nav_left_start){
+                    startTourDialog();
                 } else if (id == R.id.nav_left_discover) {
 
                 } else if (id == R.id.nav_slideshow) {
@@ -173,6 +187,19 @@ public class BaseMap extends AppCompatActivity implements
                     }
                 } else if (id == R.id.nav_left_check_3) {
                     parkingCheckbox.performClick();
+                    if (item.isChecked()) {
+                        item.setChecked(false);
+                    }   else {
+                        item.setChecked(true);
+                    }
+                } else if (id == R.id.nav_left_check_4) {
+                    restaurantCheckbox.performClick();
+                    if (item.isChecked()) {
+                        item.setChecked(false);
+                    }   else {
+                        item.setChecked(true);
+                    }
+                }else if (id == R.id.nav_left_check_4) { //TODO:
                     if (item.isChecked()) {
                         item.setChecked(false);
                     }   else {
@@ -239,6 +266,7 @@ public class BaseMap extends AppCompatActivity implements
             }
         });
 
+
         favoritesBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -272,10 +300,16 @@ public class BaseMap extends AppCompatActivity implements
         }.getType();
         Type parkingListType = new TypeToken<ArrayList<ParkingLots>>() {
         }.getType();
+        Type restaurantListType = new TypeToken<ArrayList<Restaurants>>() {
+        }.getType();
+        Type busRouteAListType = new TypeToken<ArrayList<BusRouteA>>(){
+        }.getType();
         favoritesArrayList = new ArrayList<>();
         buildingsArrayList = new GsonBuilder().create().fromJson(loadBuildingJSONFromAsset(), listType);
         landmarksArrayList = new GsonBuilder().create().fromJson(loadLandmarksJSONFromAsset(), landmarksListType);
         parkingLotsArrayList = new GsonBuilder().create().fromJson(loadParkingLotsJSONFromAsset(), parkingListType);
+        restaurantsArrayList = new GsonBuilder().create().fromJson(loadRestaurantJSONFromAsset(),restaurantListType);
+        busRouteAArrayList = new GsonBuilder().create().fromJson(loadBusRouteAJSONFromAsset(), busRouteAListType);
     }
 
     private void initGPS() {
@@ -321,9 +355,27 @@ public class BaseMap extends AppCompatActivity implements
             markersArrayList.add(myMarker);
 
         }
+        restaurantPostList = new StringBuffer();
+        for (Restaurants post : restaurantsArrayList) {
+            restaurantPostList.append("\n latitude: " + post.getLatitude() + "\n longtitude: " + post.getLongtitude() +
+                    "\n building name: " + post.getRestaurantName()+ "\n meters " + post.getMeters() + "\n description " + post.getDescription() + "\n meterlist: " + post.getMeters() + "\n building number: " + post.getRestaurantNumber() + "\n imageUrl: " + post.getImageUrl() + "\n\n");
+            myMarker = mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET)).visible(false).title(post.getRestaurantName()).snippet(post.getRestaurantNumber()).position(new LatLng(Double.parseDouble(post.getLatitude()), Double.parseDouble(post.getLongtitude()))));
+            myMarker.setTag(markersArrayList.size());
+            markersArrayList.add(myMarker);
+
+        }
+
+        busRouteAPostList = new StringBuffer();
+        for (BusRouteA post : busRouteAArrayList) {
+            myMarker = mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW)).visible(false).title(post.getBusRouteName()).snippet(post.getBusRouteNumber()).position(new LatLng(Double.parseDouble(post.getLatitude()), Double.parseDouble(post.getLongtitude()))));
+            myMarker.setTag(markersArrayList.size());
+            markersArrayList.add(myMarker);
+
+        }
     }
 
     private void setFilters() {
+
         buildingsMenuItem = leftNavigationView.getMenu().findItem(R.id.nav_left_check_1);
         buildingsCheckbox = (CompoundButton) MenuItemCompat.getActionView(buildingsMenuItem);
         buildingsCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -375,6 +427,67 @@ public class BaseMap extends AppCompatActivity implements
                 }
             }
         });
+        restaurantMenuItem = leftNavigationView.getMenu().findItem(R.id.nav_left_check_4);
+        restaurantCheckbox = (CompoundButton) MenuItemCompat.getActionView(restaurantMenuItem);
+
+        restaurantCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                if(isChecked){
+                    for(int i = (buildingsArrayList.size() + landmarksArrayList.size() + parkingLotsArrayList.size()); i < (buildingsArrayList.size() + landmarksArrayList.size() + parkingLotsArrayList.size() + restaurantsArrayList.size()); i++){
+                        markersArrayList.get(i).setVisible(true);
+                    }
+                }
+                else{
+                    for(int i = (buildingsArrayList.size() + landmarksArrayList.size() + parkingLotsArrayList.size()); i < (buildingsArrayList.size() + landmarksArrayList.size() + parkingLotsArrayList.size() + restaurantsArrayList.size()); i++){
+                        markersArrayList.get(i).setVisible(false);
+                    }
+                }
+            }
+        });
+
+        busRouteAMenuItem = leftNavigationView.getMenu().findItem(R.id.nav_left_check_4);//TODO:
+        busRouteACheckbox = (CompoundButton) MenuItemCompat.getActionView(busRouteAMenuItem);
+        busRouteACheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                if(isChecked){
+                    line = mMap.addPolyline(new PolylineOptions().add(new LatLng(34.048406, -117.815238), new LatLng(34.048615, -117.815091),new LatLng(34.048837, -117.815116),
+                            new LatLng(34.049065, -117.815789),new LatLng(34.049102, -117.816195),new LatLng(34.049025, -117.816268),new LatLng(34.049495, -117.817084),
+                            new LatLng(34.052174, -117.815027),new LatLng(34.052884, -117.814440),new LatLng(34.053669, -117.813682),new LatLng(34.053105, -117.812839),
+                            new LatLng(34.052922, -117.812144),new LatLng(34.052795, -117.812058),new LatLng(34.052376, -117.812176),new LatLng(34.051886, -117.812487),
+                            new LatLng(34.049464, -117.814465),new LatLng(34.050347, -117.816838),new LatLng(34.050569, -117.818835),new LatLng(34.050589, -117.820644),
+                            new LatLng(34.051268, -117.820614),new LatLng(34.051708, -117.820697),new LatLng(34.053217, -117.821456),new LatLng(34.053443, -117.821691),
+                            new LatLng(34.053581, -117.822033), new LatLng(34.053572, -117.822728),new LatLng(34.053492, -117.823581),new LatLng(34.053737, -117.824188),
+                            new LatLng(34.054048, -117.824611),new LatLng(34.054119, -117.824955),new LatLng(34.054070, -117.825888),new LatLng(34.054088, -117.826151),
+                            new LatLng(34.054221, -117.826403),new LatLng(34.054719, -117.826746),new LatLng(34.055870, -117.827256),new LatLng(34.056146, -117.827417),
+                            new LatLng(34.057306, -117.827846),new LatLng(34.057506, -117.827803),new LatLng(34.057732, -117.827599),new LatLng(34.059661, -117.823243),
+                            new LatLng(34.060088, -117.822219),new LatLng(34.060279, -117.821945),new LatLng(34.061608, -117.820652),new LatLng(34.061750, -117.820341),
+                            new LatLng(34.061683, -117.818437),new LatLng(34.060919, -117.818335),new LatLng(34.060457, -117.818281),new LatLng(34.060434, -117.818592),
+                            new LatLng(34.060372, -117.818694), new LatLng(34.059790, -117.819188),new LatLng(34.059639, -117.819236),new LatLng(34.059519, -117.819113),
+                            new LatLng(34.059435, -117.818748),new LatLng(34.059488, -117.818136),new LatLng(34.059955, -117.818163),new LatLng(34.060839, -117.818254),
+                            new LatLng(34.061750, -117.818389),new LatLng(34.061737, -117.818963),new LatLng(34.061843, -117.820143),new LatLng(34.061781, -117.820454),
+                            new LatLng(34.061661, -117.820690),new LatLng(34.060354, -117.821940),new LatLng(34.060243, -117.822085),new LatLng(34.060079, -117.822342),
+                            new LatLng(34.059697, -117.823302),new LatLng(34.057764, -117.827642),new LatLng(34.057630, -117.827803),new LatLng(34.057399, -117.827916),
+                            new LatLng(34.057141, -117.827868),new LatLng(34.056190, -117.827481),new LatLng(34.055821, -117.827299),new LatLng(34.054257, -117.826537),
+                            new LatLng(34.054075, -117.826290), new LatLng(34.054012, -117.826011),new LatLng(34.054052, -117.824922),new LatLng(34.053972, -117.824606),
+                            new LatLng(34.053972, -117.824606),new LatLng(34.053577, -117.824021),new LatLng(34.053444, -117.823635),new LatLng(34.053537, -117.822289),
+                            new LatLng(34.053452, -117.821843),new LatLng(34.053212, -117.821532),new LatLng(34.051777, -117.820786),new LatLng(34.051346, -117.820690),
+                            new LatLng(34.050412, -117.820706),new LatLng(34.050350, -117.817986),new LatLng(34.050252, -117.817278),new LatLng(34.050141, -117.816742),
+                            new LatLng(34.049559, -117.817219),new LatLng(34.049279, -117.816747),new LatLng(34.048994, -117.816291),new LatLng(34.048274, -117.816844),
+                            new LatLng(34.047772, -117.815529),new LatLng(34.048406, -117.815238)));
+                    for(int i = (buildingsArrayList.size() + landmarksArrayList.size() + parkingLotsArrayList.size() + restaurantsArrayList.size()); i < (buildingsArrayList.size() + landmarksArrayList.size() + parkingLotsArrayList.size() + restaurantsArrayList.size() + busRouteAArrayList.size()); i++){
+                        markersArrayList.get(i).setVisible(true);
+                    }
+                }
+                else{
+                    line.remove();
+                    for(int i = (buildingsArrayList.size() + landmarksArrayList.size() + parkingLotsArrayList.size() + restaurantsArrayList.size()); i < (buildingsArrayList.size() + landmarksArrayList.size() + parkingLotsArrayList.size() + restaurantsArrayList.size() + busRouteAArrayList.size()); i++){
+                        markersArrayList.get(i).setVisible(false);
+                    }
+                }
+            }
+        });
     }
 
     private void showDialog() {
@@ -410,7 +523,7 @@ public class BaseMap extends AppCompatActivity implements
         else if(val < (landmarksArrayList.size() + buildingsArrayList.size())){
             bottomSheetUpdateFromLandmark(landmarksArrayList.get(val - buildingsArrayList.size()));
         }
-        else{
+        else {
             bottomSheetUpdateFromParking(parkingLotsArrayList.get(val - buildingsArrayList.size() - landmarksArrayList.size()));
         }
     }
@@ -547,6 +660,7 @@ public class BaseMap extends AppCompatActivity implements
             bottomSheetListTitle.setVisibility(View.GONE);
         }
     }
+
 
     public void bottomSheetUpdateFromMarker(Marker m){
 
@@ -737,6 +851,40 @@ public class BaseMap extends AppCompatActivity implements
 
     }
 
+    public String loadRestaurantJSONFromAsset() {
+        String json = null;
+        try {
+            InputStream is = getAssets().open("restaurant.json");
+            int size = is.available();
+            byte[] buffer = new byte[size];
+            is.read(buffer);
+            is.close();
+            json = new String(buffer, "UTF-8");
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            return null;
+        }
+        return json;
+
+    }
+
+    public String loadBusRouteAJSONFromAsset() {
+        String json = null;
+        try {
+            InputStream is = getAssets().open("busstopA.json");
+            int size = is.available();
+            byte[] buffer = new byte[size];
+            is.read(buffer);
+            is.close();
+            json = new String(buffer, "UTF-8");
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            return null;
+        }
+        return json;
+
+    }
+
     private void favoritesBtnListener(final Marker m, final siliconsolutions.cpptourapp.Model.Location location){
         likeDetailBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -769,8 +917,10 @@ public class BaseMap extends AppCompatActivity implements
         else if(val < (landmarksArrayList.size() + buildingsArrayList.size())){
             location = landmarksArrayList.get(val - buildingsArrayList.size());
         }
-        else{
+        else if(val < (landmarksArrayList.size() + buildingsArrayList.size() + parkingLotsArrayList.size())){
             location = parkingLotsArrayList.get(val - buildingsArrayList.size() - landmarksArrayList.size());
+        } else {
+            location = restaurantsArrayList.get(val - buildingsArrayList.size() - landmarksArrayList.size() - parkingLotsArrayList.size());
         }
         return location;
     }
@@ -790,6 +940,25 @@ public class BaseMap extends AppCompatActivity implements
                 startActivity(intent);
             }
         });
+    }
+
+    public void startTourDialog(){
+            mStackLevel++;
+
+            // DialogFragment.show() will take care of adding the fragment
+            // in a transaction.  We also want to remove any currently showing
+            // dialog, so make our own transaction and take care of that here.
+            android.app.FragmentTransaction ft = getFragmentManager().beginTransaction();
+            android.app.Fragment prev = getFragmentManager().findFragmentByTag("dialog");
+            if (prev != null) {
+                ft.remove(prev);
+            }
+            ft.addToBackStack(null);
+
+            // Create and show the dialog.
+            DialogFragment newFragment = StartTourFragment.newInstance(mStackLevel);
+            newFragment.show(ft, "dialog");
+
     }
 
     @Override

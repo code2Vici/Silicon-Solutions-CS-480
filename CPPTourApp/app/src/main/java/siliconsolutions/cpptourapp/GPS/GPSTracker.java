@@ -55,8 +55,6 @@ public class GPSTracker extends Service implements LocationListener{
 
     private Location getLocation() {
         try {
-            Toast.makeText(mContext, "GPSTracker::getLocation()", Toast.LENGTH_SHORT).show();
-
             locationManager = (LocationManager) mContext
                     .getSystemService(LOCATION_SERVICE);
 

@@ -32,6 +32,7 @@ import siliconsolutions.cpptourapp.R;
 public class GeofenceTransitionsIntentService extends IntentService {
 
     protected static final String TAG = "GeofenceTransitionsIS";
+    protected int geofenceTransition;
 
     /**
      * This constructor is required, and calls the super IntentService(String)
@@ -64,7 +65,7 @@ public class GeofenceTransitionsIntentService extends IntentService {
         }
 
         // Get the transition type.
-        int geofenceTransition = geofencingEvent.getGeofenceTransition();
+        geofenceTransition = geofencingEvent.getGeofenceTransition();
 
         // Test that the reported transition was of interest.
         if (geofenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER ||
@@ -123,7 +124,7 @@ public class GeofenceTransitionsIntentService extends IntentService {
         Intent notificationIntent = new Intent(getApplicationContext(), NavigationActivity.class);
 
         Intent intent = new Intent("googlegeofence");
-        intent.putExtra("Key","THIS");
+        intent.putExtra("transition",geofenceTransition);
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
         // Construct a task stack.
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);

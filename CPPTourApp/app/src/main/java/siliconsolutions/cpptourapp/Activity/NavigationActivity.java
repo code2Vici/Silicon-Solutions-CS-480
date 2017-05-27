@@ -90,7 +90,6 @@ public class NavigationActivity extends AppCompatActivity implements OnMapReadyC
     private CameraUpdate cameraUpdate;
     private List<Step> instructionList;
     private Geofence mGeofence;
-    //private List<Geofence> mGeofenceList;
     private final MyHandler mHandler = new MyHandler(this);
     private GoogleApiClient googleApiClient;
     public static final int MESSAGE_NOT_CONNECTED = 1;
@@ -102,28 +101,28 @@ public class NavigationActivity extends AppCompatActivity implements OnMapReadyC
     //private final int UPDATE_INTERVAL =  3 * 60 * 1000; // 3 minutes
     //private final int FASTEST_INTERVAL = 30 * 1000;  // 30 secs
     private static Marker geoFenceMarker;
-    private static final long GEO_DURATION = 60 * 60 * 1000;
+    private static final long GEO_DURATION = 60 * 60 * 100;
     private static final String GEOFENCE_REQ_ID = "My Geofence";
-    private static final float GEOFENCE_RADIUS = 10f * 3.28084f;
+    private static final float GEOFENCE_RADIUS = 2f * 3.28084f;
     private boolean isRunning = false;
     private PendingIntent geoFencePendingIntent;
+    private Circle geoFenceLimits;
     private final int GEOFENCE_REQ_CODE = 0;// in meters
     private final Runnable sRunnable = new Runnable() {
         @Override
         public void run() {
             try{
                 isRunning = true;
-                Log.i("RUNNABLE WORKING","NOTHING INITIALIZED");
                 LatLngBounds.Builder builder = new LatLngBounds.Builder();
                 LatLngBounds bounds;
                 builder.include(new LatLng(gpsTracker.getLatitude(),gpsTracker.getLongitude()));
-                builder.include(markers.get(0).getPosition());
+                builder.include(geoFenceMarker.getPosition());
                 bounds = builder.build();
                 // define value for padding
                 int padding =20;
                 //This cameraupdate will zoom the map to a level where both location visible on map and also set the padding on four side.
                 cameraUpdate =  CameraUpdateFactory.newLatLngBounds(bounds,padding);
-                changeCameraAngle(markers.get(0));
+                changeCameraAngle(geoFenceMarker);
                 mHandler.postDelayed(sRunnable,6000);
             }catch (Exception e){
                 e.printStackTrace();
@@ -344,16 +343,7 @@ public class NavigationActivity extends AppCompatActivity implements OnMapReadyC
             @Override
             public void onClick(View view) {
                 if(markers.size() == 0){
-                    mHandler.removeCallbacks(sRunnable);
-                    Toast.makeText(getApplicationContext(), "YOU HAVE ARRIVED", Toast.LENGTH_SHORT).show();
-                    try {
-                        Thread.sleep(100);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    mMap.clear();
-                    mMap.addMarker(new MarkerOptions().position(destinationMarker.getPosition()));
-                    finish();
+                    Toast.makeText(getApplicationContext(),"No Markers on map to navigate between",Toast.LENGTH_SHORT);
                 }
                 else{
                     startContainer.setVisibility(View.GONE);
@@ -373,8 +363,8 @@ public class NavigationActivity extends AppCompatActivity implements OnMapReadyC
                     cameraUpdate =  CameraUpdateFactory.newLatLngBounds(bounds,padding);
                     mMap.moveCamera(cameraUpdate);
                     changeCameraAngle(markers.get(0));
-                    mHandler.postDelayed(sRunnable,100);
                     markerForGeofence(markers.get(0).getPosition());
+                    mHandler.postDelayed(sRunnable,100);
                     startGeofence();
                     LocalBroadcastManager lbc = LocalBroadcastManager.getInstance(getApplicationContext());
                     GoogleReceiver receiver = new GoogleReceiver(NavigationActivity.this);
@@ -386,7 +376,7 @@ public class NavigationActivity extends AppCompatActivity implements OnMapReadyC
         recenterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                changeCameraAngle(markers.get(0));
+                // changeCameraAngle(markers.get(0));
                 /*for(Marker m : markers){
                     geoFenceMarker = m;
                     Geofence geofence = createGeofence( geoFenceMarker.getPosition(), GEOFENCE_RADIUS );
@@ -594,9 +584,11 @@ public class NavigationActivity extends AppCompatActivity implements OnMapReadyC
     private void removeGeofence(){
         Log.d("STATUS", "removeGeofence");
         if(checkPermission()){
+            geoFenceLimits.setVisible(false);
             List<String> geofencesToRemove = new ArrayList<>();
             geofencesToRemove.add(mGeofence.getRequestId());
             LocationServices.GeofencingApi.removeGeofences(googleApiClient, geofencesToRemove);
+
         }
     }
 
@@ -616,7 +608,6 @@ public class NavigationActivity extends AppCompatActivity implements OnMapReadyC
     }
 
     // Draw Geofence circle on GoogleMap
-    private Circle geoFenceLimits;
     private void drawGeofence() {
         Log.d("STATUS", "drawGeofence()");
 
@@ -629,6 +620,7 @@ public class NavigationActivity extends AppCompatActivity implements OnMapReadyC
                 .fillColor( Color.argb(100, 150,150,150) )
                 .radius( GEOFENCE_RADIUS );
         geoFenceLimits = mMap.addCircle( circleOptions );
+
 
     }
 
@@ -713,7 +705,10 @@ public class NavigationActivity extends AppCompatActivity implements OnMapReadyC
         @Override
         public void onReceive(Context context, Intent intent) {
             Log.i("STRING","HERE");
-            if(index < instructionList.size() - 1){
+            int retrieveTest = intent.getIntExtra("transition",-1);
+            Log.i("ENTER",String.valueOf(retrieveTest == Geofence.GEOFENCE_TRANSITION_ENTER));
+            if(index < instructionList.size()){
+                mHandler.removeCallbacks(sRunnable);
                 geoFenceMarker.setVisible(false);
                 markers.get(index).setVisible(false);
                 updateInformationDisplay();
@@ -721,7 +716,20 @@ public class NavigationActivity extends AppCompatActivity implements OnMapReadyC
                 index++;
                 markerForGeofence(markers.get(index).getPosition());
                 changeCameraAngle(markers.get(index));
+                mHandler.postDelayed(sRunnable,1000);
                 startGeofence();
+            }
+            if(index >= instructionList.size()){
+                mHandler.removeCallbacks(sRunnable);
+                Toast.makeText(getApplicationContext(), "YOU HAVE ARRIVED", Toast.LENGTH_SHORT).show();
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                mMap.clear();
+                mMap.addMarker(new MarkerOptions().position(destinationMarker.getPosition()));
+                finish();
             }
         }
     }

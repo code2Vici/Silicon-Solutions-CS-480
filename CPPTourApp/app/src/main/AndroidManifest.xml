@@ -15,7 +15,8 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true">
-        <service android:name=".Directions.GeofenceTransitionsIntentService"/>
+        <service android:name=".Directions.GeofenceTransitionsIntentService" />
+
         <activity
             android:name=".Activity.HomeScreen"
             android:theme="@style/AppTheme.NoActionBar">
@@ -48,6 +49,15 @@
         <activity
             android:name=".Activity.NavigationActivity"
             android:label="@string/title_activity_navigation"
+            android:parentActivityName=".Activity.BaseMap"
+            android:theme="@style/AppTheme.MyTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="siliconsolutions.cpptourapp.Activity.BaseMap" />
+        </activity>
+        <activity
+            android:name=".Activity.TourActivity"
+            android:label="@string/title_activity_tour"
             android:parentActivityName=".Activity.BaseMap"
             android:theme="@style/AppTheme.MyTheme">
             <meta-data
