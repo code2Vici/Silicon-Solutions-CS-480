@@ -200,6 +200,7 @@ public class BaseMap extends AppCompatActivity implements
                         item.setChecked(true);
                     }
                 }else if (id == R.id.nav_left_check_4) { //TODO:
+                //}else if (id == R.id.nav_left_check_5) {
                     if (item.isChecked()) {
                         item.setChecked(false);
                     }   else {
@@ -447,6 +448,7 @@ public class BaseMap extends AppCompatActivity implements
         });
 
         busRouteAMenuItem = leftNavigationView.getMenu().findItem(R.id.nav_left_check_4);//TODO:
+        //busRouteAMenuItem = leftNavigationView.getMenu().findItem(R.id.nav_left_check_5);
         busRouteACheckbox = (CompoundButton) MenuItemCompat.getActionView(busRouteAMenuItem);
         busRouteACheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
