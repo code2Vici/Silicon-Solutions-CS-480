@@ -1,6 +1,7 @@
 package siliconsolutions.cpptourapp.Activity;
 
 import android.Manifest;
+import android.app.DialogFragment;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -12,6 +13,8 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -69,8 +72,10 @@ import siliconsolutions.cpptourapp.Model.GlobalVars;
 import siliconsolutions.cpptourapp.Model.Landmarks;
 import siliconsolutions.cpptourapp.Model.MyLocation;
 import siliconsolutions.cpptourapp.Model.ParkingLots;
+import siliconsolutions.cpptourapp.Model.Tour;
 import siliconsolutions.cpptourapp.Model.Restaurants;
 import siliconsolutions.cpptourapp.R;
+import siliconsolutions.cpptourapp.Tour.StartTourFragment;
 import siliconsolutions.cpptourapp.View.BottomSheetBehaviorGoogleMapsLike;
 import siliconsolutions.cpptourapp.View.MergedAppBarLayoutBehavior;
 
@@ -125,6 +130,7 @@ public class BaseMap extends AppCompatActivity implements
     private ImageButton navigationDetailBtn;
     private CoordinatorLayout coordinatorLayout;
     private View bottomSheet;
+    private int mStackLevel = 0;
     private MergedAppBarLayoutBehavior mergedAppBarLayoutBehavior;
     BottomSheetBehaviorGoogleMapsLike behavior;
     private com.google.android.gms.maps.model.Polyline line;
@@ -158,8 +164,8 @@ public class BaseMap extends AppCompatActivity implements
             public boolean onNavigationItemSelected(MenuItem item) {
                 int id = item.getItemId();
 
-                if (id == R.id.nav_left_start) {
-
+                if (id == R.id.nav_left_start){
+                    startTourDialog();
                 } else if (id == R.id.nav_left_discover) {
 
                 } else if (id == R.id.nav_slideshow) {
@@ -193,7 +199,8 @@ public class BaseMap extends AppCompatActivity implements
                     }   else {
                         item.setChecked(true);
                     }
-                }else if (id == R.id.nav_left_check_5) {
+                }else if (id == R.id.nav_left_check_4) { //TODO:
+                //}else if (id == R.id.nav_left_check_5) {
                     if (item.isChecked()) {
                         item.setChecked(false);
                     }   else {
@@ -440,7 +447,8 @@ public class BaseMap extends AppCompatActivity implements
             }
         });
 
-        busRouteAMenuItem = leftNavigationView.getMenu().findItem(R.id.nav_left_check_5);
+        busRouteAMenuItem = leftNavigationView.getMenu().findItem(R.id.nav_left_check_4);//TODO:
+        //busRouteAMenuItem = leftNavigationView.getMenu().findItem(R.id.nav_left_check_5);
         busRouteACheckbox = (CompoundButton) MenuItemCompat.getActionView(busRouteAMenuItem);
         busRouteACheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -934,6 +942,25 @@ public class BaseMap extends AppCompatActivity implements
                 startActivity(intent);
             }
         });
+    }
+
+    public void startTourDialog(){
+            mStackLevel++;
+
+            // DialogFragment.show() will take care of adding the fragment
+            // in a transaction.  We also want to remove any currently showing
+            // dialog, so make our own transaction and take care of that here.
+            android.app.FragmentTransaction ft = getFragmentManager().beginTransaction();
+            android.app.Fragment prev = getFragmentManager().findFragmentByTag("dialog");
+            if (prev != null) {
+                ft.remove(prev);
+            }
+            ft.addToBackStack(null);
+
+            // Create and show the dialog.
+            DialogFragment newFragment = StartTourFragment.newInstance(mStackLevel);
+            newFragment.show(ft, "dialog");
+
     }
 
     @Override
