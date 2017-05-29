@@ -89,9 +89,7 @@ public class Navigation {
 
 
     public void setUp(){
-        //tourResponses.add(response);
         routes = response.body().routes;
-        Log.i("BOUNDS", response.body().routes.get(0).getBounds().toString());
         bounds = response.body().routes.get(0).getBounds();
         legs = routes.get(0).getLegs();
         steps = legs.get(0).getSteps();
