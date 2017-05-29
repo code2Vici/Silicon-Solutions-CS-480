@@ -2,32 +2,32 @@
      {
         "latitude": "34.057557",
         "longtitude": "-117.821598",
-        "name": "Starbuck",
-        "number": "15"
+        "name": "Starbucks",
+        "number": "Building 15"
      },
      {
         "latitude": "34.054038",
         "longtitude": "-117.818083",
         "name": "The Den By Denny's",
-        "number": "52"
+        "number": "Building 52"
      },
      {
         "latitude": "34.053949",
         "longtitude": "-117.818072",
         "name": "Vista Market",
-        "number": "52"
+        "number": "Building 52"
      },
      {
         "latitude": "34.057727",
         "longtitude": "-117.823322",
         "name": "Panda Express",
-        "number": "97"
+        "number": "Building 97"
      },
      {
         "latitude": "34.057715",
         "longtitude": "-117.823238",
         "name": "Carl's Jr.",
-        "number": "97"
+        "number": "Building 97"
      },
      {
         "latitude": "34.061503",
@@ -75,13 +75,13 @@
         "latitude": "34.061507",
         "longtitude": "-117.820270",
         "name": "Einstein Bros. Bagels",
-        "number": "163"
+        "number": "Building 163"
      },
      {
         "latitude": "34.057707",
         "longtitude": "-117.823113",
         "name": "Taco Bell",
-        "number": "97"
+        "number": "Building 97"
      },
     {
       "latitude": "34.055889",

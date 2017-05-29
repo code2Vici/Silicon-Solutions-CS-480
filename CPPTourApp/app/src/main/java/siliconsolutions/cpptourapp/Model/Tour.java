@@ -2,6 +2,7 @@ package siliconsolutions.cpptourapp.Model;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -16,7 +17,7 @@ public class Tour {
     @SerializedName("distance")
     private String distance;
     @SerializedName("markers")
-    private List<TourMarkers> tourMarkersList;
+    private ArrayList<TourMarkers> tourMarkersList;
 
     public String getName() {
         return name;
@@ -42,11 +43,11 @@ public class Tour {
         this.distance = distance;
     }
 
-    public List<TourMarkers> getTourMarkersList() {
+    public ArrayList<TourMarkers> getTourMarkersList() {
         return tourMarkersList;
     }
 
-    public void setTourMarkersList(List<TourMarkers> tourMarkersList) {
+    public void setTourMarkersList(ArrayList<TourMarkers> tourMarkersList) {
         this.tourMarkersList = tourMarkersList;
     }
 }

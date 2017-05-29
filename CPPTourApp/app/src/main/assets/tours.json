@@ -295,9 +295,15 @@
     "distance": "",
     "markers": [
       {
-        "name": "",
-        "latitude": "",
-        "longitude": ""
+        "description": "On Campus Gym for Students",
+        "latitude": "34.054025",
+        "longtitude": "-117.821286",
+        "name": "Bronco Recreation Intramural Complex (BRIC)",
+        "number": "42",
+        "offices": [
+        ],
+        "image": "",
+        "floorplan": ""
       }
     ]
   },
@@ -309,7 +315,7 @@
       {
         "name": "",
         "latitude": "",
-        "longitude": ""
+        "longtitude": ""
       }
     ]
   }

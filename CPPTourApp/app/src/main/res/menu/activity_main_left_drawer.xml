@@ -13,10 +13,6 @@
             android:id="@+id/nav_left_discover"
             android:icon="@drawable/ic_menu_compass"
             android:title="Discover" />
-        <item
-            android:id="@+id/nav_slideshow"
-            android:icon="@drawable/ic_menu_slideshow"
-            android:title="Slideshow" />
     </group>
 
     <item android:title="Filters">
@@ -56,14 +52,5 @@
         </menu>
     </item>
 
-    <group
-        android:id="@+id/menu_left_bottom"
-        android:checkableBehavior="none">
-        <item
-            android:id="@+id/nav_left_settings"
-            android:icon="@drawable/ic_menu_settings"
-            android:title="Settings" />
-
-    </group>
 
 </menu>
