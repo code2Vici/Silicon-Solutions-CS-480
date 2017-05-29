@@ -5,6 +5,9 @@ import android.app.DialogFragment;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -75,6 +78,8 @@ import siliconsolutions.cpptourapp.GPS.GPSTrackerListener;
 import siliconsolutions.cpptourapp.Model.Building;
 import siliconsolutions.cpptourapp.Model.BusB;
 import siliconsolutions.cpptourapp.Model.BusRouteA;
+import siliconsolutions.cpptourapp.Model.BusRouteB;
+import siliconsolutions.cpptourapp.Model.BusRouteC;
 import siliconsolutions.cpptourapp.Model.GlobalVars;
 import siliconsolutions.cpptourapp.Model.Landmarks;
 import siliconsolutions.cpptourapp.Model.MyLocation;
@@ -103,15 +108,25 @@ public class BaseMap extends AppCompatActivity implements
     private ArrayList<ParkingLots> parkingLotsArrayList;
     private ArrayList<Restaurants> restaurantsArrayList;
     private ArrayList<BusRouteA> busRouteAArrayList;
+    private ArrayList<BusRouteB> busRouteBArrayList;
+    private ArrayList<BusRouteC> busRouteCArrayList;
+    private ArrayList busA = new ArrayList();
+    private ArrayList busB = new ArrayList();
+    private ArrayList busC = new ArrayList();
     private ArrayList<BusB> busBLocation;
     private ArrayList<Marker> markersArrayList;
     private ArrayList<Marker> favoritesArrayList;
     private Marker myMarker;
+    private Marker busAMarker;
+    private Marker busBMarker;
+    private Marker busCMarker;
     private StringBuffer postList;
     private StringBuffer landmarksPostList;
     private StringBuffer parkingPostList;
     private StringBuffer restaurantPostList;
     private StringBuffer busRouteAPostList;
+    private StringBuffer busRouteBPostList;
+    private StringBuffer busRouteCPostList;
     private StringBuffer busBLocationPostList;
     private MenuItem buildingsMenuItem;
     private MenuItem landmarksMenuItem;
@@ -149,9 +164,16 @@ public class BaseMap extends AppCompatActivity implements
     ArrayList<HashMap<String, String>> contactList;
     private com.google.android.gms.maps.model.Polyline lineA;
     private com.google.android.gms.maps.model.Polyline lineB;
-    public String busBLat;
-    public String busBLong;
+    //public String busBLat;
+    //public String busBLong;
     private ImageView bottomSheetRestroomImage;
+    private com.google.android.gms.maps.model.Polyline lineC;
+    public Double busALat = 0.0;
+    public Double busALong = 0.0;
+    public Double busBLat = 0.0;
+    public Double busBLong = 0.0;
+    public Double busCLat = 0.0;
+    public Double busCLong = 0.0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -216,6 +238,21 @@ public class BaseMap extends AppCompatActivity implements
                         item.setChecked(true);
                     }
                 }else if (id == R.id.nav_left_check_5) {
+                    busRouteACheckbox.performClick();
+                    if (item.isChecked()) {
+                        item.setChecked(false);
+                    }   else {
+                        item.setChecked(true);
+                    }
+                }else if (id == R.id.nav_left_check_6) {
+                    busRouteBCheckbox.performClick();
+                    if (item.isChecked()) {
+                        item.setChecked(false);
+                    }   else {
+                        item.setChecked(true);
+                    }
+                }else if (id == R.id.nav_left_check_7) {
+                    busRouteCCheckbox.performClick();
                     if (item.isChecked()) {
                         item.setChecked(false);
                     }   else {
@@ -300,7 +337,9 @@ public class BaseMap extends AppCompatActivity implements
         initLocations();
         initGPS();
 
+        new GetBusALoction().execute();
         new GetBusBLoction().execute();
+        new GetBusCLoction().execute();
 
     }
 
@@ -323,14 +362,18 @@ public class BaseMap extends AppCompatActivity implements
         }.getType();
         Type busRouteAListType = new TypeToken<ArrayList<BusRouteA>>(){
         }.getType();
-
+        Type busRouteBListType = new TypeToken<ArrayList<BusRouteB>>(){
+        }.getType();
+        Type busRouteCListType = new TypeToken<ArrayList<BusRouteC>>(){
+        }.getType();
         favoritesArrayList = new ArrayList<>();
         buildingsArrayList = new GsonBuilder().create().fromJson(loadBuildingJSONFromAsset(), listType);
         landmarksArrayList = new GsonBuilder().create().fromJson(loadLandmarksJSONFromAsset(), landmarksListType);
         parkingLotsArrayList = new GsonBuilder().create().fromJson(loadParkingLotsJSONFromAsset(), parkingListType);
         restaurantsArrayList = new GsonBuilder().create().fromJson(loadRestaurantJSONFromAsset(),restaurantListType);
         busRouteAArrayList = new GsonBuilder().create().fromJson(loadBusRouteAJSONFromAsset(), busRouteAListType);
-
+        busRouteBArrayList = new GsonBuilder().create().fromJson(loadBusRouteBJSONFromAsset(), busRouteBListType);
+        busRouteCArrayList = new GsonBuilder().create().fromJson(loadBusRouteCJSONFromAsset(), busRouteCListType);
     }
 
     private void initGPS() {
@@ -388,19 +431,41 @@ public class BaseMap extends AppCompatActivity implements
 
         busRouteAPostList = new StringBuffer();
         for (BusRouteA post : busRouteAArrayList) {
-            myMarker = mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW)).visible(false).title(post.getBusRouteName()).snippet(post.getBusRouteNumber()).position(new LatLng(Double.parseDouble(post.getLatitude()), Double.parseDouble(post.getLongtitude()))));
+            int height = 120;
+            int width = 120;
+            BitmapDrawable bitmapdraw=(BitmapDrawable)getResources().getDrawable(R.drawable.busstop);
+            Bitmap b=bitmapdraw.getBitmap();
+            Bitmap marker = Bitmap.createScaledBitmap(b, width, height, false);
+            myMarker = mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.fromBitmap(marker)).visible(false).title(post.getBusRouteNumber()).snippet(post.getBusRouteName()).position(new LatLng(Double.parseDouble(post.getLatitude()), Double.parseDouble(post.getLongtitude()))));
             myMarker.setTag(markersArrayList.size());
             markersArrayList.add(myMarker);
 
         }
-/*
-        busBLocationPostList = new StringBuffer();
-        for (BusB post : busBLocation) {
-            myMarker = mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW)).visible(false).title(post.getBusName()).snippet(post.getRouteID()).position(new LatLng(Double.parseDouble(post.getLatitude()), Double.parseDouble(post.getLongitude()))));
+        busRouteBPostList = new StringBuffer();
+        for (BusRouteB post : busRouteBArrayList) {
+            int height = 120;
+            int width = 120;
+            BitmapDrawable bitmapdraw=(BitmapDrawable)getResources().getDrawable(R.drawable.busstop);
+            Bitmap b=bitmapdraw.getBitmap();
+            Bitmap marker = Bitmap.createScaledBitmap(b, width, height, false);
+            myMarker = mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.fromBitmap(marker)).visible(false).title(post.getBusRouteNumber()).snippet(post.getBusRouteName()).position(new LatLng(Double.parseDouble(post.getLatitude()), Double.parseDouble(post.getLongtitude()))));
             myMarker.setTag(markersArrayList.size());
             markersArrayList.add(myMarker);
 
-        }*/
+        }
+
+        busRouteCPostList = new StringBuffer();
+        for (BusRouteC post : busRouteCArrayList) {
+            int height = 120;
+            int width = 120;
+            BitmapDrawable bitmapdraw=(BitmapDrawable)getResources().getDrawable(R.drawable.busstop);
+            Bitmap b=bitmapdraw.getBitmap();
+            Bitmap marker = Bitmap.createScaledBitmap(b, width, height, false);
+            myMarker = mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.fromBitmap(marker)).visible(false).title(post.getBusRouteNumber()).snippet(post.getBusRouteName()).position(new LatLng(Double.parseDouble(post.getLatitude()), Double.parseDouble(post.getLongtitude()))));
+            myMarker.setTag(markersArrayList.size());
+            markersArrayList.add(myMarker);
+
+        }
     }
 
     private void setFilters() {
@@ -484,7 +549,7 @@ public class BaseMap extends AppCompatActivity implements
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
                 if(isChecked){
                     busARoute();
-                    mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)).position(new LatLng(Double.parseDouble(busBLat), Double.parseDouble(busBLong))));
+                    mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)).position(new LatLng(busBLat, busBLong)));
                     for(int i = (buildingsArrayList.size() + landmarksArrayList.size() + parkingLotsArrayList.size() + restaurantsArrayList.size()); i < (buildingsArrayList.size() + landmarksArrayList.size() + parkingLotsArrayList.size() + restaurantsArrayList.size() + busRouteAArrayList.size()); i++){
                         markersArrayList.get(i).setVisible(true);
                     }
@@ -497,6 +562,13 @@ public class BaseMap extends AppCompatActivity implements
                 }
             }
         });
+
+                    int height = 100;
+                    int width = 100;
+                    BitmapDrawable bitmapdraw=(BitmapDrawable)getResources().getDrawable(R.drawable.bus);
+                    Bitmap b=bitmapdraw.getBitmap();
+                    Bitmap smallMarker = Bitmap.createScaledBitmap(b, width, height, false);
+                    busAMarker = mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.fromBitmap(smallMarker)).title("Bus A").snippet("7:00 - 19:30").position(new LatLng(busALat, busALong)));
 
         busRouteBMenuItem = leftNavigationView.getMenu().findItem(R.id.nav_left_check_6);//TODO:
         //busRouteAMenuItem = leftNavigationView.getMenu().findItem(R.id.nav_left_check_5);
@@ -512,6 +584,7 @@ public class BaseMap extends AppCompatActivity implements
                 }
                 else{
                     lineA.remove();
+                    busAMarker.remove();
                     for(int i = (buildingsArrayList.size() + landmarksArrayList.size() + parkingLotsArrayList.size() + restaurantsArrayList.size()); i < (buildingsArrayList.size() + landmarksArrayList.size() + parkingLotsArrayList.size() + restaurantsArrayList.size() + busRouteAArrayList.size()); i++){
                         markersArrayList.get(i).setVisible(false);
                     }
@@ -527,13 +600,50 @@ public class BaseMap extends AppCompatActivity implements
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
                 if(isChecked){
                     busBRoute();
-                    for(int i = (buildingsArrayList.size() + landmarksArrayList.size() + parkingLotsArrayList.size() + restaurantsArrayList.size()); i < (buildingsArrayList.size() + landmarksArrayList.size() + parkingLotsArrayList.size() + restaurantsArrayList.size() + busRouteAArrayList.size()); i++){
+
+                    int height = 100;
+                    int width = 100;
+                    BitmapDrawable bitmapdraw=(BitmapDrawable)getResources().getDrawable(R.drawable.bus);
+                    Bitmap b=bitmapdraw.getBitmap();
+                    Bitmap smallMarker = Bitmap.createScaledBitmap(b, width, height, false);
+                    busBMarker = mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.fromBitmap(smallMarker)).title("Bus B").snippet("7:00 - 19:30").position(new LatLng(busBLat, busBLong)));
+                    for(int i = (buildingsArrayList.size() + landmarksArrayList.size() + parkingLotsArrayList.size() + restaurantsArrayList.size() + busRouteAArrayList.size()); i < (buildingsArrayList.size() + landmarksArrayList.size() + parkingLotsArrayList.size() + restaurantsArrayList.size() + busRouteAArrayList.size() + busRouteBArrayList.size()); i++){
                         markersArrayList.get(i).setVisible(true);
                     }
                 }
                 else{
                     lineB.remove();
-                    for(int i = (buildingsArrayList.size() + landmarksArrayList.size() + parkingLotsArrayList.size() + restaurantsArrayList.size()); i < (buildingsArrayList.size() + landmarksArrayList.size() + parkingLotsArrayList.size() + restaurantsArrayList.size() + busRouteAArrayList.size()); i++){
+                    busBMarker.remove();
+                    for(int i = (buildingsArrayList.size() + landmarksArrayList.size() + parkingLotsArrayList.size() + restaurantsArrayList.size() + busRouteAArrayList.size()); i < (buildingsArrayList.size() + landmarksArrayList.size() + parkingLotsArrayList.size() + restaurantsArrayList.size() + busRouteAArrayList.size() + busRouteBArrayList.size()); i++){
+                        markersArrayList.get(i).setVisible(false);
+                    }
+                }
+            }
+        });
+
+        busRouteCMenuItem = leftNavigationView.getMenu().findItem(R.id.nav_left_check_7);//TODO:
+        //busRouteAMenuItem = leftNavigationView.getMenu().findItem(R.id.nav_left_check_5);
+        busRouteCCheckbox = (CompoundButton) MenuItemCompat.getActionView(busRouteCMenuItem);
+        busRouteCCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                if(isChecked){
+                    busCRoute();
+                    int height = 100;
+                    int width = 100;
+                    BitmapDrawable bitmapdraw=(BitmapDrawable)getResources().getDrawable(R.drawable.bus);
+                    Bitmap b=bitmapdraw.getBitmap();
+                    Bitmap smallMarker = Bitmap.createScaledBitmap(b, width, height, false);
+                    busCMarker = mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.fromBitmap(smallMarker)).title("Bus C").snippet("7:00 - 19:30").position(new LatLng(busCLat,busCLong)));
+
+                    for(int i = (buildingsArrayList.size() + landmarksArrayList.size() + parkingLotsArrayList.size() + restaurantsArrayList.size() + busRouteAArrayList.size() + busRouteBArrayList.size()); i < (buildingsArrayList.size() + landmarksArrayList.size() + parkingLotsArrayList.size() + restaurantsArrayList.size() + busRouteAArrayList.size() + busRouteBArrayList.size() + busRouteCArrayList.size()); i++){
+                        markersArrayList.get(i).setVisible(true);
+                    }
+                }
+                else{
+                    lineC.remove();
+                    busCMarker.remove();
+                    for(int i = (buildingsArrayList.size() + landmarksArrayList.size() + parkingLotsArrayList.size() + restaurantsArrayList.size()); i < (buildingsArrayList.size() + landmarksArrayList.size() + parkingLotsArrayList.size() + restaurantsArrayList.size() + busRouteAArrayList.size() + busRouteBArrayList.size() + busRouteCArrayList.size()); i++){
                         markersArrayList.get(i).setVisible(false);
                     }
                 }
@@ -576,12 +686,15 @@ public class BaseMap extends AppCompatActivity implements
         else if(val < (landmarksArrayList.size() + buildingsArrayList.size())){
             bottomSheetUpdateFromLandmark(landmarksArrayList.get(val - buildingsArrayList.size()));
         }
-        else if (val < (landmarksArrayList.size() + buildingsArrayList.size() + landmarksArrayList.size())){
+        else if (val < (landmarksArrayList.size() + buildingsArrayList.size() + parkingLotsArrayList.size())){
             bottomSheetUpdateFromParking(parkingLotsArrayList.get(val - buildingsArrayList.size() - landmarksArrayList.size()));
         }
-        else{
+        else if (val < (landmarksArrayList.size() + buildingsArrayList.size() + parkingLotsArrayList.size() + restaurantsArrayList.size())){
             bottomSheetUpdateFromRestaurants(restaurantsArrayList.get(val - buildingsArrayList.size() -
                     landmarksArrayList.size() - parkingLotsArrayList.size()));
+        } else if (val < (landmarksArrayList.size() + buildingsArrayList.size() + parkingLotsArrayList.size() + restaurantsArrayList.size() + busRouteAArrayList.size())){
+            bottomSheetUpdateFromBusARoute(busRouteAArrayList.get(val - buildingsArrayList.size() -
+                    landmarksArrayList.size() - parkingLotsArrayList.size() - restaurantsArrayList.size()));
         }
     }
 
@@ -733,6 +846,10 @@ public class BaseMap extends AppCompatActivity implements
 
     private void bottomSheetUpdateFromRestaurants(Restaurants restaurants) {
         //bottomSheetDescriptionText.setText();
+    }
+
+    private void bottomSheetUpdateFromBusARoute(BusRouteA routeA){
+
     }
 
 
@@ -958,68 +1075,36 @@ public class BaseMap extends AppCompatActivity implements
 
     }
 
-
-
-    private class GetBusBLoction extends AsyncTask<Void, Void, Void> {
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            Toast.makeText(BaseMap.this,"Json Data is downloading",Toast.LENGTH_LONG).show();
-
-        }
-
-        @Override
-        protected Void doInBackground(Void... arg0) {
-            HttpHandler sh = new HttpHandler();
-            // Making a request to url and getting response
-            String url = "https://broncoshuttle.com/Route/4512/Vehicles";
-            String jsonStr = sh.makeServiceCall(url);
-
-            Log.e(TAG, "Response from url: " + jsonStr);
-            if (jsonStr != null) {
-                try {
-                    // Getting JSON Array node
-                    JSONArray contacts = new JSONArray(jsonStr);
-
-                    // looping through All Contacts
-                    for (int i = 0; i < contacts.length(); i++) {
-                        JSONObject c = contacts.getJSONObject(i);
-
-                        // Phone node is JSON Object
-                        JSONObject phone = c.getJSONObject("Coordinate");
-                        busBLat = phone.getString("Latitude");
-                        busBLong = phone.getString("Longitude");
-
-                        Log.e("Abc:", busBLat+ " " + busBLong);
-                    }
-                } catch (final JSONException e) {
-                    Log.e(TAG, "Json parsing error: " + e.getMessage());
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Toast.makeText(getApplicationContext(),
-                                    "Json parsing error: " + e.getMessage(),
-                                    Toast.LENGTH_LONG).show();
-                        }
-                    });
-
-                }
-
-            } else {
-                Log.e(TAG, "Couldn't get json from server.");
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(getApplicationContext(),
-                                "Couldn't get json from server. Check LogCat for possible errors!",
-                                Toast.LENGTH_LONG).show();
-                    }
-                });
-            }
-
+    public String loadBusRouteBJSONFromAsset(){
+        String json = null;
+        try {
+            InputStream is = getAssets().open("busstopB.json");
+            int size = is.available();
+            byte[] buffer = new byte[size];
+            is.read(buffer);
+            is.close();
+            json = new String(buffer, "UTF-8");
+        } catch (IOException ex) {
+            ex.printStackTrace();
             return null;
         }
+        return json;
+    }
 
+    public String loadBusRouteCJSONFromAsset(){
+        String json = null;
+        try {
+            InputStream is = getAssets().open("busstopC.json");
+            int size = is.available();
+            byte[] buffer = new byte[size];
+            is.read(buffer);
+            is.close();
+            json = new String(buffer, "UTF-8");
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            return null;
+        }
+        return json;
     }
 
     private void favoritesBtnListener(final Marker m, final siliconsolutions.cpptourapp.Model.Location location){
@@ -1056,8 +1141,14 @@ public class BaseMap extends AppCompatActivity implements
         }
         else if(val < (landmarksArrayList.size() + buildingsArrayList.size() + parkingLotsArrayList.size())){
             location = parkingLotsArrayList.get(val - buildingsArrayList.size() - landmarksArrayList.size());
-        } else {
+        } else if (val < (landmarksArrayList.size() + buildingsArrayList.size() + parkingLotsArrayList.size() + restaurantsArrayList.size())){
             location = restaurantsArrayList.get(val - buildingsArrayList.size() - landmarksArrayList.size() - parkingLotsArrayList.size());
+        } else if (val < (landmarksArrayList.size() + buildingsArrayList.size() + parkingLotsArrayList.size() + restaurantsArrayList.size() + busRouteAArrayList.size())){
+            location = busRouteAArrayList.get(val - buildingsArrayList.size() - landmarksArrayList.size() - parkingLotsArrayList.size() - restaurantsArrayList.size());
+        } else if (val < (landmarksArrayList.size() + buildingsArrayList.size() + parkingLotsArrayList.size() + restaurantsArrayList.size() + busRouteAArrayList.size() + busRouteBArrayList.size())){
+            location = busRouteBArrayList.get(val - buildingsArrayList.size() - landmarksArrayList.size() - parkingLotsArrayList.size() - restaurantsArrayList.size() - busRouteAArrayList.size());
+        } else {
+            location = busRouteCArrayList.get(val - buildingsArrayList.size() - landmarksArrayList.size() - parkingLotsArrayList.size() - restaurantsArrayList.size() - busRouteAArrayList.size() - busRouteBArrayList.size());
         }
         return location;
     }
@@ -1115,6 +1206,192 @@ public class BaseMap extends AppCompatActivity implements
         return false;
     }
 
+    private class GetBusALoction extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+        }
+
+        @Override
+        protected Void doInBackground(Void... arg0) {
+            HttpHandler sh = new HttpHandler();
+            // Making a request to url and getting response
+            String url = "https://broncoshuttle.com/Route/3164/Vehicles";
+            String jsonStr = sh.makeServiceCall(url);
+
+            Log.e(TAG, "Response from url: " + jsonStr);
+            if (jsonStr != null) {
+                try {
+                    // Getting JSON Array node
+                    JSONArray busInfo = new JSONArray(jsonStr);
+
+                        // looping through All Contacts
+                        for (int i = 0; i < busInfo.length(); i++) {
+                            JSONObject c = busInfo.getJSONObject(i);
+
+                            // Phone node is JSON Object
+                            JSONObject coor = c.getJSONObject("Coordinate");
+                            busALat = coor.getDouble("Latitude");
+                            busALong = coor.getDouble("Longitude");
+
+                            Log.e("Abc:", busALat + " " + busALong);
+                        }
+                } catch (final JSONException e) {
+                    Log.e(TAG, "Json parsing error: " + e.getMessage());
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(getApplicationContext(),
+                                    "Json parsing error: " + e.getMessage(),
+                                    Toast.LENGTH_LONG).show();
+                        }
+                    });
+
+                }
+
+            } else {
+                Log.e(TAG, "Couldn't get json from server.");
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(getApplicationContext(),
+                                "Couldn't get json from server. Check LogCat for possible errors!",
+                                Toast.LENGTH_LONG).show();
+                    }
+                });
+            }
+
+            return null;
+        }
+
+    }
+
+    private class GetBusBLoction extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+
+        }
+
+        @Override
+        protected Void doInBackground(Void... arg0) {
+            HttpHandler sh = new HttpHandler();
+            // Making a request to url and getting response
+            String url = "https://broncoshuttle.com/Route/4512/Vehicles";
+            String jsonStr = sh.makeServiceCall(url);
+
+            Log.e(TAG, "Response from url: " + jsonStr);
+            if (jsonStr != null) {
+                try {
+                    // Getting JSON Array node
+                    JSONArray busInfo = new JSONArray(jsonStr);
+
+                    // looping through All Contacts
+                    for (int i = 0; i < busInfo.length(); i++) {
+                        JSONObject c = busInfo.getJSONObject(i);
+
+                        // Phone node is JSON Object
+                        JSONObject coor = c.getJSONObject("Coordinate");
+                        busBLat = coor.getDouble("Latitude");
+                        busBLong = coor.getDouble("Longitude");
+
+                        Log.e("Abc:", busBLat+ " " + busBLong);
+                    }
+                } catch (final JSONException e) {
+                    Log.e(TAG, "Json parsing error: " + e.getMessage());
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(getApplicationContext(),
+                                    "Json parsing error: " + e.getMessage(),
+                                    Toast.LENGTH_LONG).show();
+                        }
+                    });
+
+                }
+
+            } else {
+                Log.e(TAG, "Couldn't get json from server.");
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(getApplicationContext(),
+                                "Couldn't get json from server. Check LogCat for possible errors!",
+                                Toast.LENGTH_LONG).show();
+                    }
+                });
+            }
+
+            return null;
+        }
+
+    }
+
+    private class GetBusCLoction extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+
+        }
+
+        @Override
+        protected Void doInBackground(Void... arg0) {
+            HttpHandler sh = new HttpHandler();
+            // Making a request to url and getting response
+            String url = "https://broncoshuttle.com/Route/4515/Vehicles";
+            String jsonStr = sh.makeServiceCall(url);
+
+            Log.e(TAG, "Response from url: " + jsonStr);
+            if (jsonStr != null) {
+                try {
+                    // Getting JSON Array node
+                    JSONArray busInfo = new JSONArray(jsonStr);
+
+                        // looping through All Contacts
+                        for (int i = 0; i < busInfo.length(); i++) {
+                            JSONObject c = busInfo.getJSONObject(i);
+
+                            // Phone node is JSON Object
+                            JSONObject coor = c.getJSONObject("Coordinate");
+                            busCLat = coor.getDouble("Latitude");
+                            busCLong = coor.getDouble("Longitude");
+
+                            Log.e("Abc:", busCLat + " " + busCLong);
+                        }
+
+                } catch (final JSONException e) {
+                    Log.e(TAG, "Json parsing error: " + e.getMessage());
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(getApplicationContext(),
+                                    "Json parsing error: " + e.getMessage(),
+                                    Toast.LENGTH_LONG).show();
+                        }
+                    });
+
+                }
+
+            } else {
+                Log.e(TAG, "Couldn't get json from server.");
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(getApplicationContext(),
+                                "Couldn't get json from server. Check LogCat for possible errors!",
+                                Toast.LENGTH_LONG).show();
+                    }
+                });
+            }
+
+            return null;
+        }
+
+    }
+
     private void busARoute(){
         lineA = mMap.addPolyline(new PolylineOptions().add(new LatLng(34.048406, -117.815238), new LatLng(34.048615, -117.815091),new LatLng(34.048837, -117.815116),
                 new LatLng(34.049065, -117.815789),new LatLng(34.049102, -117.816195),new LatLng(34.049025, -117.816268),new LatLng(34.049495, -117.817084),
@@ -1139,30 +1416,8 @@ public class BaseMap extends AppCompatActivity implements
                 new LatLng(34.053537, -117.822289), new LatLng(34.053452, -117.821843),new LatLng(34.053212, -117.821532),new LatLng(34.051777, -117.820786),
                 new LatLng(34.051346, -117.820690), new LatLng(34.050412, -117.820706),new LatLng(34.050350, -117.817986),new LatLng(34.050252, -117.817278),
                 new LatLng(34.050141, -117.816742), new LatLng(34.049559, -117.817219),new LatLng(34.049279, -117.816747),new LatLng(34.048994, -117.816291),
-                new LatLng(34.048274, -117.816844), new LatLng(34.047772, -117.815529),new LatLng(34.048406, -117.815238)));lineA = mMap.addPolyline(new PolylineOptions().add(new LatLng(34.048406, -117.815238), new LatLng(34.048615, -117.815091),new LatLng(34.048837, -117.815116),
-                new LatLng(34.049065, -117.815789),new LatLng(34.049102, -117.816195),new LatLng(34.049025, -117.816268),new LatLng(34.049495, -117.817084),
-                new LatLng(34.052174, -117.815027),new LatLng(34.052884, -117.814440),new LatLng(34.053669, -117.813682),new LatLng(34.053105, -117.812839),
-                new LatLng(34.052922, -117.812144),new LatLng(34.052795, -117.812058),new LatLng(34.052376, -117.812176),new LatLng(34.051886, -117.812487),
-                new LatLng(34.049464, -117.814465),new LatLng(34.050347, -117.816838),new LatLng(34.050569, -117.818835),new LatLng(34.050589, -117.820644),
-                new LatLng(34.051268, -117.820614),new LatLng(34.051708, -117.820697),new LatLng(34.053217, -117.821456),new LatLng(34.053443, -117.821691),
-                new LatLng(34.053581, -117.822033), new LatLng(34.053572, -117.822728),new LatLng(34.053492, -117.823581),new LatLng(34.053737, -117.824188),
-                new LatLng(34.054048, -117.824611),new LatLng(34.054119, -117.824955),new LatLng(34.054070, -117.825888),new LatLng(34.054088, -117.826151),
-                new LatLng(34.054221, -117.826403),new LatLng(34.054719, -117.826746),new LatLng(34.055870, -117.827256), new LatLng(34.056146, -117.827417),
-                new LatLng(34.057306, -117.827846),new LatLng(34.057506, -117.827803),new LatLng(34.057732, -117.827599),new LatLng(34.059661, -117.823243),
-                new LatLng(34.060088, -117.822219),new LatLng(34.060279, -117.821945),new LatLng(34.061608, -117.820652),new LatLng(34.061750, -117.820341),
-                new LatLng(34.061683, -117.818437),new LatLng(34.060919, -117.818335),new LatLng(34.060457, -117.818281),new LatLng(34.060434, -117.818592),
-                new LatLng(34.060372, -117.818694), new LatLng(34.059790, -117.819188),new LatLng(34.059639, -117.819236),new LatLng(34.059519, -117.819113),
-                new LatLng(34.059435, -117.818748),new LatLng(34.059488, -117.818136),new LatLng(34.059955, -117.818163),new LatLng(34.060839, -117.818254),
-                new LatLng(34.061750, -117.818389),new LatLng(34.061737, -117.818963),new LatLng(34.061843, -117.820143),new LatLng(34.061781, -117.820454),
-                new LatLng(34.061661, -117.820690),new LatLng(34.060354, -117.821940),new LatLng(34.060243, -117.822085),new LatLng(34.060079, -117.822342),
-                new LatLng(34.059697, -117.823302),new LatLng(34.057764, -117.827642),new LatLng(34.057630, -117.827803),new LatLng(34.057399, -117.827916),
-                new LatLng(34.057141, -117.827868),new LatLng(34.056190, -117.827481),new LatLng(34.055821, -117.827299),new LatLng(34.054781, -117.826844),
-                new LatLng(34.054257, -117.826537), new LatLng(34.054075, -117.826290), new LatLng(34.054012, -117.826011),new LatLng(34.054052, -117.824922),
-                new LatLng(34.053972, -117.824606), new LatLng(34.053972, -117.824606),new LatLng(34.053577, -117.824021),new LatLng(34.053444, -117.823635),
-                new LatLng(34.053537, -117.822289), new LatLng(34.053452, -117.821843),new LatLng(34.053212, -117.821532),new LatLng(34.051777, -117.820786),
-                new LatLng(34.051346, -117.820690), new LatLng(34.050412, -117.820706),new LatLng(34.050350, -117.817986),new LatLng(34.050252, -117.817278),
-                new LatLng(34.050141, -117.816742), new LatLng(34.049559, -117.817219),new LatLng(34.049279, -117.816747),new LatLng(34.048994, -117.816291),
-                new LatLng(34.048274, -117.816844), new LatLng(34.047772, -117.815529),new LatLng(34.048406, -117.815238)));
+                new LatLng(34.048274, -117.816844), new LatLng(34.047772, -117.815529),new LatLng(34.048406, -117.815238)).color(Color.YELLOW));
+
     }
 
     private void busBRoute() {
@@ -1223,7 +1478,29 @@ public class BaseMap extends AppCompatActivity implements
                 new LatLng(34.048594, -117.820744), new LatLng(34.048162, -117.820653),new LatLng(34.047992, -117.820270),new LatLng(34.048046, -117.820160),
                 new LatLng(34.048605, -117.819750), new LatLng(34.048960, -117.819621),new LatLng(34.049064, -117.819492),new LatLng(34.049030, -117.819386),
                 new LatLng(34.048788, -117.819151), new LatLng(34.048533, -117.818506),new LatLng(34.048605, -117.818074),new LatLng(34.048822, -117.817721),
-                new LatLng(34.049108, -117.817482), new LatLng(34.049627, -117.817019),new LatLng(34.050257, -117.816496)));
+                new LatLng(34.049108, -117.817482), new LatLng(34.049627, -117.817019),new LatLng(34.050257, -117.816496)).color(Color.BLUE));
+    }
+
+    private void busCRoute(){
+        lineC = mMap.addPolyline(new PolylineOptions().add(new LatLng(34.052838, -117.815639), new LatLng(34.051016, -117.816660),new LatLng(34.050716, -117.816977),
+                new LatLng(34.051909, -117.820793),new LatLng(34.053100, -117.821377),new LatLng(34.053294, -117.821514),new LatLng(34.053411, -117.821669),
+                new LatLng(34.053568, -117.821988),new LatLng(34.053593, -117.822352),new LatLng(34.053543, -117.822845),new LatLng(34.053477, -117.823543),
+                new LatLng(34.053521, -117.823774),new LatLng(34.053618, -117.824002),new LatLng(34.053919, -117.824418),new LatLng(34.054053, -117.824662),
+                new LatLng(34.054099, -117.824982),new LatLng(34.054062, -117.825925),new LatLng(34.054073, -117.826128),new LatLng(34.054155, -117.826331),
+                new LatLng(34.054297, -117.826511),new LatLng(34.054697, -117.826737),new LatLng(34.055857, -117.827250),new LatLng(34.056110, -117.827416),
+                new LatLng(34.056186, -117.827212), new LatLng(34.056270, -117.827073),new LatLng(34.056390, -117.826981),new LatLng(34.056590, -117.826906),
+                new LatLng(34.056795, -117.826735),new LatLng(34.056848, -117.826633),new LatLng(34.057048, -117.825721),new LatLng(34.057093, -117.825469),
+                new LatLng(34.057266, -117.824862),new LatLng(34.057284, -117.824519),new LatLng(34.057324, -117.824144), new LatLng(34.057253, -117.823698),
+                new LatLng(34.057270, -117.823425),new LatLng(34.057364, -117.822577),new LatLng(34.057430, -117.822615),new LatLng(34.057310, -117.823586),
+                new LatLng(34.057310, -117.823693),new LatLng(34.057377, -117.824127),new LatLng(34.057355, -117.824385),new LatLng(34.057315, -117.824868),
+                new LatLng(34.057213, -117.825216),new LatLng(34.057141, -117.825501),new LatLng(34.057101, -117.825790),new LatLng(34.056893, -117.826638),
+                new LatLng(34.056786, -117.826820), new LatLng(34.056581, -117.826971),new LatLng(34.056355, -117.827062),new LatLng(34.056239, -117.827228),
+                new LatLng(34.056159, -117.827480),new LatLng(34.055835, -117.827309),new LatLng(34.054693, -117.826810),new LatLng(34.054221, -117.826499),
+                new LatLng(34.054101, -117.826332),new LatLng(34.054017, -117.826069),new LatLng(34.054057, -117.824932),new LatLng(34.054013, -117.824675),
+                new LatLng(34.053839, -117.824396),new LatLng(34.053697, -117.824235),new LatLng(34.053515, -117.823924),new LatLng(34.053430, -117.823570),
+                new LatLng(34.053493, -117.822894),new LatLng(34.053546, -117.822180),new LatLng(34.053457, -117.821831),new LatLng(34.053284, -117.821590),
+                new LatLng(34.053137, -117.821477),new LatLng(34.051790, -117.820779),new LatLng(34.050659, -117.816906),new LatLng(34.052746, -117.815276),
+                new LatLng(34.052844, -117.815475), new LatLng(34.052822, -117.815525), new LatLng(34.052838, -117.815639)).color(Color.RED));
     }
 
     @Override
