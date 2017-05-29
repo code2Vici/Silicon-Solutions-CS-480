@@ -461,8 +461,6 @@ private int i= 0;
             double lng = gpsTracker.getLongitude();
             LatLng userLatLng = new LatLng(lat, lng);
             i++;
-            mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA))
-                    .visible(true).title("LOCATE"+ i).position(new LatLng(location.getLatitude(),location.getLongitude())));
             //mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLatLng, 16));
         }
         writeActualLocation(location);
@@ -558,7 +556,6 @@ private int i= 0;
                 geoFenceMarker.remove();
 
             geoFenceMarker = markers.get(0);
-            Log.i("","");
         }
     }
 

@@ -5,12 +5,14 @@ import android.util.Log;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import retrofit2.Response;
+import siliconsolutions.cpptourapp.Adapters.Utilities;
 import siliconsolutions.cpptourapp.Directions.GeoCodeResponse;
 import siliconsolutions.cpptourapp.Directions.Leg;
 import siliconsolutions.cpptourapp.Directions.StartLocation;
@@ -25,6 +27,8 @@ public class TourNavigation {
     private com.google.android.gms.maps.model.Polyline line;
     private GoogleMap mMap;
     private String polyLine;
+    private List<String> instructionList;
+    private ArrayList<Marker> markersList;
 
     public static TourNavigation getInstance(List<Response<GeoCodeResponse>> responseList, GoogleMap mMap){
         if(instance == null){
@@ -39,11 +43,43 @@ public class TourNavigation {
         this.mMap = mMap;
     }
 
+    private void generateInstructionList() {
+        instructionList = new ArrayList<>();
+        for(int i = 0; i < responseList.size();i++){
+            List<Step> stepList = responseList.get(i).body().routes.get(0).getLegs().get(0).getSteps();
+            if(i < markersList.size()){
+                instructionList.add(markersList.get(i).getTitle());
+            }
+            for(int j = 0; j < stepList.size();j++){
+                String html = stepList.get(j).getHtmlInstructions();
+                String result = Utilities.htmlToText(html);
+                instructionList.add(result);
+            }
+        }
+    }
+
+    public void setMarkersList(ArrayList<Marker> markersList) {
+        this.markersList = markersList;
+    }
+
+    public List<String> getInstructionList() {
+        generateInstructionList();
+        return instructionList;
+    }
+
     private void generateTotalTime(){
         for(Response<GeoCodeResponse> response : responseList){
             String timeString = response.body().routes.get(0).getLegs().get(0).getDuration().getText();
-            String str = timeString.replaceAll("\\D+","");
-            totalTime += Double.parseDouble(str);
+            if(timeString.toLowerCase().contains("hour")){
+                String str = timeString.replaceAll("\\D+","");
+                int hour = (int)str.charAt(0) * 60;
+                int minutes = Integer.parseInt(str.substring(1));
+                totalTime += hour + minutes;
+            }
+            else{
+                String str = timeString.replaceAll("\\D+","");
+                totalTime += Double.parseDouble(str);
+            }
         }
     }
 
@@ -51,21 +87,24 @@ public class TourNavigation {
         for(int i = 0; i < responseList.size();i++){
             polyLine = responseList.get(i).body().routes.get(0).getOverviewPolyline().getPoints();
             latLngsList = decodePoly(polyLine);
-            int color = getRandomColor();
             for(int j = 0; j < latLngsList.size() - 1;j++){
                 LatLng s = latLngsList.get(j);
                 LatLng d = latLngsList.get(j + 1);
                 line = mMap.addPolyline(new PolylineOptions().add(new LatLng(s.latitude,s.longitude),new LatLng(d.latitude,d.longitude))
-                        .width(5).color(color).geodesic(true));
+                        .width(5).color(Color.BLUE).geodesic(true));
             }
         }
     }
 
-    private void displayRouteMarkers(int i,int j){
+
+    public void displayRouteMarkers(int i){
         List<Step> legs = responseList.get(i).body().routes.get(0).getLegs().get(0).getSteps();
         for(int index = 0; index < legs.size();index++){
             StartLocation s = legs.get(index).getStartLocation();
-            mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.defaultMarker()).position(new LatLng(s.getLat(),s.getLng())));
+            String title = Utilities.htmlToText(legs.get(index).getHtmlInstructions());
+
+            mMap.addMarker(new MarkerOptions().visible(true).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)).
+                    position(new LatLng(s.getLat(),s.getLng())).title(title));
         }
     }
 
@@ -114,27 +153,14 @@ public class TourNavigation {
 
     public String getTotalTime(){
         generateTotalTime();
-        return (totalTime + "mins");
-    }
-
-    public int getRandomColor(){
-        Random random = new Random();
-        int i = random.nextInt(7) + 1;
-        switch (i){
-            case 1:
-                return Color.BLACK;
-            case 2:
-                return Color.BLUE;
-            case 3:
-                return Color.GREEN;
-            case 4:
-                return Color.RED;
-            case 5:
-                return Color.YELLOW;
-            case 6:
-                return Color.WHITE;
-            default:
-                return Color.DKGRAY;
+        if(totalTime > 60){
+            int hours = (int)totalTime / 60;
+            int minutes = (int)totalTime % 60;
+            return hours + " hours and " + minutes + " minutes";
+        }
+        else{
+            return (totalTime + "mins");
         }
     }
+
 }

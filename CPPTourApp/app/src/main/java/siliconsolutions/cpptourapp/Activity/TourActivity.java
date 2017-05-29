@@ -13,13 +13,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.SimpleAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -30,10 +30,8 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import retrofit2.Response;
 import siliconsolutions.cpptourapp.Directions.APIService;
 import siliconsolutions.cpptourapp.Directions.BusProvider;
@@ -62,6 +60,7 @@ public class TourActivity extends AppCompatActivity implements OnMapReadyCallbac
     private LinearLayout listLayout;
     private LinearLayout detailLayout;
     private APIService apiService;
+    private List<String> instructionList;
     private GPSTracker gpsTracker;
     private int callbackCount = 0;
     private List<Response<GeoCodeResponse>> tourResponses;
@@ -188,7 +187,10 @@ public class TourActivity extends AppCompatActivity implements OnMapReadyCallbac
     private void setUpTour() {
         TourNavigation tourNav = TourNavigation.getInstance(tourResponses,mMap);
         timeTv.setText(tourNav.getTotalTime());
+        tourNav.setMarkersList(markers);
+        instructionList = tourNav.getInstructionList();
         tourNav.generatePolyLines();
+        updateDetailListView();
 
     }
 
@@ -234,6 +236,12 @@ public class TourActivity extends AppCompatActivity implements OnMapReadyCallbac
         return mBus;
     }
 
+    private void updateDetailListView(){
+        ArrayAdapter<String> adapter =  new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, android.R.id.text1,
+                instructionList);
+        stepListView.setAdapter(adapter);
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -262,8 +270,6 @@ public class TourActivity extends AppCompatActivity implements OnMapReadyCallbac
         beginNavButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getApplication(), "YES", Toast.LENGTH_SHORT).show();
-                Log.i("","");
             }
         });
     }
