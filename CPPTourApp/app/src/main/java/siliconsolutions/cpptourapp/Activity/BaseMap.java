@@ -132,6 +132,7 @@ public class BaseMap extends AppCompatActivity implements
     private TextView bottomSheetDescriptionText;
     private LinearLayout bottomSheetPeekBar;
     private ImageView bottomImageHeader;
+    private ImageView restroomImageHeader;
     private CompoundButton buildingsCheckbox;
     private CompoundButton landmarksCheckbox;
     private CompoundButton parkingCheckbox;
@@ -678,6 +679,7 @@ public class BaseMap extends AppCompatActivity implements
         bottomSheetHeadingDistance = (TextView) findViewById(R.id.bottomSheetHeadingDistance);
         bottomSheetPeekBar = (LinearLayout) findViewById(R.id.bottom_sheet_peek_bar_container);
         bottomImageHeader = (ImageView) findViewById(R.id.bottomSheetImage);
+        restroomImageHeader = (ImageView) findViewById(R.id.bottom_sheet_floor_image);
         bottomSheetDescriptionText = (TextView) findViewById(R.id.description_bottom_sheet);
         bottomSheetListTitle = (TextView) findViewById(R.id.bottom_sheet_list_title);
         bottomSheetRecycler = (RecyclerView) findViewById(R.id.bottom_sheet_recycler);
