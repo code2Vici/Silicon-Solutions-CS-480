@@ -23,9 +23,11 @@ import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -166,7 +168,9 @@ public class NavigationActivity extends AppCompatActivity implements OnMapReadyC
         String snippet = bundle.getString("snippet");
         destinationMarker = mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)).visible(true).title(title).snippet(snippet).position(toPosition));
         destinationMarker.setTag("destination");
+
     }
+
 
     private void createGoogleApi() {
         if ( googleApiClient == null ) {
@@ -363,7 +367,12 @@ public class NavigationActivity extends AppCompatActivity implements OnMapReadyC
                     cameraUpdate =  CameraUpdateFactory.newLatLngBounds(bounds,padding);
                     mMap.moveCamera(cameraUpdate);
                     changeCameraAngle(markers.get(0));
-                    markerForGeofence(markers.get(0).getPosition());
+                    geoFenceMarker = markers.get(0);
+                    Log.i("MARKER 1 LOCATION", markers.get(0).getPosition().latitude + "," + markers.get(0).getPosition().longitude);
+                    Log.i("MARKER 1 NAME", markers.get(0).getTitle());
+                    Log.i("GEOFENCE LOCATION", geoFenceMarker.getPosition().latitude + "," + geoFenceMarker.getPosition().longitude);
+                    Log.i("GEOFENCE NAME", geoFenceMarker.getTitle());
+                    //markerForGeofence(markers.get(0).getPosition());
                     mHandler.postDelayed(sRunnable,100);
                     startGeofence();
                     LocalBroadcastManager lbc = LocalBroadcastManager.getInstance(getApplicationContext());
@@ -441,10 +450,21 @@ public class NavigationActivity extends AppCompatActivity implements OnMapReadyC
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         Log.i("STATUS", "onConnectionFailed()");
     }
-
+private int i= 0;
     @Override
     public void onLocationChanged(Location location) {
         lastLocation = location;
+        checkPermission();
+        mMap.setMyLocationEnabled(true);
+        if (gpsTracker.canGetLocation()) {
+            double lat = gpsTracker.getLatitude();
+            double lng = gpsTracker.getLongitude();
+            LatLng userLatLng = new LatLng(lat, lng);
+            i++;
+            mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA))
+                    .visible(true).title("LOCATE"+ i).position(new LatLng(location.getLatitude(),location.getLongitude())));
+            //mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLatLng, 16));
+        }
         writeActualLocation(location);
     }
 
@@ -471,6 +491,7 @@ public class NavigationActivity extends AppCompatActivity implements OnMapReadyC
     private void writeActualLocation(Location location) {
         Log.i("LOCATION", "Lat: " + location.getLatitude() );
         Log.i("LOCATION", "Long: " + location.getLongitude() );
+        //gpsTracker =
     }
 
     private void writeLastLocation() {
@@ -536,7 +557,8 @@ public class NavigationActivity extends AppCompatActivity implements OnMapReadyC
             if (geoFenceMarker != null)
                 geoFenceMarker.remove();
 
-            geoFenceMarker = mMap.addMarker(markerOptions);
+            geoFenceMarker = markers.get(0);
+            Log.i("","");
         }
     }
 

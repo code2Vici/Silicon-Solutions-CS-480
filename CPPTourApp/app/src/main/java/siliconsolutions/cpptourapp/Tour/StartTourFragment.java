@@ -22,10 +22,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.List;
 
 import siliconsolutions.cpptourapp.Activity.TourActivity;
 import siliconsolutions.cpptourapp.Adapters.TourListAdapter;
 import siliconsolutions.cpptourapp.Model.Tour;
+import siliconsolutions.cpptourapp.Model.TourMarkers;
 import siliconsolutions.cpptourapp.R;
 
 public class StartTourFragment extends DialogFragment {
@@ -34,6 +36,8 @@ public class StartTourFragment extends DialogFragment {
     StringBuffer tourPostList;
     RelativeLayout startTourSelectedContainer;
     LinearLayout tourListContainer;
+    String name;
+    ArrayList<TourMarkers> markersList;
     //ListView markerList;
     int num;
 
@@ -109,12 +113,17 @@ public class StartTourFragment extends DialogFragment {
                 tourListContainer.setVisibility(View.GONE);
                 startTourSelectedContainer.setVisibility(View.VISIBLE);
                 selectedTourText.setText("Start tour of " + toursArrayList.get(i).getName() + "?");
+                markersList = toursArrayList.get(i).getTourMarkersList();
+                name = toursArrayList.get(i).getName();
+
             }
         });
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getActivity(), TourActivity.class);
+                intent.putExtra("name",name);
+                intent.putParcelableArrayListExtra("markers",markersList);
                 getActivity().startActivity(intent);
             }
         });

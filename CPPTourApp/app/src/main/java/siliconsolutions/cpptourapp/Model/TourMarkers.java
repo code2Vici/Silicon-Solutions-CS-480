@@ -1,22 +1,25 @@
 package siliconsolutions.cpptourapp.Model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-class TourMarkers {
+public class TourMarkers implements Parcelable{
     @SerializedName("description")
     private String description;
     @SerializedName("latitude")
     private String latitude;
-    @SerializedName("longitude")
+    @SerializedName("longtitude")
     private String longitude;
     @SerializedName("name")
     private String name;
     @SerializedName("number")
     private String number;
-    @SerializedName("events")
-    private List<Event> events;
+    /*@SerializedName("events")
+    private List<Event> events;*/
     @SerializedName("image")
     private String imageUrl;
 
@@ -59,14 +62,14 @@ class TourMarkers {
     public void setNumber(String number) {
         this.number = number;
     }
-
+/*
     public List<Event> getEvents() {
         return events;
     }
 
     public void setEvents(List<Event> events) {
         this.events = events;
-    }
+    }*/
 
     public String getImageUrl() {
         return imageUrl;
@@ -74,5 +77,41 @@ class TourMarkers {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+    public static final Parcelable.Creator<TourMarkers> CREATOR
+            = new Parcelable.Creator<TourMarkers>() {
+        public TourMarkers createFromParcel(Parcel in) {
+            return new TourMarkers(in);
+        }
+
+        public TourMarkers[] newArray(int size) {
+            return new TourMarkers[size];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(description);
+        parcel.writeString(latitude);
+        parcel.writeString(longitude);
+        parcel.writeString(name);
+        parcel.writeString(number);
+        //parcel.writeA
+        parcel.writeString(imageUrl);
+    }
+
+    private TourMarkers(Parcel in){
+        description = in.readString();
+        latitude = in.readString();
+        longitude = in.readString();
+        name = in.readString();
+        number = in.readString();
+        imageUrl = in.readString();
     }
 }

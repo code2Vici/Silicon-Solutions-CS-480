@@ -37,12 +37,13 @@ public class Navigation {
     private String duration;
     private Response<GeoCodeResponse> response;
     private List<Route> routes;
+    private List<Response<GeoCodeResponse> > tourResponses;
     private List<Leg> legs;
     private List<Step> steps;
     private List<LatLng> latLngsList;
     private List<Marker> markers;
     private Bounds bounds;
-    final String[] polyLine;
+    String polyLine;
 
     public static Navigation getInstance(){
         if(instance == null){
@@ -52,14 +53,15 @@ public class Navigation {
     }
 
     private Navigation(){
-        polyLine = new String[1];
+
         distance = "";
         duration = "";
         markers = new ArrayList<>();
+        tourResponses = new ArrayList<>();
     }
 
-    private void generatePolyLine(){
-        latLngsList = decodePoly(polyLine[0]);
+    public void generatePolyLine(){
+        latLngsList = decodePoly(polyLine);
         for(int i = 0; i < latLngsList.size() - 1;i++){
             LatLng s = latLngsList.get(i);
             LatLng d = latLngsList.get(i + 1);
@@ -75,6 +77,9 @@ public class Navigation {
                     title(s)
                     .position(new LatLng(steps.get(i).getStartLocation().getLat(),steps.get(i).getStartLocation().getLng())));
             markers.add(m);
+
+            Log.i("MARKER " + i + "LOCATION", markers.get(i).getPosition().latitude + "," + markers.get(i).getPosition().longitude);
+            Log.i("MARKER " + i + " NAME", markers.get(i).getTitle());
             //mMap.addMarker(new MarkerOptions().position(latLng).title(s));
             //m.setAlpha(0.0f);
             //m.setVisible(true);
@@ -82,12 +87,15 @@ public class Navigation {
         }
     }
 
+
     public void setUp(){
+        //tourResponses.add(response);
         routes = response.body().routes;
+        Log.i("BOUNDS", response.body().routes.get(0).getBounds().toString());
         bounds = response.body().routes.get(0).getBounds();
         legs = routes.get(0).getLegs();
         steps = legs.get(0).getSteps();
-        polyLine[0] = routes.get(0).getOverviewPolyline().getPoints();
+        polyLine = routes.get(0).getOverviewPolyline().getPoints();
         generatePolyLine();
         generateMarkers();
         distance = legs.get(0).getDistance().getText();
@@ -183,5 +191,13 @@ public class Navigation {
 
     public void setBounds(Bounds bounds) {
         this.bounds = bounds;
+    }
+
+    public List<Response<GeoCodeResponse>> getTourResponses() {
+        return tourResponses;
+    }
+
+    public void setPolyLine(String polyLine) {
+        this.polyLine = polyLine;
     }
 }

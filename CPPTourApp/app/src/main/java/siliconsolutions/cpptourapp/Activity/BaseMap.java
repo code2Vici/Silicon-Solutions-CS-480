@@ -168,9 +168,7 @@ public class BaseMap extends AppCompatActivity implements
                     startTourDialog();
                 } else if (id == R.id.nav_left_discover) {
 
-                } else if (id == R.id.nav_slideshow) {
-
-                } else if (id == R.id.nav_left_check_1) {
+                }  else if (id == R.id.nav_left_check_1) {
                     buildingsCheckbox.performClick();
                     if(item.isChecked()){
                         item.setChecked(false);
@@ -199,15 +197,12 @@ public class BaseMap extends AppCompatActivity implements
                     }   else {
                         item.setChecked(true);
                     }
-                }else if (id == R.id.nav_left_check_4) { //TODO:
-                //}else if (id == R.id.nav_left_check_5) {
+                }else if (id == R.id.nav_left_check_5) {
                     if (item.isChecked()) {
                         item.setChecked(false);
                     }   else {
                         item.setChecked(true);
                     }
-                } else if (id == R.id.nav_left_settings) {
-
                 }
 
                 DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -447,8 +442,7 @@ public class BaseMap extends AppCompatActivity implements
             }
         });
 
-        busRouteAMenuItem = leftNavigationView.getMenu().findItem(R.id.nav_left_check_4);//TODO:
-        //busRouteAMenuItem = leftNavigationView.getMenu().findItem(R.id.nav_left_check_5);
+        busRouteAMenuItem = leftNavigationView.getMenu().findItem(R.id.nav_left_check_5);
         busRouteACheckbox = (CompoundButton) MenuItemCompat.getActionView(busRouteAMenuItem);
         busRouteACheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -525,10 +519,15 @@ public class BaseMap extends AppCompatActivity implements
         else if(val < (landmarksArrayList.size() + buildingsArrayList.size())){
             bottomSheetUpdateFromLandmark(landmarksArrayList.get(val - buildingsArrayList.size()));
         }
-        else {
+        else if (val < (landmarksArrayList.size() + buildingsArrayList.size() + landmarksArrayList.size())){
             bottomSheetUpdateFromParking(parkingLotsArrayList.get(val - buildingsArrayList.size() - landmarksArrayList.size()));
         }
+        else{
+            bottomSheetUpdateFromRestaurants(restaurantsArrayList.get(val - buildingsArrayList.size() -
+                    landmarksArrayList.size() - parkingLotsArrayList.size()));
+        }
     }
+
 
     private void setDetailView(){
         coordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinatorLayout);
@@ -663,11 +662,15 @@ public class BaseMap extends AppCompatActivity implements
         }
     }
 
+    private void bottomSheetUpdateFromRestaurants(Restaurants restaurants) {
+        //bottomSheetDescriptionText.setText();
+    }
+
 
     public void bottomSheetUpdateFromMarker(Marker m){
 
         bottomSheetHeading.setText(m.getTitle());
-        if(!(m.getSnippet()).equals("")){
+        if(!(m.getSnippet().length() > 4) && !(m.getSnippet()).equals("")){
             bottomSheetSubHeading.setText("Building " + m.getSnippet());
         }
         else{
@@ -794,7 +797,6 @@ public class BaseMap extends AppCompatActivity implements
 
     @Override
     public void onGPSTrackerLocationChanged(Location location) {
-
     }
 
     @Override
