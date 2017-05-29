@@ -6,6 +6,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.location.Location;
@@ -41,6 +42,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -61,6 +63,8 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Type;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -175,6 +179,7 @@ public class BaseMap extends AppCompatActivity implements
     public Double busCLat = 0.0;
     public Double busCLong = 0.0;
     private LinearLayout lowerContainerDetailView;
+    private SubsamplingScaleImageView bottomSheetRestroomImageScalable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -704,6 +709,7 @@ public class BaseMap extends AppCompatActivity implements
         bottomSheetRestroomImage = (ImageView) findViewById(R.id.bottom_sheet_floor_image);
         lowerContainerDetailView = (LinearLayout) findViewById(R.id.lower_container_detail_view);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
+        bottomSheetRestroomImageScalable = (SubsamplingScaleImageView) findViewById(R.id.subSamplingImageView);
         bottomSheetRecycler.setLayoutManager(mLayoutManager);
         AppBarLayout mergedAppBarLayout = (AppBarLayout) findViewById(R.id.merged_appbarlayout);
         mergedAppBarLayoutBehavior = MergedAppBarLayoutBehavior.from(mergedAppBarLayout);
@@ -784,6 +790,19 @@ public class BaseMap extends AppCompatActivity implements
         else{
             bottomSheetListTitle.setVisibility(View.GONE);
         }
+       /* try {
+            URL url = new URL(src);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setDoInput(true);
+            connection.connect();
+            InputStream input = connection.getInputStream();
+            Bitmap myBitmap = BitmapFactory.decodeStream(input);
+            bottomSheetRestroomImageScalable.setImage(myBitmap);
+        } catch (IOException e) {
+            // Log exception
+            return null;
+        }*/
+        //Picasso.with(getApplicationContext()).load(b.getImageUrl()).into(bottomSheetRestroomImageScalable);
     }
 
     public void bottomSheetUpdateFromLandmark(Landmarks l){
