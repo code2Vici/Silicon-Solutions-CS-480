@@ -33,7 +33,12 @@ public class OfficesListAdapter extends RecyclerView.Adapter<OfficesListAdapter.
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.roomNumber.setText("Room " + offices.get(position).getRoom());
+        if((offices.get(position).getRoom()).equals("")){
+            holder.roomNumber.setText(offices.get(position).getRoom());
+        }
+        else{
+            holder.roomNumber.setText("Room " + offices.get(position).getRoom());
+        }
         holder.phoneNumber.setText(offices.get(position).getPhoneNumber());
         holder.name.setText(offices.get(position).getName());
     }
