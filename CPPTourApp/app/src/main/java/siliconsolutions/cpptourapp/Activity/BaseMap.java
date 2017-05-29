@@ -110,10 +110,16 @@ public class BaseMap extends AppCompatActivity implements
     private ArrayList<BusRouteA> busRouteAArrayList;
     private ArrayList<BusRouteB> busRouteBArrayList;
     private ArrayList<BusRouteC> busRouteCArrayList;
+    private ArrayList busA = new ArrayList();
+    private ArrayList busB = new ArrayList();
+    private ArrayList busC = new ArrayList();
     private ArrayList<BusB> busBLocation;
     private ArrayList<Marker> markersArrayList;
     private ArrayList<Marker> favoritesArrayList;
     private Marker myMarker;
+    private Marker busAMarker;
+    private Marker busBMarker;
+    private Marker busCMarker;
     private StringBuffer postList;
     private StringBuffer landmarksPostList;
     private StringBuffer parkingPostList;
@@ -547,7 +553,7 @@ public class BaseMap extends AppCompatActivity implements
                     BitmapDrawable bitmapdraw=(BitmapDrawable)getResources().getDrawable(R.drawable.bus);
                     Bitmap b=bitmapdraw.getBitmap();
                     Bitmap smallMarker = Bitmap.createScaledBitmap(b, width, height, false);
-                    mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.fromBitmap(smallMarker)).position(new LatLng(busALat, busALong)));
+                    busAMarker = mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.fromBitmap(smallMarker)).title("Bus A").snippet("7:00 - 19:30").position(new LatLng(busALat, busALong)));
 
                     for(int i = (buildingsArrayList.size() + landmarksArrayList.size() + parkingLotsArrayList.size() + restaurantsArrayList.size()); i < (buildingsArrayList.size() + landmarksArrayList.size() + parkingLotsArrayList.size() + restaurantsArrayList.size() + busRouteAArrayList.size()); i++){
                         markersArrayList.get(i).setVisible(true);
@@ -555,6 +561,7 @@ public class BaseMap extends AppCompatActivity implements
                 }
                 else{
                     lineA.remove();
+                    busAMarker.remove();
                     for(int i = (buildingsArrayList.size() + landmarksArrayList.size() + parkingLotsArrayList.size() + restaurantsArrayList.size()); i < (buildingsArrayList.size() + landmarksArrayList.size() + parkingLotsArrayList.size() + restaurantsArrayList.size() + busRouteAArrayList.size()); i++){
                         markersArrayList.get(i).setVisible(false);
                     }
@@ -576,14 +583,14 @@ public class BaseMap extends AppCompatActivity implements
                     BitmapDrawable bitmapdraw=(BitmapDrawable)getResources().getDrawable(R.drawable.bus);
                     Bitmap b=bitmapdraw.getBitmap();
                     Bitmap smallMarker = Bitmap.createScaledBitmap(b, width, height, false);
-                    mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.fromBitmap(smallMarker)).position(new LatLng(busBLat, busBLong)));
-
+                    busBMarker = mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.fromBitmap(smallMarker)).title("Bus B").snippet("7:00 - 19:30").position(new LatLng(busBLat, busBLong)));
                     for(int i = (buildingsArrayList.size() + landmarksArrayList.size() + parkingLotsArrayList.size() + restaurantsArrayList.size() + busRouteAArrayList.size()); i < (buildingsArrayList.size() + landmarksArrayList.size() + parkingLotsArrayList.size() + restaurantsArrayList.size() + busRouteAArrayList.size() + busRouteBArrayList.size()); i++){
                         markersArrayList.get(i).setVisible(true);
                     }
                 }
                 else{
                     lineB.remove();
+                    busBMarker.remove();
                     for(int i = (buildingsArrayList.size() + landmarksArrayList.size() + parkingLotsArrayList.size() + restaurantsArrayList.size() + busRouteAArrayList.size()); i < (buildingsArrayList.size() + landmarksArrayList.size() + parkingLotsArrayList.size() + restaurantsArrayList.size() + busRouteAArrayList.size() + busRouteBArrayList.size()); i++){
                         markersArrayList.get(i).setVisible(false);
                     }
@@ -604,7 +611,7 @@ public class BaseMap extends AppCompatActivity implements
                     BitmapDrawable bitmapdraw=(BitmapDrawable)getResources().getDrawable(R.drawable.bus);
                     Bitmap b=bitmapdraw.getBitmap();
                     Bitmap smallMarker = Bitmap.createScaledBitmap(b, width, height, false);
-                    mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.fromBitmap(smallMarker)).position(new LatLng(busCLat,busCLong)));
+                    busCMarker = mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.fromBitmap(smallMarker)).title("Bus C").snippet("7:00 - 19:30").position(new LatLng(busCLat,busCLong)));
 
                     for(int i = (buildingsArrayList.size() + landmarksArrayList.size() + parkingLotsArrayList.size() + restaurantsArrayList.size() + busRouteAArrayList.size() + busRouteBArrayList.size()); i < (buildingsArrayList.size() + landmarksArrayList.size() + parkingLotsArrayList.size() + restaurantsArrayList.size() + busRouteAArrayList.size() + busRouteBArrayList.size() + busRouteCArrayList.size()); i++){
                         markersArrayList.get(i).setVisible(true);
@@ -612,6 +619,7 @@ public class BaseMap extends AppCompatActivity implements
                 }
                 else{
                     lineC.remove();
+                    busCMarker.remove();
                     for(int i = (buildingsArrayList.size() + landmarksArrayList.size() + parkingLotsArrayList.size() + restaurantsArrayList.size()); i < (buildingsArrayList.size() + landmarksArrayList.size() + parkingLotsArrayList.size() + restaurantsArrayList.size() + busRouteAArrayList.size() + busRouteBArrayList.size() + busRouteCArrayList.size()); i++){
                         markersArrayList.get(i).setVisible(false);
                     }
@@ -1167,7 +1175,6 @@ public class BaseMap extends AppCompatActivity implements
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            Toast.makeText(BaseMap.this,"Json Data is downloading",Toast.LENGTH_LONG).show();
 
         }
 
@@ -1229,7 +1236,7 @@ public class BaseMap extends AppCompatActivity implements
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            Toast.makeText(BaseMap.this,"Json Data is downloading",Toast.LENGTH_LONG).show();
+
 
         }
 
@@ -1291,7 +1298,7 @@ public class BaseMap extends AppCompatActivity implements
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            Toast.makeText(BaseMap.this,"Json Data is downloading",Toast.LENGTH_LONG).show();
+
 
         }
 
