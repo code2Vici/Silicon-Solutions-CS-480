@@ -191,13 +191,11 @@
             android:layout_margin="10dp"
             android:text="RESTROOM LOCATION(1st Floor Only)" />
 
-        <ImageView
+        <com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
             android:scaleType="fitXY"
-            android:id="@+id/bottom_sheet_floor_image"
             android:layout_width="match_parent"
             android:layout_height="300dp"
-            android:layout_margin="10dp"
-            android:background="@color/colorDetail" />
+            android:id="@+id/subSamplingImageView"/>
 
     </LinearLayout>
 

@@ -6,8 +6,10 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -41,6 +43,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.davemorrissey.labs.subscaleview.ImageSource;
+import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -53,6 +57,7 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -61,6 +66,8 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Type;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -166,7 +173,7 @@ public class BaseMap extends AppCompatActivity implements
     private com.google.android.gms.maps.model.Polyline lineB;
     //public String busBLat;
     //public String busBLong;
-    private ImageView bottomSheetRestroomImage;
+
     private com.google.android.gms.maps.model.Polyline lineC;
     public Double busALat = 0.0;
     public Double busALong = 0.0;
@@ -175,6 +182,7 @@ public class BaseMap extends AppCompatActivity implements
     public Double busCLat = 0.0;
     public Double busCLong = 0.0;
     private LinearLayout lowerContainerDetailView;
+    private SubsamplingScaleImageView bottomSheetRestroomImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -692,6 +700,7 @@ public class BaseMap extends AppCompatActivity implements
         bottomSheet = coordinatorLayout.findViewById(R.id.bottom_sheet);
         behavior = BottomSheetBehaviorGoogleMapsLike.from(bottomSheet);
         behavior.setState(BottomSheetBehaviorGoogleMapsLike.STATE_COLLAPSED);
+        bottomImageHeader = (ImageView) findViewById(R.id.bottomSheetImage);
         bottomSheetHeading = (TextView) findViewById(R.id.bottomSheetHeading);
         bottomSheetSubHeading = (TextView) findViewById(R.id.bottomSheetSubheader);
         bottomSheetHeadingDistance = (TextView) findViewById(R.id.bottomSheetHeadingDistance);
@@ -700,9 +709,9 @@ public class BaseMap extends AppCompatActivity implements
         bottomSheetListTitle = (TextView) findViewById(R.id.bottom_sheet_list_title);
         bottomSheetRecycler = (RecyclerView) findViewById(R.id.bottom_sheet_recycler);
         bottomSheetRestroomTitle = (TextView) findViewById(R.id.bottom_sheet_restroom_text);
-        bottomSheetRestroomImage = (ImageView) findViewById(R.id.bottom_sheet_floor_image);
-        //lowerContainerDetailView = (LinearLayout) findViewById(R.id.lower_container_detail_view);
+        lowerContainerDetailView = (LinearLayout) findViewById(R.id.lower_container_detail_view);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
+        bottomSheetRestroomImage = (SubsamplingScaleImageView) findViewById(R.id.subSamplingImageView);
         bottomSheetRecycler.setLayoutManager(mLayoutManager);
         AppBarLayout mergedAppBarLayout = (AppBarLayout) findViewById(R.id.merged_appbarlayout);
         mergedAppBarLayoutBehavior = MergedAppBarLayoutBehavior.from(mergedAppBarLayout);
@@ -764,10 +773,10 @@ public class BaseMap extends AppCompatActivity implements
         bottomSheetRestroomTitle.setVisibility(View.VISIBLE);
         bottomSheetRestroomImage.setVisibility(View.VISIBLE);
         if(!(b.getFloorPlanUrl()).equals("")){
-            Picasso.with(getApplicationContext()).load(b.getFloorPlanUrl()).into(bottomSheetRestroomImage);
+            Picasso.with(getApplicationContext()).load(b.getFloorPlanUrl()).into(target);
         }else{
-            bottomSheetRestroomTitle.setVisibility(View.GONE);
-            bottomSheetRestroomImage.setVisibility(View.GONE);
+            bottomSheetRestroomTitle.setVisibility(View.INVISIBLE);
+            bottomSheetRestroomImage.setVisibility(View.INVISIBLE);
             //bottomSheetRestroomImage.setImageDrawable(null);
         }
         OfficesListAdapter adapter = new OfficesListAdapter(b.getOfficeList());
@@ -892,6 +901,23 @@ public class BaseMap extends AppCompatActivity implements
         bottomSheetHeadingDistance.setText(distance + " ft away");
         mergedAppBarLayoutBehavior.setToolbarTitle(m.getTitle());
     }
+
+    private Target target = new Target() {
+        @Override
+        public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+            bottomSheetRestroomImage.setImage(ImageSource.bitmap(bitmap));
+        }
+
+        @Override
+        public void onBitmapFailed(Drawable errorDrawable) {
+
+        }
+
+        @Override
+        public void onPrepareLoad(Drawable placeHolderDrawable) {
+
+        }
+    };
 
     /**
      * Manipulates the map once available.
