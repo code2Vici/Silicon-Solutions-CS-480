@@ -174,6 +174,7 @@ public class BaseMap extends AppCompatActivity implements
     public Double busBLong = 0.0;
     public Double busCLat = 0.0;
     public Double busCLong = 0.0;
+    private LinearLayout lowerContainerDetailView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -206,8 +207,6 @@ public class BaseMap extends AppCompatActivity implements
 
                 if (id == R.id.nav_left_start){
                     startTourDialog();
-                } else if (id == R.id.nav_left_discover) {
-
                 }  else if (id == R.id.nav_left_check_1) {
                     buildingsCheckbox.performClick();
                     if(item.isChecked()){
@@ -422,7 +421,7 @@ public class BaseMap extends AppCompatActivity implements
         restaurantPostList = new StringBuffer();
         for (Restaurants post : restaurantsArrayList) {
             restaurantPostList.append("\n latitude: " + post.getLatitude() + "\n longtitude: " + post.getLongtitude() +
-                    "\n building name: " + post.getRestaurantName()+ "\n meters " + post.getMeters() + "\n description " + post.getDescription() + "\n meterlist: " + post.getMeters() + "\n building number: " + post.getRestaurantNumber() + "\n imageUrl: " + post.getImageUrl() + "\n\n");
+                    "\n building name: " + post.getRestaurantName()+ "\n meters " + post.getOffices() + "\n description " + post.getDescription()  + "\n building number: " + post.getRestaurantNumber() + "\n imageUrl: " + post.getImageUrl() + "\n\n");
             myMarker = mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET)).visible(false).title(post.getRestaurantName()).snippet(post.getRestaurantNumber()).position(new LatLng(Double.parseDouble(post.getLatitude()), Double.parseDouble(post.getLongtitude()))));
             myMarker.setTag(markersArrayList.size());
             markersArrayList.add(myMarker);
@@ -580,28 +579,6 @@ public class BaseMap extends AppCompatActivity implements
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
                 if(isChecked){
                     busBRoute();
-                    for(int i = (buildingsArrayList.size() + landmarksArrayList.size() + parkingLotsArrayList.size() + restaurantsArrayList.size()); i < (buildingsArrayList.size() + landmarksArrayList.size() + parkingLotsArrayList.size() + restaurantsArrayList.size() + busRouteAArrayList.size()); i++){
-                        markersArrayList.get(i).setVisible(true);
-                    }
-                }
-                else{
-                    lineA.remove();
-                    busAMarker.remove();
-                    for(int i = (buildingsArrayList.size() + landmarksArrayList.size() + parkingLotsArrayList.size() + restaurantsArrayList.size()); i < (buildingsArrayList.size() + landmarksArrayList.size() + parkingLotsArrayList.size() + restaurantsArrayList.size() + busRouteAArrayList.size()); i++){
-                        markersArrayList.get(i).setVisible(false);
-                    }
-                }
-            }
-        });
-
-        busRouteBMenuItem = leftNavigationView.getMenu().findItem(R.id.nav_left_check_6);//TODO:
-        //busRouteAMenuItem = leftNavigationView.getMenu().findItem(R.id.nav_left_check_5);
-        busRouteBCheckbox = (CompoundButton) MenuItemCompat.getActionView(busRouteBMenuItem);
-        busRouteBCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
-                if(isChecked){
-                    busBRoute();
 
                     int height = 100;
                     int width = 100;
@@ -698,7 +675,16 @@ public class BaseMap extends AppCompatActivity implements
             bottomSheetUpdateFromBusARoute(busRouteAArrayList.get(val - buildingsArrayList.size() -
                     landmarksArrayList.size() - parkingLotsArrayList.size() - restaurantsArrayList.size()));
         }
+        else if (val < (landmarksArrayList.size() + buildingsArrayList.size() + parkingLotsArrayList.size() + restaurantsArrayList.size() + busRouteAArrayList.size() + busRouteBArrayList.size())){
+            bottomSheetUpdateFromBusBRoute(busRouteBArrayList.get(val - buildingsArrayList.size() -
+                    landmarksArrayList.size() - parkingLotsArrayList.size() - restaurantsArrayList.size() - busRouteAArrayList.size()));
+        }
+        else if (val < (landmarksArrayList.size() + buildingsArrayList.size() + parkingLotsArrayList.size() + restaurantsArrayList.size() + busRouteAArrayList.size() + busRouteBArrayList.size() + busRouteCArrayList.size())){
+            bottomSheetUpdateFromBusCRoute(busRouteCArrayList.get(val - buildingsArrayList.size() -
+                    landmarksArrayList.size() - parkingLotsArrayList.size() - restaurantsArrayList.size() - busRouteAArrayList.size() - busRouteBArrayList.size()));
+        }
     }
+
 
 
     private void setDetailView(){
@@ -710,12 +696,12 @@ public class BaseMap extends AppCompatActivity implements
         bottomSheetSubHeading = (TextView) findViewById(R.id.bottomSheetSubheader);
         bottomSheetHeadingDistance = (TextView) findViewById(R.id.bottomSheetHeadingDistance);
         bottomSheetPeekBar = (LinearLayout) findViewById(R.id.bottom_sheet_peek_bar_container);
-        bottomImageHeader = (ImageView) findViewById(R.id.bottomSheetImage);
         bottomSheetDescriptionText = (TextView) findViewById(R.id.description_bottom_sheet);
         bottomSheetListTitle = (TextView) findViewById(R.id.bottom_sheet_list_title);
         bottomSheetRecycler = (RecyclerView) findViewById(R.id.bottom_sheet_recycler);
         bottomSheetRestroomTitle = (TextView) findViewById(R.id.bottom_sheet_restroom_text);
         bottomSheetRestroomImage = (ImageView) findViewById(R.id.bottom_sheet_floor_image);
+        //lowerContainerDetailView = (LinearLayout) findViewById(R.id.lower_container_detail_view);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
         bottomSheetRecycler.setLayoutManager(mLayoutManager);
         AppBarLayout mergedAppBarLayout = (AppBarLayout) findViewById(R.id.merged_appbarlayout);
@@ -767,6 +753,7 @@ public class BaseMap extends AppCompatActivity implements
     }
 
     public void bottomSheetUpdateFromBuilding(Building b){
+        lowerContainerDetailView.setVisibility(View.VISIBLE);
         bottomSheetDescriptionText.setText(b.getDescritption());
         if(!b.getImageUrl().equals("")){
             Picasso.with(getApplicationContext()).load(b.getImageUrl()).into(bottomImageHeader);
@@ -797,6 +784,7 @@ public class BaseMap extends AppCompatActivity implements
     }
 
     public void bottomSheetUpdateFromLandmark(Landmarks l){
+        lowerContainerDetailView.setVisibility(View.VISIBLE);
         bottomSheetDescriptionText.setText(l.getDescription());
         if(!l.getImageUrl().equals("")){
             Picasso.with(getApplicationContext()).load(l.getImageUrl()).into(bottomImageHeader);
@@ -822,6 +810,7 @@ public class BaseMap extends AppCompatActivity implements
     }
 
     public void bottomSheetUpdateFromParking(ParkingLots p){
+        lowerContainerDetailView.setVisibility(View.VISIBLE);
         bottomSheetDescriptionText.setText(p.getDescription());
         if(!p.getImageUrl().equals("")){
             Picasso.with(getApplicationContext()).load(p.getImageUrl()).into(bottomImageHeader);
@@ -847,11 +836,30 @@ public class BaseMap extends AppCompatActivity implements
     }
 
     private void bottomSheetUpdateFromRestaurants(Restaurants restaurants) {
-        //bottomSheetDescriptionText.setText();
+        lowerContainerDetailView.setVisibility(View.VISIBLE);
+        bottomSheetDescriptionText.setText(restaurants.getDescription());
+        if(!restaurants.getImageUrl().equals("")){
+            Picasso.with(getApplicationContext()).load(restaurants.getImageUrl()).into(bottomImageHeader);
+        }
+        else{
+            Picasso.with(getApplicationContext()).load(R.drawable.notavailableimg).into(bottomImageHeader);
+        }
+        OfficesListAdapter adapter = new OfficesListAdapter(restaurants.getOffices());
+        bottomSheetRecycler.setAdapter(adapter);
+        bottomSheetRestroomTitle.setVisibility(View.INVISIBLE);
+        bottomSheetRestroomImage.setVisibility(View.INVISIBLE);
     }
 
     private void bottomSheetUpdateFromBusARoute(BusRouteA routeA){
+        lowerContainerDetailView.setVisibility(View.INVISIBLE);
+    }
 
+    private void bottomSheetUpdateFromBusBRoute(BusRouteB busRouteB) {
+        lowerContainerDetailView.setVisibility(View.INVISIBLE);
+    }
+
+    private void bottomSheetUpdateFromBusCRoute(BusRouteC busRouteC) {
+        lowerContainerDetailView.setVisibility(View.INVISIBLE);
     }
 
 
