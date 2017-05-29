@@ -188,9 +188,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
-            android:text="RESTROOM LOCATION" />
+            android:text="RESTROOM LOCATION(1st Floor Only)" />
 
         <ImageView
+            android:scaleType="fitXY"
             android:id="@+id/bottom_sheet_floor_image"
             android:layout_width="match_parent"
             android:layout_height="300dp"

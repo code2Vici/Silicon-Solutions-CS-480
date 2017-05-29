@@ -138,7 +138,6 @@ public class BaseMap extends AppCompatActivity implements
     private TextView bottomSheetDescriptionText;
     private LinearLayout bottomSheetPeekBar;
     private ImageView bottomImageHeader;
-    private ImageView restroomImageHeader;
     private CompoundButton buildingsCheckbox;
     private CompoundButton landmarksCheckbox;
     private CompoundButton parkingCheckbox;
@@ -712,7 +711,6 @@ public class BaseMap extends AppCompatActivity implements
         bottomSheetHeadingDistance = (TextView) findViewById(R.id.bottomSheetHeadingDistance);
         bottomSheetPeekBar = (LinearLayout) findViewById(R.id.bottom_sheet_peek_bar_container);
         bottomImageHeader = (ImageView) findViewById(R.id.bottomSheetImage);
-        restroomImageHeader = (ImageView) findViewById(R.id.bottom_sheet_floor_image);
         bottomSheetDescriptionText = (TextView) findViewById(R.id.description_bottom_sheet);
         bottomSheetListTitle = (TextView) findViewById(R.id.bottom_sheet_list_title);
         bottomSheetRecycler = (RecyclerView) findViewById(R.id.bottom_sheet_recycler);
@@ -781,13 +779,13 @@ public class BaseMap extends AppCompatActivity implements
         if(!(b.getFloorPlanUrl()).equals("")){
             Picasso.with(getApplicationContext()).load(b.getFloorPlanUrl()).into(bottomSheetRestroomImage);
         }else{
-            bottomSheetRestroomImage.setImageDrawable(null);
+            bottomSheetRestroomTitle.setVisibility(View.GONE);
+            bottomSheetRestroomImage.setVisibility(View.GONE);
+            //bottomSheetRestroomImage.setImageDrawable(null);
         }
         OfficesListAdapter adapter = new OfficesListAdapter(b.getOfficeList());
         bottomSheetRecycler.setAdapter(adapter);
-        if(bottomSheetRestroomTitle.getVisibility() == View.INVISIBLE){
-            bottomSheetRestroomTitle.setVisibility(View.VISIBLE);
-        }
+        
         if(b.getOfficeList().size() != 0){
             if(bottomSheetListTitle.getVisibility() == View.GONE)
                 bottomSheetListTitle.setVisibility(View.VISIBLE);
