@@ -701,13 +701,12 @@ public class BaseMap extends AppCompatActivity implements
         bottomSheetSubHeading = (TextView) findViewById(R.id.bottomSheetSubheader);
         bottomSheetHeadingDistance = (TextView) findViewById(R.id.bottomSheetHeadingDistance);
         bottomSheetPeekBar = (LinearLayout) findViewById(R.id.bottom_sheet_peek_bar_container);
-        bottomImageHeader = (ImageView) findViewById(R.id.bottomSheetImage);
         bottomSheetDescriptionText = (TextView) findViewById(R.id.description_bottom_sheet);
         bottomSheetListTitle = (TextView) findViewById(R.id.bottom_sheet_list_title);
         bottomSheetRecycler = (RecyclerView) findViewById(R.id.bottom_sheet_recycler);
         bottomSheetRestroomTitle = (TextView) findViewById(R.id.bottom_sheet_restroom_text);
         bottomSheetRestroomImage = (ImageView) findViewById(R.id.bottom_sheet_floor_image);
-        lowerContainerDetailView = (LinearLayout) findViewById(R.id.lower_container_detail_view);
+        //lowerContainerDetailView = (LinearLayout) findViewById(R.id.lower_container_detail_view);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
         bottomSheetRestroomImageScalable = (SubsamplingScaleImageView) findViewById(R.id.subSamplingImageView);
         bottomSheetRecycler.setLayoutManager(mLayoutManager);
@@ -773,15 +772,13 @@ public class BaseMap extends AppCompatActivity implements
         if(!(b.getFloorPlanUrl()).equals("")){
             Picasso.with(getApplicationContext()).load(b.getFloorPlanUrl()).into(bottomSheetRestroomImage);
         }else{
-            bottomSheetRestroomImage.setImageDrawable(null);
-            bottomSheetRestroomTitle.setVisibility(View.INVISIBLE);
-            bottomSheetRestroomImage.setVisibility(View.INVISIBLE);
+            bottomSheetRestroomTitle.setVisibility(View.GONE);
+            bottomSheetRestroomImage.setVisibility(View.GONE);
+            //bottomSheetRestroomImage.setImageDrawable(null);
         }
         OfficesListAdapter adapter = new OfficesListAdapter(b.getOfficeList());
         bottomSheetRecycler.setAdapter(adapter);
-        if(bottomSheetRestroomTitle.getVisibility() == View.INVISIBLE){
-            bottomSheetRestroomTitle.setVisibility(View.VISIBLE);
-        }
+        
         if(b.getOfficeList().size() != 0){
             if(bottomSheetListTitle.getVisibility() == View.GONE)
                 bottomSheetListTitle.setVisibility(View.VISIBLE);
