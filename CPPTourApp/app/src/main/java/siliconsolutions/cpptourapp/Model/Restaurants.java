@@ -21,17 +21,17 @@ public class Restaurants extends Location{
     private boolean isFavorite;
     @SerializedName("description")
     private String description;
-    @SerializedName("meters")
-    private List<Meter> meters;
+    @SerializedName("offices")
+    private List<Office> offices;
     @SerializedName("image")
     private String imageUrl;
 
-    public Restaurants(String latitude, String longtitude, String restaurantName, String restaurantNumber, List<Meter> meterList) {
+    public Restaurants(String latitude, String longtitude, String restaurantName, String restaurantNumber, List<Office> officeList) {
         this.latitude = latitude;
         this.longtitude = longtitude;
         this.restaurantName = restaurantName;
         this.restaurantNumber = restaurantNumber;
-        meters = meterList;
+        offices = officeList;
         isFavorite = false;
     }
 
@@ -82,8 +82,8 @@ public class Restaurants extends Location{
         isFavorite = favorite;
     }
 
-    public List<Meter> getMeters() {
-        return meters;
+    public List<Office> getOffices() {
+        return offices;
     }
 
     public void setLatitude(String latitude) {

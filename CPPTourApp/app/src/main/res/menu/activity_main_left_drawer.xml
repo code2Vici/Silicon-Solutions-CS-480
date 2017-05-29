@@ -9,10 +9,6 @@
             android:id="@+id/nav_left_start"
             android:icon="@drawable/ic_menu_send"
             android:title="Start Tour" />
-        <item
-            android:id="@+id/nav_left_discover"
-            android:icon="@drawable/ic_menu_compass"
-            android:title="Discover" />
     </group>
 
     <item android:title="Filters">
