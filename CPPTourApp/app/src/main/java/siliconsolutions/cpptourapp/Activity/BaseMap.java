@@ -571,29 +571,6 @@ public class BaseMap extends AppCompatActivity implements
             }
         });
 
-
-        busRouteBMenuItem = leftNavigationView.getMenu().findItem(R.id.nav_left_check_6);//TODO:
-        //busRouteAMenuItem = leftNavigationView.getMenu().findItem(R.id.nav_left_check_5);
-        busRouteBCheckbox = (CompoundButton) MenuItemCompat.getActionView(busRouteBMenuItem);
-        busRouteBCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
-                if(isChecked){
-                    busBRoute();
-                    for(int i = (buildingsArrayList.size() + landmarksArrayList.size() + parkingLotsArrayList.size() + restaurantsArrayList.size()); i < (buildingsArrayList.size() + landmarksArrayList.size() + parkingLotsArrayList.size() + restaurantsArrayList.size() + busRouteAArrayList.size()); i++){
-                        markersArrayList.get(i).setVisible(true);
-                    }
-                }
-                else{
-                    lineA.remove();
-                    busAMarker.remove();
-                    for(int i = (buildingsArrayList.size() + landmarksArrayList.size() + parkingLotsArrayList.size() + restaurantsArrayList.size()); i < (buildingsArrayList.size() + landmarksArrayList.size() + parkingLotsArrayList.size() + restaurantsArrayList.size() + busRouteAArrayList.size()); i++){
-                        markersArrayList.get(i).setVisible(false);
-                    }
-                }
-            }
-        });
-
         busRouteBMenuItem = leftNavigationView.getMenu().findItem(R.id.nav_left_check_6);//TODO:
         //busRouteAMenuItem = leftNavigationView.getMenu().findItem(R.id.nav_left_check_5);
         busRouteBCheckbox = (CompoundButton) MenuItemCompat.getActionView(busRouteBMenuItem);
