@@ -550,13 +550,21 @@ public class BaseMap extends AppCompatActivity implements
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
                 if(isChecked){
                     busARoute();
-                    mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)).position(new LatLng(busBLat, busBLong)));
+                    int height = 100;
+                    int width = 100;
+                    BitmapDrawable bitmapdraw=(BitmapDrawable)getResources().getDrawable(R.drawable.bus);
+                    Bitmap b=bitmapdraw.getBitmap();
+                    Bitmap smallMarker = Bitmap.createScaledBitmap(b, width, height, false);
+                    busAMarker = mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.fromBitmap(smallMarker)).title("Bus A").snippet("7:00 - 19:30").position(new LatLng(busALat, busALong)));
+
+                  //  mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)).position(new LatLng(busBLat, busBLong)));
                     for(int i = (buildingsArrayList.size() + landmarksArrayList.size() + parkingLotsArrayList.size() + restaurantsArrayList.size()); i < (buildingsArrayList.size() + landmarksArrayList.size() + parkingLotsArrayList.size() + restaurantsArrayList.size() + busRouteAArrayList.size()); i++){
                         markersArrayList.get(i).setVisible(true);
                     }
                 }
                 else{
                     lineA.remove();
+                    busAMarker.remove();
                     for(int i = (buildingsArrayList.size() + landmarksArrayList.size() + parkingLotsArrayList.size() + restaurantsArrayList.size()); i < (buildingsArrayList.size() + landmarksArrayList.size() + parkingLotsArrayList.size() + restaurantsArrayList.size() + busRouteAArrayList.size()); i++){
                         markersArrayList.get(i).setVisible(false);
                     }
@@ -564,12 +572,6 @@ public class BaseMap extends AppCompatActivity implements
             }
         });
 
-                    int height = 100;
-                    int width = 100;
-                    BitmapDrawable bitmapdraw=(BitmapDrawable)getResources().getDrawable(R.drawable.bus);
-                    Bitmap b=bitmapdraw.getBitmap();
-                    Bitmap smallMarker = Bitmap.createScaledBitmap(b, width, height, false);
-                    busAMarker = mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.fromBitmap(smallMarker)).title("Bus A").snippet("7:00 - 19:30").position(new LatLng(busALat, busALong)));
 
         busRouteBMenuItem = leftNavigationView.getMenu().findItem(R.id.nav_left_check_6);//TODO:
         //busRouteAMenuItem = leftNavigationView.getMenu().findItem(R.id.nav_left_check_5);
