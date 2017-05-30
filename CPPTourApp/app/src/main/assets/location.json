@@ -856,6 +856,9 @@
     "longtitude": "-117.8111215",
     "name": "Agricultural Engineering Building",
     "number": "45",
+    "offices": [
+
+    ],
     "image": "http://i.imgur.com/8570exc.gif",
     "floorplan": ""
   },
@@ -1095,11 +1098,6 @@
     "name": "English Language Institute",
     "number": "86",
     "offices": [
-      {
-        "name": "",
-        "room": "",
-        "phone": "(909)"
-      },
       {
         "name": "Cal Poly English Language Institute",
         "room": "121",

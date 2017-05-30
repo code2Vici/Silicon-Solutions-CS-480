@@ -31,7 +31,7 @@ public class LandmarksListAdapter extends ArrayAdapter<Landmarks> {
         TextView landmarksNumberText = (TextView) convertView.findViewById(R.id.locations_list_building_number_text);
 
         landmarksNameText.setText(landmarks.get(position).getLandmarkName());
-        distanceText.setText("0 mi");
+        distanceText.setText("   ");
         landmarksNumberText.setText(landmarks.get(position).getLandmarkNumber());
 
         convertView.setTag(position);

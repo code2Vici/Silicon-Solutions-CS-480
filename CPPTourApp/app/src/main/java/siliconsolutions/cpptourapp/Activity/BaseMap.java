@@ -27,14 +27,19 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -70,6 +75,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import siliconsolutions.cpptourapp.Adapters.BuildingsListAdapter;
 import siliconsolutions.cpptourapp.Adapters.EventsListAdapter;
@@ -105,6 +111,8 @@ public class BaseMap extends AppCompatActivity implements
     private GoogleMap mMap;
     private Toolbar toolbar;
     private DrawerLayout drawer;
+    private EditText searchEditText;
+    //private ImageButton searchButton;
     private ImageView btnMyLocation;
     private ImageView btnOpenFavoriteDrawer;
     public static GPSTracker gpsTracker;
@@ -200,6 +208,11 @@ public class BaseMap extends AppCompatActivity implements
         favoritesBtn = (FloatingActionButton) findViewById(R.id.btnOpenFavoriteDrawer);
         locationBtn = (FloatingActionButton) findViewById(R.id.btnMyLocation);
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+
+        searchEditText = (EditText) findViewById(R.id.searchEditText);
+        //searchButton = (ImageButton) findViewById(R.id.searchButton);
+
+
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
@@ -274,11 +287,11 @@ public class BaseMap extends AppCompatActivity implements
         });
         initialize();
         final NavigationView rightNavigationView = (NavigationView) findViewById(R.id.nav_view_right);
-        ListView buildingsListView = (ListView) findViewById(R.id.right_nav_building_listView);
-        ListView landmarksListView = (ListView) findViewById(R.id.right_nav_landmarks_listView);
-        ListView parkingListView = (ListView) findViewById(R.id.right_nav_parking_listView);
+        final ListView buildingsListView = (ListView) findViewById(R.id.right_nav_building_listView);
+        final ListView landmarksListView = (ListView) findViewById(R.id.right_nav_landmarks_listView);
+        final ListView parkingListView = (ListView) findViewById(R.id.right_nav_parking_listView);
 
-        final BuildingsListAdapter buildingsListAdapter = new BuildingsListAdapter(this,R.id.right_nav_building_listView,buildingsArrayList);
+        BuildingsListAdapter buildingsListAdapter = new BuildingsListAdapter(this,R.id.right_nav_building_listView,buildingsArrayList);
         buildingsListView.setAdapter(buildingsListAdapter);
         buildingsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -324,6 +337,121 @@ public class BaseMap extends AppCompatActivity implements
             }
         });
 
+        searchEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                Log.i("SEARCH", "Text [" + s  + "]");
+
+                int textLength = s.length();
+                final ArrayList<Building> newBuildingArrayList = new ArrayList<Building>();
+                final ArrayList<Landmarks> newLandmarkArrayList = new ArrayList<Landmarks>();
+                final ArrayList<ParkingLots> newParkingArrayList = new ArrayList<ParkingLots>();
+
+                for (Building building : buildingsArrayList){
+
+                    if(textLength <= building.getBuildingName().length()){
+                        if (building.getBuildingName().toLowerCase().contains(s.toString().toLowerCase())){
+                            newBuildingArrayList.add(building);
+                        }
+                    }
+                    if(textLength <= building.getBuildingNumber().length()) {
+                        if(building.getBuildingNumber().contains(s.toString())) {
+                            newBuildingArrayList.add(building);
+                        }
+                    }
+
+                }
+
+                for (Landmarks landmark : landmarksArrayList) {
+
+                    if (textLength <= landmark.getLandmarkName().length()) {
+                        if (landmark.getLandmarkName().toLowerCase().contains(s.toString().toLowerCase())) {
+                            newLandmarkArrayList.add(landmark);
+                        }
+                    }
+                    if (textLength <= landmark.getLandmarkNumber().length()) {
+                        if (landmark.getLandmarkNumber().contains(s.toString())) {
+                            newLandmarkArrayList.add(landmark);
+                        }
+                    }
+                }
+
+                for (ParkingLots parkingLot : parkingLotsArrayList) {
+
+                    if (textLength <= parkingLot.getParkingLotsName().length()) {
+                        if (parkingLot.getParkingLotsName().toLowerCase().contains(s.toString().toLowerCase())) {
+                            newParkingArrayList.add(parkingLot);
+                        }
+                    }
+                    if (textLength <= parkingLot.getParkingLotsNumber().length()) {
+                        if (parkingLot.getParkingLotsNumber().contains(s.toString())) {
+                            newParkingArrayList.add(parkingLot);
+                        }
+                    }
+                }
+                Log.d("SIZE OF SEARCH", String.valueOf(newBuildingArrayList.size()));
+
+                BuildingsListAdapter buildingsListAdapter1 = new BuildingsListAdapter(BaseMap.this, R.id.right_nav_building_listView, newBuildingArrayList);
+                ListView buildingsListView1 = (ListView) findViewById(R.id.right_nav_building_listView);
+                buildingsListView1.setAdapter(buildingsListAdapter1);
+                buildingsListView1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                        if (drawer.isDrawerOpen(GravityCompat.END))
+                            drawer.closeDrawer(GravityCompat.END);
+                        if(!markersArrayList.get(i).isVisible())
+                            markersArrayList.get(i).setVisible(true);
+                        markersArrayList.get(i).showInfoWindow();
+                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(markersArrayList.get(i).getPosition(),16));
+                        bottomSheetUpdateFromBuilding(newBuildingArrayList.get(i));
+                        bottomSheetUpdateFromMarker(markersArrayList.get(i));
+                    }
+                });
+                LandmarksListAdapter landmarksListAdapter1 = new LandmarksListAdapter(BaseMap.this,R.id.right_nav_landmarks_listView,newLandmarkArrayList);
+                ListView landmarksListView1 = (ListView) findViewById(R.id.right_nav_landmarks_listView);
+                landmarksListView1.setAdapter(landmarksListAdapter1);
+                landmarksListView1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                        i += buildingsArrayList.size();
+                        if (drawer.isDrawerOpen(GravityCompat.END))
+                            drawer.closeDrawer(GravityCompat.END);
+                        markersArrayList.get(i).showInfoWindow();
+                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(markersArrayList.get(i).getPosition(),16));
+                        bottomSheetUpdateFromLandmark(newLandmarkArrayList.get(i - buildingsArrayList.size()));
+                        bottomSheetUpdateFromMarker(markersArrayList.get(i));
+                    }
+                });
+                ParkingListAdapter parkingListAdapter1 = new ParkingListAdapter(BaseMap.this,R.id.right_nav_parking_listView,newParkingArrayList);
+                ListView parkingListView1 = (ListView) findViewById(R.id.right_nav_parking_listView);
+                parkingListView1.setAdapter(parkingListAdapter1);
+                parkingListView1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                        i += buildingsArrayList.size() + landmarksArrayList.size();
+                        if (drawer.isDrawerOpen(GravityCompat.END))
+                            drawer.closeDrawer(GravityCompat.END);
+                        if(!markersArrayList.get(i).isVisible())
+                            markersArrayList.get(i).setVisible(true);
+                        markersArrayList.get(i).showInfoWindow();
+                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(markersArrayList.get(i).getPosition(),16));
+                        bottomSheetUpdateFromParking(newParkingArrayList.get(i - buildingsArrayList.size() - landmarksArrayList.size()));
+                        bottomSheetUpdateFromMarker(markersArrayList.get(i));
+                    }
+                });
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
 
         favoritesBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -922,8 +1050,7 @@ public class BaseMap extends AppCompatActivity implements
     /**
      * Manipulates the map once available.
      * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
+     * This is where we can add markers or lines, add listeners or move the camera.
      * If Google Play services is not installed on the device, the user will be prompted to install
      * it inside the SupportMapFragment. This method will only be triggered once the user has
      * installed Google Play services and returned to the app.
@@ -969,6 +1096,10 @@ public class BaseMap extends AppCompatActivity implements
             drawer.openDrawer(GravityCompat.END);
             return true;
         }
+
+        /*if (id == R.id.action_search) {
+            searchView.setVisibility(View.VISIBLE);
+        }*/
 
         return super.onOptionsItemSelected(item);
     }

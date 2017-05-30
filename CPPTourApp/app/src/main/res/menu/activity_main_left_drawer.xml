@@ -23,7 +23,7 @@
             <item
                 android:id="@+id/nav_left_check_2"
                 android:checked="true"
-                android:title="Interest Locations"
+                android:title="Points of Interest"
                 app:actionLayout="@layout/widget_check_interest" />
             <item
                 android:id="@+id/nav_left_check_3"

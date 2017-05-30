@@ -29,7 +29,7 @@ public class ParkingListAdapter extends ArrayAdapter<ParkingLots> {
         TextView parkingLotNumberText = (TextView) convertView.findViewById(R.id.locations_list_building_number_text);
 
         parkingLotNameText.setText(parkingLots.get(position).getParkingLotsName());
-        distanceText.setText("0 mi");
+        distanceText.setText("    ");
         parkingLotNumberText.setText(parkingLots.get(position).getParkingLotsNumber());
 
         convertView.setTag(position);

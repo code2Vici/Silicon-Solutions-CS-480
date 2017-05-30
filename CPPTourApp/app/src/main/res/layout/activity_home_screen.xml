@@ -8,39 +8,6 @@
     android:orientation="vertical"
     tools:context="siliconsolutions.cpptourapp.Activity.HomeScreen">
 
-    <!-- Layout Containing Searchbar
-    <LinearLayout
-        android:layout_weight="1"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:background="#063E2A"
-        android:orientation="horizontal">
-
-
-        <SearchView
-            android:id="@+id/customSearch"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/searchview"
-            android:layout_margin="10dp"
-            >
-
-        </SearchView>
-
-        <TextView
-            android:layout_weight="4"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-
-        <ImageButton
-            android:layout_weight="1"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="right"
-            android:src="@drawable/ic_search"/>
-
-    </LinearLayout>
-    -->
     <LinearLayout
         android:layout_weight="5"
         android:layout_width="match_parent"
