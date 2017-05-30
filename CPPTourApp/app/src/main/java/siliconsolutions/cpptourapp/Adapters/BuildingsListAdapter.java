@@ -6,21 +6,23 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
-
 import java.util.List;
 import siliconsolutions.cpptourapp.Model.Building;
 import siliconsolutions.cpptourapp.R;
 
 public class BuildingsListAdapter extends ArrayAdapter<Building> {
-    List<Building> buildings;
 
+    List<Building> buildings;
     public BuildingsListAdapter(Context context, int resource, List<Building> buildings) {
         super(context, resource, buildings);
         this.buildings = buildings;
     }
 
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+
+
         if(convertView == null){
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.locations_list_item_layout,parent,false);
         }
@@ -36,4 +38,5 @@ public class BuildingsListAdapter extends ArrayAdapter<Building> {
         convertView.setTag(position);
         return convertView;
     }
+
 }

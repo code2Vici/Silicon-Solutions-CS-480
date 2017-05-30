@@ -16,8 +16,6 @@ public class HomeScreen extends AppCompatActivity {
     private TextView homeTextview;
     private Button startButtn;
 
-    //private SearchView searchHint;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
