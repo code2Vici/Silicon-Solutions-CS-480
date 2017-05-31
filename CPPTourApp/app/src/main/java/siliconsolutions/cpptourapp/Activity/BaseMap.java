@@ -111,7 +111,7 @@ public class BaseMap extends AppCompatActivity implements
     private GoogleMap mMap;
     private Toolbar toolbar;
     private DrawerLayout drawer;
-    private EditText searchEditText;
+    //private EditText searchEditText;
     //private ImageButton searchButton;
     private ImageView btnMyLocation;
     private ImageView btnOpenFavoriteDrawer;
@@ -209,7 +209,7 @@ public class BaseMap extends AppCompatActivity implements
         locationBtn = (FloatingActionButton) findViewById(R.id.btnMyLocation);
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 
-        searchEditText = (EditText) findViewById(R.id.searchEditText);
+        //searchEditText = (EditText) findViewById(R.id.searchEditText);
         //searchButton = (ImageButton) findViewById(R.id.searchButton);
 
 
@@ -334,122 +334,6 @@ public class BaseMap extends AppCompatActivity implements
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(markersArrayList.get(i).getPosition(),16));
                 bottomSheetUpdateFromParking(parkingLotsArrayList.get(i - buildingsArrayList.size() - landmarksArrayList.size()));
                 bottomSheetUpdateFromMarker(markersArrayList.get(i));
-            }
-        });
-
-        searchEditText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-                Log.i("SEARCH", "Text [" + s  + "]");
-
-                int textLength = s.length();
-                final ArrayList<Building> newBuildingArrayList = new ArrayList<Building>();
-                final ArrayList<Landmarks> newLandmarkArrayList = new ArrayList<Landmarks>();
-                final ArrayList<ParkingLots> newParkingArrayList = new ArrayList<ParkingLots>();
-
-                for (Building building : buildingsArrayList){
-
-                    if(textLength <= building.getBuildingName().length()){
-                        if (building.getBuildingName().toLowerCase().contains(s.toString().toLowerCase())){
-                            newBuildingArrayList.add(building);
-                        }
-                    }
-                    if(textLength <= building.getBuildingNumber().length()) {
-                        if(building.getBuildingNumber().contains(s.toString())) {
-                            newBuildingArrayList.add(building);
-                        }
-                    }
-
-                }
-
-                for (Landmarks landmark : landmarksArrayList) {
-
-                    if (textLength <= landmark.getLandmarkName().length()) {
-                        if (landmark.getLandmarkName().toLowerCase().contains(s.toString().toLowerCase())) {
-                            newLandmarkArrayList.add(landmark);
-                        }
-                    }
-                    if (textLength <= landmark.getLandmarkNumber().length()) {
-                        if (landmark.getLandmarkNumber().contains(s.toString())) {
-                            newLandmarkArrayList.add(landmark);
-                        }
-                    }
-                }
-
-                for (ParkingLots parkingLot : parkingLotsArrayList) {
-
-                    if (textLength <= parkingLot.getParkingLotsName().length()) {
-                        if (parkingLot.getParkingLotsName().toLowerCase().contains(s.toString().toLowerCase())) {
-                            newParkingArrayList.add(parkingLot);
-                        }
-                    }
-                    if (textLength <= parkingLot.getParkingLotsNumber().length()) {
-                        if (parkingLot.getParkingLotsNumber().contains(s.toString())) {
-                            newParkingArrayList.add(parkingLot);
-                        }
-                    }
-                }
-                Log.d("SIZE OF SEARCH", String.valueOf(newBuildingArrayList.size()));
-
-                BuildingsListAdapter buildingsListAdapter1 = new BuildingsListAdapter(BaseMap.this, R.id.right_nav_building_listView, newBuildingArrayList);
-                ListView buildingsListView1 = (ListView) findViewById(R.id.right_nav_building_listView);
-                buildingsListView1.setAdapter(buildingsListAdapter1);
-                buildingsListView1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                        if (drawer.isDrawerOpen(GravityCompat.END))
-                            drawer.closeDrawer(GravityCompat.END);
-                        if(!markersArrayList.get(i).isVisible())
-                            markersArrayList.get(i).setVisible(true);
-                        markersArrayList.get(i).showInfoWindow();
-                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(markersArrayList.get(i).getPosition(),16));
-                        bottomSheetUpdateFromBuilding(newBuildingArrayList.get(i));
-                        bottomSheetUpdateFromMarker(markersArrayList.get(i));
-                    }
-                });
-                LandmarksListAdapter landmarksListAdapter1 = new LandmarksListAdapter(BaseMap.this,R.id.right_nav_landmarks_listView,newLandmarkArrayList);
-                ListView landmarksListView1 = (ListView) findViewById(R.id.right_nav_landmarks_listView);
-                landmarksListView1.setAdapter(landmarksListAdapter1);
-                landmarksListView1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                        i += buildingsArrayList.size();
-                        if (drawer.isDrawerOpen(GravityCompat.END))
-                            drawer.closeDrawer(GravityCompat.END);
-                        markersArrayList.get(i).showInfoWindow();
-                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(markersArrayList.get(i).getPosition(),16));
-                        bottomSheetUpdateFromLandmark(newLandmarkArrayList.get(i - buildingsArrayList.size()));
-                        bottomSheetUpdateFromMarker(markersArrayList.get(i));
-                    }
-                });
-                ParkingListAdapter parkingListAdapter1 = new ParkingListAdapter(BaseMap.this,R.id.right_nav_parking_listView,newParkingArrayList);
-                ListView parkingListView1 = (ListView) findViewById(R.id.right_nav_parking_listView);
-                parkingListView1.setAdapter(parkingListAdapter1);
-                parkingListView1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                        i += buildingsArrayList.size() + landmarksArrayList.size();
-                        if (drawer.isDrawerOpen(GravityCompat.END))
-                            drawer.closeDrawer(GravityCompat.END);
-                        if(!markersArrayList.get(i).isVisible())
-                            markersArrayList.get(i).setVisible(true);
-                        markersArrayList.get(i).showInfoWindow();
-                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(markersArrayList.get(i).getPosition(),16));
-                        bottomSheetUpdateFromParking(newParkingArrayList.get(i - buildingsArrayList.size() - landmarksArrayList.size()));
-                        bottomSheetUpdateFromMarker(markersArrayList.get(i));
-                    }
-                });
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
             }
         });
 
