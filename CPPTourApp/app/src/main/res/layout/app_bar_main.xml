@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activity.BaseMap">
+    tools:context=".Controller.BaseMap">
 
 
     <android.support.design.widget.AppBarLayout
@@ -99,24 +99,5 @@
                 app:navigationIcon="@drawable/ic_close"/>
         </FrameLayout>
     </android.support.design.widget.AppBarLayout>
-
-    <!-->
-    <android.support.v4.widget.NestedScrollView
-        android:id="@+id/bottom_sheet"
-        android:layout_width="match_parent"
-        android:layout_height="350dp"
-        android:background="@android:color/holo_orange_light"
-        android:clipToPadding="true"
-        app:layout_behavior="android.support.design.widget.BottomSheetBehavior">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="16dp"
-            android:text="@string/search_tip"
-            android:textSize="16sp" />
-
-    </android.support.v4.widget.NestedScrollView>
-    <!-->
 
 </android.support.design.widget.CoordinatorLayout>

@@ -19,7 +19,7 @@
         <service android:name=".Directions.GeofenceTransitionsIntentService" />
 
         <activity
-            android:name=".Activity.HomeScreen"
+            android:name=".Controller.HomeScreen"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -40,30 +40,30 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".Activity.BaseMap"
+            android:name=".Controller.BaseMap"
             android:label="@string/title_activity_base_map"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="siliconsolutions.cpptourapp.Activity.BaseMap" />
+                android:value="siliconsolutions.cpptourapp.Controller.BaseMap" />
         </activity>
         <activity
-            android:name=".Activity.NavigationActivity"
+            android:name=".Controller.NavigationActivity"
             android:label="@string/title_activity_navigation"
-            android:parentActivityName=".Activity.BaseMap"
+            android:parentActivityName=".Controller.BaseMap"
             android:theme="@style/AppTheme.MyTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="siliconsolutions.cpptourapp.Activity.BaseMap" />
+                android:value="siliconsolutions.cpptourapp.Controller.BaseMap" />
         </activity>
         <activity
-            android:name=".Activity.TourActivity"
+            android:name=".Controller.TourActivity"
             android:label="@string/title_activity_tour"
-            android:parentActivityName=".Activity.BaseMap"
+            android:parentActivityName=".Controller.BaseMap"
             android:theme="@style/AppTheme.MyTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="siliconsolutions.cpptourapp.Activity.BaseMap" />
+                android:value="siliconsolutions.cpptourapp.Controller.BaseMap" />
         </activity>
     </application>
 

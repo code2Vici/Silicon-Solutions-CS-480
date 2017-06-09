@@ -18,8 +18,6 @@ public class TourMarkers implements Parcelable{
     private String name;
     @SerializedName("number")
     private String number;
-    /*@SerializedName("events")
-    private List<Event> events;*/
     @SerializedName("image")
     private String imageUrl;
 
@@ -62,14 +60,6 @@ public class TourMarkers implements Parcelable{
     public void setNumber(String number) {
         this.number = number;
     }
-/*
-    public List<Event> getEvents() {
-        return events;
-    }
-
-    public void setEvents(List<Event> events) {
-        this.events = events;
-    }*/
 
     public String getImageUrl() {
         return imageUrl;
@@ -102,7 +92,6 @@ public class TourMarkers implements Parcelable{
         parcel.writeString(longitude);
         parcel.writeString(name);
         parcel.writeString(number);
-        //parcel.writeA
         parcel.writeString(imageUrl);
     }
 

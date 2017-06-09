@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="siliconsolutions.cpptourapp.Activity.TourActivity"
+    tools:context="siliconsolutions.cpptourapp.Controller.TourActivity"
     tools:showIn="@layout/activity_tour">
 
     <include

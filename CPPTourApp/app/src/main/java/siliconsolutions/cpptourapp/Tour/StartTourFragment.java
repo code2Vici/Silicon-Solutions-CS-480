@@ -22,9 +22,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.List;
 
-import siliconsolutions.cpptourapp.Activity.TourActivity;
+import siliconsolutions.cpptourapp.Controller.TourActivity;
 import siliconsolutions.cpptourapp.Adapters.TourListAdapter;
 import siliconsolutions.cpptourapp.Model.Tour;
 import siliconsolutions.cpptourapp.Model.TourMarkers;
@@ -38,7 +37,6 @@ public class StartTourFragment extends DialogFragment {
     LinearLayout tourListContainer;
     String name;
     ArrayList<TourMarkers> markersList;
-    //ListView markerList;
     int num;
 
     public static StartTourFragment newInstance(int num){
@@ -49,24 +47,6 @@ public class StartTourFragment extends DialogFragment {
 
         return fragment;
     }
-
-    /*@Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        num = getArguments().getInt("num");
-        setStyle(num);
-        Type tourlistType = new TypeToken<ArrayList<Tour>>(){}.getType();
-
-        toursArrayList = new GsonBuilder().create().fromJson(loadTourJSONFromAsset(),tourlistType);
-        tourPostList = new StringBuffer();
-        for (Tour post : toursArrayList) {
-            tourPostList.append("\n name: " + post.getName() + "\n description: " + post.getDescription() +
-                    "\n distance: " + post.getDistance() + "\n markers " + post.getTourMarkersList() + "\n\n");
-        }
-        Log.i("comp","test");
-
-
-    }*/
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {

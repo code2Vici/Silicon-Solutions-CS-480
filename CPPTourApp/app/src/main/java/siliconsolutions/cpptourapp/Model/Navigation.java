@@ -80,10 +80,6 @@ public class Navigation {
 
             Log.i("MARKER " + i + "LOCATION", markers.get(i).getPosition().latitude + "," + markers.get(i).getPosition().longitude);
             Log.i("MARKER " + i + " NAME", markers.get(i).getTitle());
-            //mMap.addMarker(new MarkerOptions().position(latLng).title(s));
-            //m.setAlpha(0.0f);
-            //m.setVisible(true);
-            //m.setInfoWindowAnchor(.5f,1.0f);
         }
     }
 
