@@ -134,3 +134,31 @@ Checkpoint 4 (Day 8 & 9):
  
 Checkpoint 4 (Day 10):
 ·        Finish report and documentation.
+
+######################################################################################
+
+Project ID #: 24 (Phone Contacts Book) Estimated Development Time: 10 Days
+
+Project Description:
+
+This is an android based application implemented in Java that stores contact information on Google’s secure database called Firebase. It’s purpose compared to other typical contacts applications is to allow the user to be able to add custom entries besides the default name, phone, physical address, and email. The user has the choice to add a LinkedIn account, Instagram, Snapchat, or other. There is a limit of five custom entries as the contact list would look to crumbled with contact info. Once a user adds a contact to the list, he has the option to call the contact by clicking on the phone icon. This opens up the phone dialer activity and grabs the specified phone number on the contact list and is just a button click away from making a call to his saved contact. If the user has other apps other than the default android dialer, a dialog will display with options and can choose by preference. The other option the user has it to click on the message button. This open the default email client provider, if there is one. Otherwise, similar to the phone dialer, he has the options to choose from other client providers. It’s important to note that everything is stored securely on Firebase and updates automatically. All the contact information is private to the user and not publicly available.
+ 
+Preliminary Development Plan:
+
+Android based application using Java.
+
+Checkpoint 1 (Day 1 & 2):
+·        Create an underlying Java class to save and load data (using Firebase database).
+ 
+Checkpoint 2 (Day 3 & 4):
+·       Design the application front-end and rest of architecture that will be used.
+ 
+Checkpoint 3 (Day 5 & 6 & 7):
+·        Implement GUI and any other classes designed.
+            -Link GUI to underlying Java class
+ 
+Checkpoint 4 (Day 8 & 9):
+·        Test product and fix bugs
+ 
+Checkpoint 5 (Day 10):
+·        Finish report and documentation.
